@@ -1,0 +1,24 @@
+{% extends "base.html"%}
+{% load i18n %} 
+{% block META_REDIRECT %}
+        
+{% endblock META_REDIRECT %}
+
+
+{% block MAIN %}
+<div id="static-page" class="col-xs-12 col-6">
+    <div class="faq-group">
+        <h3>{% trans "JARIBIO FAQ" %}</h3>
+        <p>
+        {% blocktrans trimmed %}
+        This FAQ collects the commons questions you may be looking for answers.
+        {% endblocktrans %}
+        </p>
+    </div>
+    <div class="faq-group">
+        <h4>{% trans "How do I pcreate a quiz ?" %}</h4>
+        <p>WIP</p>
+    </div>
+</div>
+
+{% endblock MAIN %}

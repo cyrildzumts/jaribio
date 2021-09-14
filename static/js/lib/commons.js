@@ -1,0 +1,1471 @@
+define(['ajax_api'], function(ajax_api) {
+    'use strict';
+    var fileUpload;
+    var productManager;
+    let campaignManager;
+    var messages;
+    var notification_wrapper;
+    var fadeDelay = 5000; // 5s
+    var AVAILABILITY_IMMEDIATELY = 0;
+    var AVAILABILITY_ON_DEMAND = 1;
+    let CAMPAIGN_TYPE_REPEAT_WEEKLY = 0, CAMPAIGN_TYPE_REPEAT_MONTHLY = 1,  CAMPAIGN_TYPE_REPEAT_ONCE = 2;
+    
+
+    var order_status_container;
+    var order_payment_option_container;
+    var order_status = [];
+    var filter_form;
+
+    function clean_form_before_submit(form){
+        $('.filter-input', form).each(function(){
+            this.disabled = this.value == "";
+        });
+        $('.no-submit', form).each(function(){
+            this.disabled = true;
+        });
+    }
+    
+    function filter_singular_init(field_id, chips_class){
+        var input = $(field_id);
+        var selected_chips = $(chips_class);
+        var values = ""
+        selected_chips.each(function(index, element){
+            var chips = $(this);
+            if(index < selected_chips.length - 1){
+                values += chips.data('value') + ",";
+            }else{
+                values += chips.data('value');
+            }
+        });
+        input.val(values);
+    }
+    
+    function initialize_filters(){
+        filter_singular_init('#order-status-input', '.order-status-chips.chips-selected');
+        filter_singular_init('#order-payment-option-input', '.order-payment-option-chips.chips-selected');
+    }
+    
+    
+    function integer_field_filter(element){
+        var values = "";
+        var input_target = $('#' + element.data('target'));
+        var filter_type = element.data('type');
+        var parent = element.parent();
+        if (filter_type == "selection"){
+            element.toggleClass('chips-selected', !element.hasClass('chips-selected'));
+            var selected_chips = $('.chips-selected', parent);
+            selected_chips.each(function(index, element){
+                var chips = $(this);
+                if(index < selected_chips.length - 1){
+                    values += chips.data('value') + ",";
+                }else{
+                    values += chips.data('value');
+                }
+            });
+            
+    
+        }else if(filter_type == "range-start" || filter_type == "range-end"){
+            var start;
+            var end;
+            if(filter_type == 'range-start'){
+                start = element.val();
+                end = $('#' + element.data('range-next')).val();
+            }else if(filter_type == 'range-end'){
+                end = element.val();
+                start = $('#' + element.data('range-next')).val();
+            }
+            if(start != "" || end != ""){
+                values = start + '-' + end;
+            }
+    
+        }else if (filter_type == "value"){
+            values = element.val();
+        }
+        input_target.val(values);
+    
+    }
+    
+    function install_integer_filter(){
+        $('.js-list-filter').on('click', function(){
+            integer_field_filter($(this));
+        });
+        $('.js-range-filter,.js-value-filter').on('keyup change', function(){
+            integer_field_filter($(this));
+        });
+        /*
+        $('.js-value-filter').on('keyup,change', function(){
+            integer_field_filter($(this));
+        });
+        */
+    }
+    
+    function toggle_order_status(element){
+        var value = element.data('value');
+        var added = false;
+        var status_input = $('#order-status-input');
+        var current_value = status_input.val();
+        var values = ""
+        element.toggleClass('chips-selected', !element.hasClass('chips-selected'));
+        var selected_chips = $('.order-status-chips.chips-selected');
+        selected_chips.each(function(index, element){
+            var chips = $(this);
+            if(index < selected_chips.length - 1){
+                values += chips.data('value') + ",";
+            }else{
+                values += chips.data('value');
+            }
+            added = true;
+        });
+        status_input.val(values);
+        return added;
+    }
+    
+    function toggle_playment_option(element){
+        var value = element.data('value');
+        var added = false;
+        var input = $('#order-payment-option-input');
+        var current_value = input.val();
+        var values = ""
+        element.toggleClass('chips-selected', !element.hasClass('chips-selected'));
+        var selected_chips = $('.order-payment-option-chips.chips-selected');
+        selected_chips.each(function(index, element){
+            var chips = $(this);
+            if(index < selected_chips.length - 1){
+                values += chips.data('value') + ",";
+            }else{
+                values += chips.data('value');
+            }
+            added = true;
+        });
+        input.val(values);
+        return added;
+    }
+    
+    
+    function toggle_amount_option(element){
+        var input = $('#amount-filter');
+        var filter_action = element.data('value');
+        var added = false;
+        if(input.val() == filter_action){
+            //element.removeClass('chips-selected').siblings().removeClass('chips-selected');
+            input.val('');
+        }else{
+            input.val(filter_action);
+            added = true;
+            //element.addClass('chips-selected').siblings().removeClass('chips-selected');
+        }
+        $(".amount-filter-chips .chips").removeClass('chips-selected');
+        return added;
+    }
+    
+    function toggle_date_filter(element){
+        var input = $('#filter-action');
+        var filter_action = element.data('filter-action');
+        if(input.val() == filter_action){
+            element.removeClass('chips-selected').siblings().removeClass('chips-selected');;
+            input.val('');
+        }else{
+            input.val(filter_action);
+            element.addClass('chips-selected').siblings().removeClass('chips-selected');
+        }
+    }
+
+    function notify(message){
+        if( typeof notification_wrapper === 'undefined' || typeof messages === 'undefined'){
+            console.warn("Notify call for message %s. But There is no messages container", message);
+            return;
+        }
+        let li = $('<li />', {
+            "class" : message.level,
+        });
+        let div = $('<div />', {
+            "class" : "notification flex"
+        });
+        div.append($('<i />', {
+            "class" : "fas fa-info-circle icon"
+        })).append($('<span />', {
+            'text': message.content
+        })).appendTo(li);
+        li.appendTo(messages);
+        //let top = notification_wrapper.offset().top - $(window).scrollTop();
+        notification_wrapper.fadeIn().delay(fadeDelay).fadeOut('slow', function () {
+            messages.empty();
+        });
+    }
+
+    function notify_init(wrapper, message_container){
+    
+        if(typeof wrapper === 'undefined'){
+            return;
+        }
+
+        if(typeof message_container === 'undefined' || $('li', message_container).length == 0){
+            return;
+        }
+
+        wrapper.fadeIn().delay(fadeDelay).fadeOut('slow', function () {
+            message_container.empty();
+        });
+    }
+
+    function input_check_max_limit(input){
+        var $input = $(input);
+        var max_len = parseInt($input.data('max-length'));
+        var len = $input.val().length;
+        var target = $($input.data('target'));
+        var max_len_reached = len > max_len;
+        $input.toggleClass("warning", max_len_reached);
+        target.toggleClass("danger", max_len_reached).text(len);
+    }
+
+    function track_action(track_element){
+        let csrfmiddlewaretoken = document.querySelector('input[name="csrfmiddlewaretoken"]');
+        let url = '/api/track-actions/';
+        let action = parseInt(track_element.dataset.action);
+        let options = {
+            url : url,
+            type: 'POST',
+            data : {'action': action, 'csrfmiddlewaretoken': csrfmiddlewaretoken.value},
+            dataType : 'json',
+            async:false,
+            cache : false,
+
+        };
+        ajax_api.ajax(options).then(function(response){
+            
+        }, function(reason){
+            console.error(reason);
+        });
+    }
+
+
+    var ListFilter = (function(){
+        function ListFilter(){
+            this.init();
+            console.log("ListFilter instance created");
+        };
+
+        ListFilter.prototype.init = function(){
+            console.log("ListFilter instance initializing");
+            var self;
+            $('.js-list-filter').on('keyup', function(event){
+                event.stopPropagation();
+                var value = this.value.trim().toLowerCase();
+                var fieldname = $(this).data('field');
+                var target = $("#" + $(this).data('target'));
+                
+                target.children().filter(function(){
+                    self = $(this)
+                    self.toggle(self.data(fieldname).toLowerCase().includes(value));
+                });
+            });
+
+            console.log("ListFilter instance initialized");
+        };
+
+        ListFilter.prototype.filter = function(ctx, filter_field, value_list){
+            if(!ctx || !filter_field || !value_list || value_list.length == 0){
+                console.log("Filter called with missing argumtent");
+                return;
+            }
+            console.log("Filtering started");
+            $(".filterable", ctx).each(function(index, element){
+                let filter_value = this.getAttribute(filter_field);
+                console.log(" Filter Field = \"%s\" - Filter Value = \"%s\" - Value List = [\"%s\"]", filter_field ,filter_value, value_list)
+                $(this).toggle(value_list.includes(filter_value));
+            });
+            console.log("Listfilter : filter run with success");
+        };
+
+        ListFilter.prototype.reset_filter = function(ctx, container){
+            if(!ctx || !container){
+                console.log(" Reset Filter called with missing context");
+                return;
+            }
+            $("input:checkbox", ctx).each(function(){
+                this.checked = false;
+            });
+            $(".filterable", container).each(function(index, element){
+                $(this).show();
+            });
+            console.log("Listfilter : reset run with success");
+        };
+
+        return ListFilter;
+    })();
+
+    function clear_uploaded_files(){
+        var files_container = document.querySelector('.file-list');
+        var input_files = document.querySelector('#files');
+        input_files.value = null;
+        while(files_container.firstChild){
+            files_container.removeChild(files_container.firstChild);
+        }
+        $('.js-uploaded-files-clear').hide();
+    }
+    function show_preview(files) {
+        var files_container = document.querySelector('.file-list');
+        var li;
+        var img;
+        while(files_container.firstChild){
+            files_container.removeChild(files_container.firstChild);
+        }
+        console.log("files : ", files);
+        var f;
+        for(var i = 0; i < files.length; i++){
+            f = files[i];
+            li = document.createElement('li');
+            img = document.createElement('img');
+            img.src = URL.createObjectURL(f);
+            img.height = 60;
+            files_container.appendChild(li);
+            img.onload = function(){
+                URL.revokeObjectURL(img.src);
+            };
+            li.classList.add('file-entry');
+            li.appendChild(img);
+            const info = document.createElement('span');
+            info.innerHTML = f.name + " : " + f.size + ' bytes';
+            li.appendChild(info);
+        }
+    }
+
+    function onDragInit(){
+        var droppedFiles;
+        var dragarea = document.querySelector('.drag-area');
+        if(!dragarea){
+            console.log("no drag-area could be found");
+            return;
+        }
+        var $form = $('#' + dragarea.dataset.form);
+        $('.drag-area').on('drag dragstart dragend dragover dragenter drop', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+        }).on('dragover dragenter', function(){
+            dragarea.classList.add('on-drag');
+        }).on('dragleave dragend drop', function(){
+            dragarea.classList.remove('on-drag');
+        }).on('drop', function(e){
+            droppedFiles = e.originalEvent.dataTransfer.files;
+            var input_files = document.querySelector('#files');
+            console.log("Droped file : ", droppedFiles);
+            console.log("Input file : ", input_files.files);
+            input_files.files = droppedFiles;
+            console.log("Input file 2 : ", input_files.files);
+            show_preview(droppedFiles);
+            $('.js-uploaded-files-clear').show();
+            console.log("Files dropped : %s", droppedFiles.length);
+
+        });
+        $('.js-uploaded-files-clear').on('click', clear_uploaded_files);
+    }
+
+    function onDropHandler(event){
+        event.preventDefault();
+        var files = [];
+        event.dataTransfer = event.originalEvent.dataTransfer;
+        if(event.dataTransfer.items){
+            var items = event.dataTransfer.items;
+            for(var i = 0; i < items.length; i++){
+                if(items[i].kind === 'file'){
+                    var file = items[i].getAsFile();
+                    fileUpload.addFile(file);
+                }
+            }
+        }else{
+            var files = event.dataTransfer.files;
+            //fileUpload.setFiles(files);
+            for(var i = 0; i < files.length; i++){
+                //var file = files[i]
+                fileUpload.addFile(files[i]);
+            }
+        }
+        $('.drag-area').removeClass('on-drag');
+    }
+
+
+    function onDragOverHandler(event){
+        event.preventDefault();
+    }
+
+    function onDragStartHandler(event) {
+        $('.drag-area').addClass('on-drag');
+        
+    }
+    function onDragEndHandler(event) {
+        $('.drag-area').removeClass('on-drag');
+        
+    }
+
+    function uploadFiles(form, files) {
+        var formData = new FormData(form);
+        files.forEach(function(file, index){
+            formData.append("file_" + index, file, file.name);
+        });
+        $(form).serializeArray().forEach(function(input, index){
+            formData.append(input.name, input.value);
+        });
+        var options = {
+            url : $(form).attr('action'),
+            type: 'POST',
+            enctype : 'multipart/form-data',
+            data : formData,
+            processData : false,
+            cache : false,
+            contentType : false
+        };
+        ajax_api.ajax_lang(options, false).then(function(response){
+
+        }, function(reason){
+
+        });
+        
+    }
+
+    var CampaignManager = (function(){
+        function CampaignManager() {
+            this.images = null;
+            this.form = undefined;
+            this.formData = undefined;
+            this.input_file = undefined;
+            this.drag_area = undefined;
+            this.files_container = undefined;
+            this.send_btn = undefined;
+            this.clear_uploaded_files_btn = undefined;
+            this.campaign_container = undefined;
+            this.campaign_link = undefined;
+            this.supported_formats = ['jpg', 'jpeg', 'png', 'webp'];
+        };
+        CampaignManager.prototype.init = function(){
+            var self = this;
+            this.form = document.querySelector('#campaign-upload-form') || document.querySelector('#campaign-update-form');
+            if(this.form == null ){
+                console.warn("No campaign form found");
+                return;
+            }
+            this.drag_area = document.querySelector('.drag-area');
+            if(!this.drag_area){
+                console.warn("No drag-area on campaign form found");
+                return;
+            }
+            this.input_file = document.querySelector('#files');
+            if(!this.input_file){
+                console.warn("No image input on campaign form found");
+                return;
+            }
+            this.campaign_container = document.querySelector('#created-producted-link');
+            this.campaign_link = document.querySelector('#created-producted-link a');
+            this.files_container = document.querySelector('.file-list');
+
+            $('.drag-area').on('drag dragstart dragend dragover dragenter drop', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            }).on('dragover dragenter', function(){
+                self.drag_area.classList.add('on-drag');
+            }).on('dragleave dragend drop', function(){
+                self.drag_area.classList.remove('on-drag');
+            }).on('drop', function(e){
+                self.images = e.originalEvent.dataTransfer.files;
+                self.input_file.files = self.images;
+                self.onImagesChanged();
+                self.imagesPreview();
+
+            });
+            $('#files').on('change', function(e){
+                self.images = self.input_file.files;
+                self.onImagesChanged();
+                self.imagesPreview();
+            });
+            $('.js-uploaded-files-clear').on('click', this.clearImages.bind(this));
+            $('.js-input-campaign-type').on('change', this.onCampaignTpyeChanged);
+            this.validators = [];
+            
+            $(this.form).on('submit', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                self.formData = new FormData(self.form);
+                self.upload();
+            });
+
+            console.log("Campaign initialized");
+
+        };
+
+        CampaignManager.prototype.imagesPreview = function(){
+            let li;
+            let img;
+            while(this.files_container.firstChild){
+                this.files_container.removeChild(this.files_container.firstChild);
+            }
+            let f;
+            for(let i = 0; i < this.images.length; i++){
+                f = this.images[i];
+                li = document.createElement('li');
+                img = document.createElement('img');
+                img.src = URL.createObjectURL(f);
+                img.height = 60;
+                this.files_container.appendChild(li);
+                img.onload = function(){
+                    URL.revokeObjectURL(img.src);
+                };
+                li.classList.add('file-entry');
+                li.appendChild(img);
+                const info = document.createElement('span');
+                info.innerHTML = f.name + " : " + Math.ceil(f.size/1024) + ' KB';
+                li.appendChild(info);
+            }
+            $('.js-uploaded-files-clear').show();
+        };
+
+        CampaignManager.prototype.clearImages = function(){
+            while(this.files_container.firstChild){
+                this.files_container.removeChild(this.files_container.firstChild);
+            }
+            this.images = null;
+            this.input_file.files = null;
+            let li = document.createElement('li');
+            let span = document.createElement('span');
+            span.innerText = "No images";
+            li.appendChild(span);
+            this.files_container.appendChild(li);
+            this.onImagesChanged();
+        };
+
+        CampaignManager.prototype.clear = function(){
+            document.querySelector('#name').value = "";
+            document.querySelector('#title').value = "";
+            document.querySelector('#start_at').value = "";
+            document.querySelector('#end_at').value = "";
+            document.querySelector('#is_active').checked = false;
+            document.querySelector('#description').value = "";
+            document.querySelector('#description-counter').innerText = '0';
+            this.input_file.files = null;
+            this.images = null;
+            this.campaign_link.href = '';
+            this.campaign_link.innerText = '';
+            this.campaign_container.style.display = 'none';
+            this.onImagesChanged();
+        }
+
+        CampaignManager.prototype.is_update_form = function(){
+            return this.form != null ? this.form.id == 'campaign-update-form' : false;
+        }
+
+        CampaignManager.prototype.onImagesChanged = function(){
+            this.drag_area.classList.toggle('active', this.images && (this.images.length > 0));
+        };
+
+        CampaignManager.prototype.onUploadResponse = function(data){
+            if(!data.success){
+                
+                return;
+            }
+            this.clear();
+            this.campaign_link.href = data.url;
+            this.campaign_link.innerText = data.url_text + " : " + data.name;
+            this.campaign_container.style.display = 'flex';
+        };
+
+        CampaignManager.prototype.upload = function(){
+            let self = this;
+            let form_is_valid = this.validate();
+            if(!form_is_valid){
+                console.log("Campaign form is invalid");
+                return;
+            }
+
+            let url = this.is_update_form() ? '/api/update-campaign/' + this.form.dataset.campaign + '/' : '/api/create-campaign/';
+
+            let options = {
+                url : url,
+                type: 'POST',
+                enctype : 'multipart/form-data',
+                data : this.formData,
+                dataType : 'json',
+                processData : false,
+                cache : false,
+                contentType : false
+            };
+            ajax_api.ajax(options).then(function(response){
+                let msg = {
+                    content : response.message,
+                    level : response.created
+                }
+                notify(msg);
+                self.onUploadResponse(response);
+                self.clearImages();
+                
+
+            }, function(reason){
+                console.error("Files could not be uploaded.");
+                console.error(reason);
+                self.clearImages();
+            });
+        };
+
+        CampaignManager.prototype.onCampaignTpyeChanged = function(){
+            let c_type = document.querySelector('.js-input-campaign-type:checked');
+            let c_type_entries = document.querySelectorAll('.campaign-type');
+            let c_type_value = parseInt(c_type.value);
+            c_type_entries.forEach((e)=>{
+                if((parseInt(e.dataset.campaignType) == c_type_value) || (parseInt(e.dataset.campaignAltType) == c_type_value)){
+                    e.style.display = 'block';
+                }else{
+                    e.style.display = 'block';
+                }
+
+            });
+            
+
+        };
+
+
+        CampaignManager.prototype.validate = function(){
+            let name = document.querySelector('#name');
+            let title = document.querySelector('#title');
+            let description = document.querySelector('#description');
+            let c_type = document.querySelector('.js-input-campaign-type:checked');
+            let c_type_entries = document.querySelectorAll('.campaign-type');
+            let c_type_value = c_type != null ? parseInt(c_type.value) : null;
+            let is_valid = true;
+
+            if(name == null || title == null || description == null){
+                is_valid = false;
+            }
+            if(name.value == ""){
+                name.classList.add('warn');
+                is_valid = false;
+            }else{
+                name.classList.remove('warn');
+            }
+            if(title.value == ""){
+                title.classList.add('warn');
+                is_valid = false;
+            }else{
+                title.classList.remove('warn');
+            }
+            if(description.value == ""){
+                description.classList.add('warn');
+                is_valid = false;
+            }else{
+                description.classList.remove('warn');
+            }
+            if(c_type_value == null){
+                is_valid = false;
+            }
+            let start_at = document.querySelector('#start_at');
+            let end_at = document.querySelector('#end_at');
+            let repeat_day = document.querySelector('#repeat_day');
+            if(c_type_value == CAMPAIGN_TYPE_REPEAT_ONCE){
+                if(start_at == null || end_at == null){
+                    is_valid = false;
+                }
+                if( (start_at != null &&  start_at.value.length == 0)){
+                    start_at.classList.add('warn');
+                }
+                if( (end_at != null &&  end_at.value.length == 0)){
+                    end_at.classList.add('warn');
+                }
+                let start_date = new Date(start_at.value);
+                let end_date = new Date(end_at.value);
+                let today = new Date();
+                if((start_date < today) || (end_date < today)){
+                    start_at.classList.add('warn');
+                    end_at.classList.add('warn');
+                    is_valid = false;
+                }else{
+                    start_at.classList.remove('warn');
+                    end_at.classList.remove('warn');
+                }
+            }
+            if(c_type_value == CAMPAIGN_TYPE_REPEAT_WEEKLY || c_type_value == CAMPAIGN_TYPE_REPEAT_MONTHLY){
+                if(repeat_day == null || isNaN(parseInt(repeat_day.value))){
+                    c_type.classList.add('warn');
+                    repeat_day.classList.add('warn');
+                    is_valid = false;
+                }else{
+                    c_type.classList.remove('warn');
+                    repeat_day.classList.remove('warn');
+                }
+            }
+            
+            /*
+            if((this.images == null || this.images.length == 0) && !this.is_update_form()){
+                return false;
+            }*/
+            return is_valid;
+        };
+
+        return CampaignManager;
+
+    })();
+
+    var ProductManager = (function(){
+        function ProductManager() {
+            this.images = null;
+            this.form = undefined;
+            this.formData = undefined;
+            this.input_file = undefined;
+            this.drag_area = undefined;
+            this.files_container = undefined;
+            this.send_btn = undefined;
+            this.clear_uploaded_files_btn = undefined;
+            this.created_product_container = undefined;
+            this.created_product_link = undefined;
+            this.on_demand_url = undefined;
+            this.supported_formats = ['jpg', 'jpeg', 'png', 'webp'];
+        };
+        ProductManager.prototype.init = function(){
+            var self = this;
+            this.form = document.querySelector('#product-upload-form') || document.querySelector('#product-update-form');
+            if(this.form == null ){
+                return;
+            }
+            this.drag_area = document.querySelector('.drag-area');
+            if(!this.drag_area){
+                return;
+            }
+            this.input_file = document.querySelector('#files');
+            if(!this.input_file){
+                return;
+            }
+            this.created_product_container = document.querySelector('#created-producted-link');
+            this.created_product_link = document.querySelector('#created-producted-link a');
+            this.files_container = document.querySelector('.file-list');
+            this.on_demand_url = document.querySelector('#on-demand-url');
+            $('.drag-area').on('drag dragstart dragend dragover dragenter drop', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            }).on('dragover dragenter', function(){
+                self.drag_area.classList.add('on-drag');
+            }).on('dragleave dragend drop', function(){
+                self.drag_area.classList.remove('on-drag');
+            }).on('drop', function(e){
+                self.images = e.originalEvent.dataTransfer.files;
+                self.input_file.files = self.images;
+                self.onImagesChanged();
+                self.imagesPreview();
+
+            });
+            $('#files').on('change', function(e){
+                self.images = self.input_file.files;
+                self.onImagesChanged();
+                self.imagesPreview();
+            });
+            $('.js-input-availability').on('change', function(e){
+                try {
+                    self.on_demand_url.classList.toggle('hidden', !(parseInt(this.value) == AVAILABILITY_ON_DEMAND));
+                } catch (error) {
+                    
+                }
+            });
+            $('input.product-type-input').on('change', update_attrs_from_type);
+            $('.js-uploaded-files-clear').on('click', this.clearImages.bind(this));
+            this.validators = [this.validateAvailability, this.validateBrand, this.validateCategory, 
+                                this.validateDescriptions, this.validateGender, this.validateName, 
+                                this.validateProductType, this.validateVariants, this.validateImages];
+            
+
+            
+            $(this.form).on('submit', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                self.formData = new FormData(self.form);
+                self.upload();
+            });
+
+            console.log("ProductManager initialized");
+
+        };
+
+        ProductManager.prototype.imagesPreview = function(){
+            var li;
+            var img;
+            while(this.files_container.firstChild){
+                this.files_container.removeChild(this.files_container.firstChild);
+            }
+            var f;
+            for(var i = 0; i < this.images.length; i++){
+                f = this.images[i];
+                li = document.createElement('li');
+                img = document.createElement('img');
+                img.src = URL.createObjectURL(f);
+                img.height = 60;
+                this.files_container.appendChild(li);
+                img.onload = function(){
+                    URL.revokeObjectURL(img.src);
+                };
+                li.classList.add('file-entry');
+                li.appendChild(img);
+                const info = document.createElement('span');
+                info.innerHTML = f.name + " : " + Math.ceil(f.size/1024) + ' KB';
+                li.appendChild(info);
+            }
+            $('.js-uploaded-files-clear').show();
+        };
+
+        ProductManager.prototype.clearImages = function(){
+            while(this.files_container.firstChild){
+                this.files_container.removeChild(this.files_container.firstChild);
+            }
+            this.images = null;
+            this.input_file.files = null;
+            var li = document.createElement('li');
+            var span = document.createElement('span');
+            span.innerText = "No images";
+            li.appendChild(span);
+            this.files_container.appendChild(li);
+            this.onImagesChanged();
+        };
+
+        ProductManager.prototype.clear = function(){
+            var inputs = [];
+            var name = document.querySelector('#name');
+            var display_name = document.querySelector('#display-name');
+            var gender = document.querySelectorAll('#gender');
+            var seller = document.querySelector('#sold-by');
+            var availability = document.querySelectorAll('#availability');
+            var attributes = document.querySelectorAll('#attributes');
+            var price = document.querySelector('#price');
+            var discount = document.querySelector('#promotion-price');
+            var description = document.querySelector('#description');
+            var short_description = document.querySelector('#short-description');
+            short_description.value = "";
+            description.value = "";
+            price.value = "";
+            discount.value = "";
+            name.value = "";
+            display_name.value = "";
+            gender.selectedIndex = null;
+            seller.selectedIndex = null;
+            availability.selectedIndex = null;
+            attributes.selectedIndex = null;
+            this.input_file.files = null;
+            this.images = null;
+            this.created_product_link.href = '';
+            this.created_product_link.innerText = '';
+            this.created_product_container.style.display = 'none';
+            this.onImagesChanged();
+        }
+
+        ProductManager.prototype.is_update_form = function(){
+            return this.form != null ? this.form.id == 'product-update-form' : false;
+        }
+
+        ProductManager.prototype.validate = function(){
+            // if(this.validators){
+            //     return this.validators.every((f)=>f());
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateName = function(){
+            var name = document.querySelector('#name');
+            var display_name = document.querySelector('#display-name');
+            // if(!name || !display_name || !name.value.lenght || !display_name.value.length){
+            //     console.log("name & display name errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateGender = function(){
+            var gender = document.querySelector('#gender');
+            // if(!gender  || !gender.value.length){
+            //     console.log("error errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateAvailability = function(){
+            var availability = document.querySelector('#availability');
+            // if(!availability  || !availability.value.length){
+            //     console.log("availability errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateCategory = function(){
+            var category = document.querySelector('#category');
+            // if(!category  || !category.value.length){
+            //     console.log("category errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateBrand = function(){
+            var brand = document.querySelector('#brand');
+            // if(!brand  || !brand.value.length){
+            //     console.log("brand errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateProductType = function(){
+            var product_type = document.querySelector('#product-type');
+            // if(!product_type  || !product_type.value.length){
+            //     console.log("product type errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validatePrices = function(){
+            var price = document.querySelector('#price');
+            // if(!price  || !price.value.length){
+            //     console.log("price errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateVariants = function(){
+            var variants = document.querySelector('#variants');
+            // if(!variants  || !variants.value.length){
+            //     console.log(" variants errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.validateDescriptions = function(){
+            var description = document.querySelector('#description');
+            // if(!description  || !description.value.length){
+            //     console.log(" description errors");
+            //     return false;
+            // }
+            return true;
+        };
+
+        ProductManager.prototype.onImagesChanged = function(){
+            this.drag_area.classList.toggle('active', this.images && (this.images.length > 0));
+        };
+
+        ProductManager.prototype.validateImages = function(){
+            
+            if(!this.images  || !this.input_file.files.length){
+                console.log(" images errors");
+                return false;
+            }
+            return true;
+        };
+
+        ProductManager.prototype.onUploadResponse = function(data){
+            
+            if(!data.success){
+                return;
+            }
+            this.created_product_link.href = data.url;
+            this.created_product_link.innerText = data.url_text + " : " + data.name;
+            this.created_product_container.style.display = 'flex';
+            if(!this.is_update_form()){
+                self.clearImages();
+                this.clear();
+            }
+        };
+
+        ProductManager.prototype.upload = function(){
+            let self = this;
+            var form_is_valid = this.validate();
+            if(!form_is_valid){
+                console.log("Product form is invalid");
+                return;
+            }
+            let url = this.is_update_form() ? '/api/update-product/' + this.form.dataset.product + '/' : '/api/create-product/';
+            var options = {
+                url : url,
+                type: 'POST',
+                enctype : 'multipart/form-data',
+                data : this.formData,
+                dataType : 'json',
+                processData : false,
+                cache : false,
+                contentType : false
+            };
+            ajax_api.ajax(options).then(function(response){
+                var msg = {
+                    content : response.message,
+                    level : response.success
+                }
+                notify(msg);
+                self.onUploadResponse(response);
+                
+                
+
+            }, function(reason){
+                console.error("Files could not be uploaded.");
+                console.error(reason);
+                if(!self.is_update_form()){
+                    self.clearImages();
+                }
+            });
+        };
+
+        return ProductManager;
+
+    })();
+
+    var FileUpload = (function(){
+        function FileUpload(){
+            this.files = [];
+            this.form = undefined;
+            this.formData = undefined;
+            this.clean = true;
+            this.drag_area = $('.drag-area');
+            this.file_list_container = $('.file-list');
+            this.file_entries = {};
+            this.empty_element = $('.no-data', this.file_list_container);
+            this.send_btn = $('.js-send-file-upload-btn');
+            this.clear_btn = $('.js-file-list-clear-btn');
+            //this.init();
+        };
+
+        FileUpload.prototype.init = function(){
+            var that = this;
+            this.clear_btn.on('click', this.clear.bind(this));
+
+            $('.drag-area')
+                .on('drop', onDropHandler)
+                .on('dragover', onDragOverHandler)
+                .on('dragenter', onDragStartHandler)
+                .on('dragleave', onDragEndHandler)
+            console.log("Fileupload initialized");
+        };
+
+        FileUpload.prototype.clear = function() {
+            this.files = [];
+            this.formData = undefined;
+            this.form = undefined;
+            this.clean = true;
+            //$('.file-entry', this.file_list_container).remove();
+            this.file_list_container.empty().append(this.empty_element);
+            this.drag_area.removeClass('non-empty');
+            this.send_btn.addClass('disabled').prop('disabled',true);
+            this.clear_btn.addClass('hidden');
+            console.log("[OK] cleared file list");
+        };
+
+        FileUpload.prototype.isClean = function() {
+            return this.clean;
+        };
+
+        FileUpload.prototype.setForm = function(form){
+            this.form = form;
+            this.clean = false;
+            return this;
+        };
+
+        FileUpload.prototype.setFiles = function(files){
+            this.files = files;
+            this.clean = false;
+            return this;
+        };
+
+        FileUpload.prototype.addFile = function(file){
+            if(this.files.some(f => f.name == file.name)){
+                console.warn("A file with the same name already exists.")
+                return this;
+            }
+            var that = this;
+            this.files.push(file);
+            var li = $('<li />',{
+                id:"file-" + that.files.length,
+                'class' : 'file-entry',
+                'title': file.name,
+            });
+            var entry_text = $('<span />', {
+                text: file.name
+            });
+            var entry_remove_btn = $('<button />', {
+                class: 'mat-button mat-button-text',
+                type: 'button'
+            }).append($('<i />', {
+                class: 'fas fa-times icon'
+            }));
+            entry_remove_btn.on('click', function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                that.removeFile([file.name]);
+                li.remove();
+            });
+            li.append(entry_text, entry_remove_btn).appendTo(that.file_list_container);
+            $('.no-data', that.file_list_container).remove();
+            this.drag_area.addClass('non-empty');
+            this.send_btn.removeClass('disabled').prop('disabled',false);
+            this.clear_btn.removeClass('hidden');
+            this.clean = false;
+            return this;
+        };
+
+        FileUpload.prototype.removeFile = function(fileNames){
+            console.log("removing files : %s", fileNames);
+            var old_length = this.files.length;
+            this.files = this.files.filter(f => !fileNames.includes(f.name));
+            if(this.files.length != old_length && this.files.length < old_length){
+                console.log("removed files : %s", fileNames);
+                if(this.files.length == 0){
+                    this.file_list_container.append(this.empty_element);
+                    this.drag_area.removeClass('non-empty');
+                    this.send_btn.addClass('disabled').prop('disabled',true);
+                    this.clear_btn.addClass('hidden');
+                }
+                this.clean = false;
+            }else{
+                console.log("files : %s not removed", fileNames);
+                
+            }
+            
+            return this;
+        };
+        FileUpload.prototype.update = function(){
+            if(this.isClean()){
+                console.warn("FileUpload can not be updated. formData is already clean.");
+                return;
+            }
+            if(!this.form || !this.files || this.files.length == 0){
+                console.warn("FileUpload can not be updated. form or files are missing.");
+                return;
+            }
+            this.formData = new FormData(this.form);
+            var that = this;
+            this.files.forEach(function(file, index){
+                that.formData.append("file_" + index, file, file.name);
+            });
+            this.clean = true;
+            /*
+            $(form).serializeArray().forEach(function(input, index){
+                formData.append(input.name, input.value);
+            });
+            */
+        };
+
+        FileUpload.prototype.canSend = function(){
+            let formValid = typeof this.form != 'undefined';
+            let filesValid = typeof this.files != 'undefined';
+
+            return formValid && filesValid && this.files.length > 0;
+        };
+
+        FileUpload.prototype.getForm = function() {
+            return this.form;
+        };
+
+        FileUpload.prototype.getFiles = function() {
+            return this.files;
+        }
+
+        FileUpload.prototype.getFormDate = function() {
+            return this.formData;
+        }
+
+        FileUpload.prototype.upload = function(){
+            if(!this.canSend()){
+                console.error("Files can not be sent. Please check your files form. Files or form are missing.");
+                return;
+            }
+            if(typeof ajax_api.ajax_lang === 'undefined'){
+                var errorMsg = "can not upload files. ajax funtion is not defined";
+                console.error(errorMsg);
+                throw new Error(errorMsg);
+            }
+            var that = this;
+            var options = {
+                url : $(this.form).attr('action'),
+                type: 'POST',
+                enctype : 'multipart/form-data',
+                data : this.formData,
+                processData : false,
+                cache : false,
+                contentType : false
+            };
+            ajax_api.ajax(options).then(function(response){
+                console.info("Files have bean uploaded.");
+                var msg = {
+                    content : response.message,
+                    level : response.status === 'OK'
+                }
+                notify(msg);
+                fileUpload.clear();
+                
+
+            }, function(reason){
+                console.error("Files could not be uploaded.");
+                console.error(reason);
+                fileUpload.clear();
+            });
+
+        };
+
+        return FileUpload;
+    })();
+
+    function kiosk_update(event){
+        document.getElementById('main-image').src = event.target.src;
+        $(".kiosk-image").removeClass('active').filter(event.target).addClass("active");
+    }
+
+    function dateFormat(index, input){
+        console.log(input);
+        console.log("Date Value : %s", input.value);
+    }
+
+    function regroupe_attrs(attribute_list){
+        var keySet = new Set();
+        var attrs_map = {};
+        attribute_list.forEach((o)=>{
+            keySet.add(o.name);
+        });
+        keySet.forEach((name)=>{
+            attrs_map[name] = attribute_list.filter(o => o.name == name).sort((first, second) =>{
+                if (first.value < second.value) {
+                    return -1
+                }
+                if(first.value > second.value){
+                    return 1;
+                }
+                return 0;
+            });
+        });
+        return attrs_map;
+    }
+
+    function update_attrs(attrs_mapping){
+        var attributes_container = document.querySelector('#attributes-container');
+        while(attributes_container.firstChild){
+            attributes_container.removeChild(attributes_container.firstChild);
+        }
+        var i = 0;
+        for(const [key,value] of Object.entries(attrs_mapping)){
+            var div = document.createElement('div');
+            var label = document.createElement('label');
+            var select = document.createElement('select');
+            var opt = document.createElement('option');
+            opt.innerText = `Select a ${key}`;
+            select.appendChild(opt);
+            value.forEach((o)=>{
+                opt = document.createElement('option');
+                opt.value = o.id;
+                opt.innerText = o.value;
+                select.appendChild(opt);
+            });
+            select.name = 'attributes';
+            select.id = select.name + "-" + i;
+            select.multiple = true;
+            label.htmlFor = select.id;
+            label.innerText = key.toUpperCase();
+            i++;
+            div.appendChild(label);
+            div.appendChild(select);
+            div.classList.add('form-group');
+            attributes_container.appendChild(div);
+            
+        }
+
+    }
+
+    function update_attrs_from_type(){
+        var input = document.querySelector('input.product-type-input:checked');
+        var option = {
+            type:'GET',
+            method: 'GET',
+            dataType: 'json',
+            url : '/api/attrs-from-type/' + input.dataset.typeUuid + '/'
+        }
+        ajax_api.ajax(option).then(function(response){
+            var attributes = response.attributes;
+            var attrs_mapping = regroupe_attrs(attributes);
+            update_attrs(attrs_mapping);
+        }, function(reason){
+            console.error(reason);
+        });
+    }
+
+
+    $(document).ready(function(){
+        if(window){
+            window.notify = notify;
+        }
+        notification_wrapper = $('#notifications-wrapper');
+        messages = $('#messages', notification_wrapper);
+        //onDragInit();
+        notify_init(notification_wrapper, messages);
+        var listfilter = new ListFilter();
+        fileUpload = new FileUpload();
+        campaignManager = new CampaignManager();
+        productManager = new ProductManager();
+        productManager.init();
+        campaignManager.init();
+        
+        $('.collapsible .toggle').on('click', function(event){
+            var parent = $(this).parent();
+            var target = $('.' + this.getAttribute('data-toggle'), parent);
+            $('input', parent).val('');
+            
+            target.toggle();
+        });
+        $('.js-filter-btn').on('click', function(event){
+            var ctx = $('#' + this.getAttribute('data-context'));
+            var input_name = this.getAttribute('data-input-name');
+            var container = $('#' + this.getAttribute('data-container'));
+            var filter_field = this.getAttribute("data-filter-field");
+            var value_list = [];
+            $("input:checked[name=\"" + input_name + "\"]", ctx).each(function(){
+                console.log("adding value to filter : %s", this.getAttribute("data-value"));
+                value_list.push(this.getAttribute("data-value"));
+            });
+            listfilter.filter(container, filter_field, value_list);
+        });
+
+        $('.js-filter-reset-btn').on('click', function(event){
+            var ctx = $('#' + this.getAttribute('data-context'));
+            var container = $('#' + this.getAttribute('data-container'));
+            listfilter.reset_filter(ctx, container);
+        });
+
+        $('#file-upload-form').on('submit', function(event){
+            console.log("submitting file-upload-form");
+            event.preventDefault();
+            event.stopPropagation();
+            console.log(this);
+            fileUpload.setForm(this);
+            fileUpload.update();
+            fileUpload.upload();
+            //return false;
+            
+        });
+        $('.js-select-image').on('click', kiosk_update);
+        $('.js-select-image').first().click();
+        $(".limited-input").on("keyup", function(event){
+            event.stopPropagation();
+            console.log("limited input keyup");
+            input_check_max_limit(this);
+        });
+        $('.js-dialog-open').on('click', function(){
+            var target = $('#' + $(this).data('target'));
+            target.show();
+        });
+
+        
+        $('.js-dialog-close').on('click', function(){
+            var target = $("#" + $(this).data('target'));
+            target.hide();
+            //var parent = $(this).parents('.dialog').hide();
+            $('input[type!="hidden"]', target).val('');
+        });
+        $('.js-reveal-btn, .js-revealable-hide').on('click', function(){
+            var target = $($(this).data('target')).parent();
+            $('.js-revealable', target).toggleClass('hidden');
+        });
+        $('.js-clear-input').on('click', function(){
+            
+            var target = $('#' + $(this).data('target'));
+            console.log("Clearing inputs from ", target);
+            $('input[type!=checkbox]', target).val('');
+            $('input:checkbox', target).val('').prop('checked', '');
+        });
+        var selectable_list = $(".js-selectable");
+        var activable_list = $(".js-activable");
+        var select_all = $('.js-select-all');
+        selectable_list.on('click', function(){
+            var is_selected = selectable_list.is(function (el) {
+                return this.checked;
+            });
+            
+            var selected_all = selectable_list.is(function (el) {
+                return !this.checked;
+            });
+            select_all.prop('checked', !selected_all);
+            activable_list.prop('disabled', !is_selected);
+        });
+
+        select_all.on('click', function(){
+            console.log("Select All clicked : %s", this.checked);
+            selectable_list.prop('checked', this.checked);
+            activable_list.prop('disabled', !this.checked);
+        });
+
+        filter_form = $('#filter-form');
+        $('#filter-form').on('submit', function(event){
+            $('input[name="csrfmiddlewaretoken"]').prop('disabled', true);
+            clean_form_before_submit(this);
+        });
+        $('.js-pagination').on('click', function(event){
+            
+            if(filter_form.length != 0){
+                event.preventDefault();
+                event.stopPropagation();
+                
+                var page = $(event.target).data('page');
+                var input = $('<input />', {
+                    name : 'page',
+                    value : page
+                });
+                input.appendTo(filter_form);
+                filter_form.submit();
+            }
+            
+
+        });
+
+        $("#amount-filter-input").on('keyup', function(event){
+            var input = $(this);
+            $(input.data('update')).text(input.val());
+            $("#" + input.data('target')).val(input.val());
+        });
+        initialize_filters();
+        install_integer_filter();
+        
+        $('.js-custom-input .input-value').on('click', function(event){
+            $(this).toggle();
+            $('.input-edit-wrapper', $(this).parent()).toggle();
+        });
+        
+        /*
+        $('.js-custom-input .js-edit').on('click', function(event){
+            $(this).parent().toggle();
+            $(this).siblings('input').toggle();
+        });
+        */
+        
+        $('.js-custom-input input').on('keyup change', function(event){
+            var $el = $(this);
+            $el.parent().siblings('.input-value').html($el.val());
+        });
+        
+        $('.js-custom-input .js-edit-close').on('click', function(event){
+            var $el = $(this).siblings('input');
+            $el.parent().siblings('.input-value').html($el.val());
+            $(this).parent().toggle();
+        });
+        $('.js-menu').on('click', function(){
+            console.log("Menu clicked");
+            $('.site-panel').css('left', 0);
+            $('.js-menu-close').show();
+            $(this).hide();
+    
+        });
+        $('.js-menu-close').on('click', function(){
+            var panel = $('.site-panel');
+            var left = '-' + panel.css('width');
+            panel.css('left', left );
+            $('.js-menu').show();
+            $(this).hide();
+        });
+        $('.js-action-abtest').on('click', function(e){
+            track_action(this);
+        });
+        console.log("commons.js loaded");
+        /*
+        $('.js-revealable-hide').on('click', function(){
+            console.log('hidding revealable inputs');
+            var target = $($(this).data('target')).parent();
+            $('.js-revealable', target).hide();
+        });
+        */
+    });
+
+});
