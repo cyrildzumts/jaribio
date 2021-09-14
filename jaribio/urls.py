@@ -30,14 +30,14 @@ urlpatterns = i18n_patterns(
     #path('api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('jaribio-admin-board/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    path('dashboard/', include('dashboard.urls')),
+    #path('dashboard/', include('dashboard.urls')),
     path('faq/', views.faq, name='faq'),
 ]
 )
 
 urlpatterns += [
     path('i18n/', include('django.conf.urls.i18n')),
-    path('api/', include('api.urls', namespace='api')),
+    #path('api/', include('api.urls', namespace='api')),
     path('api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     #path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name="django.contrib.sitemaps.views.sitemap"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
