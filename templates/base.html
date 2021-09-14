@@ -2,7 +2,6 @@
 {% load i18n %} 
 <html lang="{{LANGUAGE_CODE}}">
 {% load static %}
-{% load core_tags %}
 
 <head>
         <meta charset="utf-8">
@@ -41,9 +40,7 @@
         {% block STYLESHEET %}<link rel="stylesheet" type="text/css" href="{% static 'css/main.min.css' %}" media="all" />{% endblock STYLESHEET %}
 
         {% block external %} {% endblock external %}
-        {% if structured_data %}
-        {% json_ld structured_data %}
-        {% endif %}
+ 
 </head>
 
 <body>
