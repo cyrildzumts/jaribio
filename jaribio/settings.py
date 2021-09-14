@@ -133,6 +133,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'jaribio.context_processors.site_context',
                 'accounts.context_processors.account_context',
             ],
         },
