@@ -46,6 +46,7 @@ def create_question(request, quiz_uuid):
     template_name = "quiz/question_create.html"
     context = {
         'page_title': "New Question",
+        'QUESTION_TYPES': QUIZ_CONSTANTS.QUESTION_TYPES,
         'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
         'QUESTION_TYPE_MCQ' : QUIZ_CONSTANTS.QUESTION_TYPE_MCQ
     }
