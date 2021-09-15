@@ -49,7 +49,14 @@
                         <div class="form-group">
                             <span class="padding-bottom">{% trans "Answers" %}</span><span class="js-add-answer padding-h"><i class="fas fa-plus icon"></i></span>
                             <div id="answers-wrapper" class="row">
-                                <ul id="answers"><li><div><input type="text" class="answers" name="content-0"> <span><label for="is_correct-0">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-0" id="is_correct-0"></span></div></li></ul>
+                                <ul id="answers">
+                                        <li>
+                                            <div><input type="text" class="answers" name="content-0"> <span><label for="is_correct-0">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-0" id="is_correct-0"></span></div>
+                                            <div><input type="text" class="answers" name="content-1"> <span><label for="is_correct-1">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-1" id="is_correct-1"></span></div>
+                                            <div><input type="text" class="answers" name="content-2"> <span><label for="is_correct-2">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-2" id="is_correct-2"></span></div>
+                                            <div><input type="text" class="answers" name="content-3"> <span><label for="is_correct-3">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-3" id="is_correct-3"></span></div>
+                                        </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
