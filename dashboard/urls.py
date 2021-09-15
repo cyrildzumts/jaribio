@@ -114,12 +114,12 @@ report_patterns = [
 urlpatterns = [
     path('', views.dashboard, name='home'),
     #path('abtests/',views.abtests, name='abtests'),
-    path('quizzes/', include(quiz_pattterns, app_name), namespace="quizzes"),
+    path('quizzes/', include(quiz_pattterns)),
     #path('campaigns/', include(campaigns_patterns, app_name), namespace='campaigns'),
 
-    path('categories/', include(category_patterns, app_name), namespace='categories'),
-    path('groups/', include(group_patterns, app_name), namespace='users'),
-    path('users/', include(users_patterns, app_name), namespace="users"),
+    path('categories/', include(category_patterns)),
+    path('groups/', include(group_patterns)),
+    path('users/', include(users_patterns)),
 
     #path('highlights/', include(highlight_patterns, app_name), namespace='highlights'),
 
