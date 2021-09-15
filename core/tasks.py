@@ -23,7 +23,7 @@ def send_mail_task(email_context=None):
             logger.error(f"send_mail_task : template_name not available. Mail not send. email_context : {email_context}")
             return
         #message = loader.render_to_string(template_name, {'email': email_context})
-        root_categories = Category.objects.filter(is_active=True, parent=None)
+        root_categories = Category.objects.filter(is_active=True)
         context = email_context['context']
         context['root_categories'] = root_categories
         html_message = render_to_string(template_name, context)

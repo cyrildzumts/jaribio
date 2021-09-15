@@ -1448,7 +1448,7 @@ def send_welcome_mail(request, pk):
     user = get_object_or_404(User, pk=pk)
     email_context = {
             'template_name': settings.DJANGO_WELCOME_EMAIL_TEMPLATE,
-            'title': 'Bienvenu chez LYSHOP',
+            'title': 'Bienvenu chez ' + settings.SITE_NAME,
             'recipient_email': user.email,
             'context':{
                 'SITE_NAME': settings.SITE_NAME,
@@ -1456,12 +1456,13 @@ def send_welcome_mail(request, pk):
                 'FULL_NAME': user.get_full_name()
             }
     }
+    logger.info(f"Sending Welcome mail to user {user.username}")
     send_mail_task.apply_async(
         args=[email_context],
         queue=settings.CELERY_OUTGOING_MAIL_QUEUE,
         routing_key=settings.CELERY_OUTGOING_MAIL_ROUTING_KEY
     )
-
+    logger.info(f"sent Welcome mail to user {user.username}")
     return redirect('dashboard:user-detail', pk=pk)
 
 
@@ -1507,7 +1508,7 @@ def create_partner_token(request):
     template_name = 'dashboard/partner_token_create.html'
     page_title = _("Partner Token")
     if request.method == 'POST':
-        p_token = payment_service.create_partner_token(utils.get_postdata(request))
+        p_token = dashboard_service.create_partner_token(utils.get_postdata(request))
         if p_token:
             messages.add_message(request, messages.SUCCESS, message=_('Partner Token created'))
             return redirect(p_token.get_dashboard_url())
