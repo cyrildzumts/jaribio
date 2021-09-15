@@ -17,6 +17,7 @@ def create_quiz(request):
     context = {
         'page_title': "New Quiz",
         'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES,
+        'QUIZ_TYPE_TOURNAMENT': QUIZ_CONSTANTS.QUIZ_TYPE_TOURNAMENT,
         'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE
     }
     return render(request, template_name, context)
@@ -45,6 +46,8 @@ def create_question(request, quiz_uuid):
     template_name = "quiz/question_create.html"
     context = {
         'page_title': "New Question",
+        'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
+        'QUESTION_TYPE_MCQ' : QUIZ_CONSTANTS.QUESTION_TYPE_MCQ
     }
     return render(request, template_name, context)
 
