@@ -16,7 +16,8 @@ def create_quiz(request):
     template_name = "quiz/quiz_create.html"
     context = {
         'page_title': "New Quiz",
-        'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES
+        'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES,
+        'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE
     }
     return render(request, template_name, context)
 
@@ -26,7 +27,8 @@ def update_quiz(request, quiz_uuid):
     template_name = "quiz/quiz_update.html"
     context = {
         'page_title': "Update Quiz",
-        'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES
+        'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES,
+        'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE
     }
     return render(request, template_name, context)
 
