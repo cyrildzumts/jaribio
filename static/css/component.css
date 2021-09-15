@@ -3095,6 +3095,10 @@ label.nav-label::after{
     display: block;
 }
 
+.create-form .flex{
+	align-items: baseline;
+}
+
 .create-form .form-group{
     text-align: left;
 }

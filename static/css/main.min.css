@@ -2564,12 +2564,16 @@ label.nav-label::after{
 .new-product-wrapper #simple-calculator-toggle:checked ~ #simple-calculator{
     display: block;
 }
+.create-form .flex{
+	align-items: baseline;
+}
 .create-form .form-group{
     text-align: left;
 }
 .create-form select{
     border: 2px solid #ccc;
     padding: 0.5em !important;
+	margin: 1em 0 !important;
 }
 .create-form  .form-group > span{
     font-weight: 300;
