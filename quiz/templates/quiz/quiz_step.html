@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load static %}
+{% if banner %}
+
+{% block HEADER_BANNER %}
+<div class="banner">
+
+</div><!--End of Banner-->
+{% endblock HEADER_BANNER %}
+{% endif %}
+
+{% block MAIN %}
+<div class="container">
+  <div class="mat-box-full">
+    <p>Welcome to {{SITE_NAME}} QUIZ !</p>
+  </div>
+</div>
+
+{% endblock MAIN %}

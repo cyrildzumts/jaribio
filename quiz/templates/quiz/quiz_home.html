@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load static %}
+{% if banner %}
+
+{% block HEADER_BANNER %}
+<div class="banner">
+
+</div><!--End of Banner-->
+{% endblock HEADER_BANNER %}
+{% endif %}
+
+{% block MAIN %}
+<div class="container">
+  <div class="mat-box-full">
+    <p>Welcome to {{SITE_NAME}} QUIZ  Home!</p>
+    <p><a class="mat-button mat-button-default" href="{% url 'quiz:quiz-create' %}">New Quiz</a></p>
+  </div>
+</div>
+
+{% endblock MAIN %}

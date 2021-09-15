@@ -88,6 +88,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'accounts',
+    'quiz.apps.QuizConfig',
 ]
 
 # RESTFRAMEWORK SETTINGS
