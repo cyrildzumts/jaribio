@@ -260,18 +260,18 @@ LOGGING = {
             'propagate': False,
         },
         'django': {
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'handlers': ['file'],
             'propagate': True,
         },
         'django.request': {
             'handlers': ['mail_admins', 'file'],
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'django.template': {
             'handlers': ['console', 'file'],
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'propagate': True,
         },
         'PIL':{
