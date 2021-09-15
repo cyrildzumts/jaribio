@@ -63,7 +63,7 @@ group_patterns = [
 # ]
 
 quiz_pattterns = [
-    path('', views.product_home, name='product-home'),
+    path('', views.product_home, name='quiz-home'),
     path('products/products/', views.products, name='products'),
     path('products/detail/<uuid:product_uuid>/', views.product_detail, name='product-detail'),
     path('products/update/<uuid:product_uuid>/', views.product_update, name='product-update'),

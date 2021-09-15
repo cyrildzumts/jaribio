@@ -1,7 +1,5 @@
 {% extends "dashboard_base.html"%}
 {% load i18n %}
-{% load order_tag %}
-{% load catalog_tags %}
 {% load core_tags %}
 {% if not perms.dashboard.can_view_dashboard %}
 {% include "tags/unauthorized.html" %}
