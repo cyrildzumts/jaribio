@@ -21,5 +21,5 @@ quiz_patterns = [
 
 urlpatterns = [
     path('', include(quiz_patterns)),
-    path('category/<slug:category_slug>/', include(quiz_patterns, app_name, namespace='category'))
+    path('category/<slug:category_slug>/', include((quiz_patterns, app_name), namespace='category'))
 ]
