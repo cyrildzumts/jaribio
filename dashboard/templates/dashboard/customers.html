@@ -3,7 +3,7 @@
 
 {% block CONTENT %}
 
-{% if can_view_user %}
+{% if perms.auth.view_user %}
 
 <div class="container">
     <div class="actions flex-left">
@@ -23,9 +23,6 @@
                               <th scope="col">{% trans "Customer" %}</th>
                               <th scope="col">{% trans "Customer ID" %}</th>
                               <th scope="col">{% trans "Date Joined" %}</th>
-                              <th scope="col">{% trans "Last Purchase" %}</th>
-                              <th scope="col">{% trans "Purchase" %}</th>
-                              <th scope="col">{% trans "Products" %}</th>
                               <th scope="col">{% trans "Status" %}</th>
                               <th scope="col" class="th-actions">{% trans "Actions" %}</th>
                       </tr>
@@ -37,9 +34,6 @@
                         <td data-label="{% trans 'Customer' %}"><span>{{u.username}}</span></td>
                         <td data-label="{% trans 'Customer ID' %}"><span>{{u.customer_id}}</span></td>
                         <td data-label="{% trans 'Date Joined' %}"><span>{{u.date_joined|date:"F j,Y H:i:s"}}</span></td>
-                        <td data-label="{% trans 'Last Purchase' %}"><span>{{u.last_purchase|date:"F j,Y H:i:s"|default:''}}</span></td>
-                        <td data-label="{% trans 'Purchase' %}"><span>{{u.purchase|floatformat:"-2"|default:''}} {% if u.purchase %}{% trans CURRENCY %}{% endif %}</span></td>
-                        <td data-label="{% trans 'Products' %}"><span>{{u.products|default_if_none:'0'}}</span></td>
                         <td data-label="{% trans 'Status' %}"><span><i class="fas fa-circle icon {% if u.is_active %}success{% else %}error{% endif %}"></i>{{u.is_active|yesno:_('active,inactive')}}</span></td>
                         <td data-label="{% trans 'Actions' %}"><a class="mat-button mat-button-default" href="{% url 'dashboard:user-detail' u.id %}">{% trans "More" %} </a></td>
                       </tr>
