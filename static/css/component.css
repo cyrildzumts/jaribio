@@ -3096,6 +3096,7 @@ label.nav-label::after{
 }
 
 .create-form .flex{
+	flex-wrap: wrap;
 	align-items: baseline;
 }
 
