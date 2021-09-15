@@ -249,7 +249,7 @@ LOGGING = {
             'when' : 'midnight'
         },
         'mail_admins': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
         }
     },
@@ -260,7 +260,7 @@ LOGGING = {
             'propagate': False,
         },
         'django': {
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'handlers': ['file'],
             'propagate': True,
         },
@@ -271,7 +271,7 @@ LOGGING = {
         },
         'django.template': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'propagate': True,
         },
         'PIL':{
