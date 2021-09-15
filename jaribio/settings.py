@@ -73,6 +73,12 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_BACKEND = os.environ.get('JARIBIO_EMAIL_BACKEND')
 
+DJANGO_EMAIL_TEMPLATE = "tags/template_email_new.html"
+DJANGO_EMAIL_TO_ADMIN_TEMPLATE = "tags/admin_newuser_template_email.html"
+DJANGO_EMAIL_TEMPLATE_TXT = "tags/template_email.txt"
+DJANGO_WELCOME_EMAIL_TEMPLATE = "welcome_email_new.html"
+DJANGO_VALIDATION_EMAIL_TEMPLATE = "validation_email_new.html"
+
 PAY_USERNAME = os.getenv('JARIBIO_PAY_USER')
 PAY_REQUEST_TOKEN = os.getenv('JARIBIO_LIPA_REQUEST_TOKEN')
 PAY_REQUEST_DESCRIPTION = os.getenv('JARIBIO_PAY_DESCRIPTION', "JARIBIO PAYMENT")
