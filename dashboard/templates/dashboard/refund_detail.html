@@ -1,0 +1,54 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+{% load order_tag %}
+
+{% block CONTENT %}
+
+{% if perms.orders.view_refund %}
+<div class="container">
+        <div class="actions">
+            <a class="mat-button mat-button-default" href="{{refund.get_update_url}}"><i class="fas fa-pen icon"></i>{% trans "Edit" %}</a>
+            <a class="mat-button mat-button-outline" href="{% url 'dashboard:refunds' %}"><i class="fas fa-list icon"></i></span>{% trans "Refunds" %}</a>
+        </div><!--End of Actions-->
+        <div class="mat-box full">
+          <div class="grid">
+            <div class="box">
+                <div class="entry">
+                  <span class="key">{% trans "Amount" %}</span> <span class="value">{{refund.amount|floatformat:"-2"}} {% trans CURRENCY %}</span>
+                </div>
+                <div class="entry">
+                  <span class="key">{% trans "Customer" %}</span> <span class="value">{{refund.user.get_full_name}}</span>
+                </div>
+                <div class="entry">
+                  <span class="key">{% trans "Order" %}</span> <span class="value">{{refund.order.order_ref_number}}</span>
+                </div>
+                <div class="entry">
+                  <span class="key">{% trans "Status" %}</span> <span class="value">{{refund.status|refund_status_value}}</span>
+                </div>
+                <div class="entry">
+                  <span class="key">{% trans "Declined Reason" %}</span> <span class="value">{{refund.declined_reason|refund_declined_value|default_if_none:'-'}}</span>
+                </div>
+                
+            </div>
+            
+            <div class="box">
+                <div class="entry">
+                  <span class="key">{% trans "Create at" %}</span> <span class="value">{{refund.created_at|date:"F j, Y"}}</span>
+                </div>
+                <div class="entry">
+                  <span class="key">{% trans "Last changed" %}</span> <span class="value">{{refund.last_changed_at|date:"F j, Y"}}</span>
+                </div>
+                <div class="entry">
+                  <span class="key">{% trans "Payment Mode" %}</span> <span class="value">{{refund.payment.payment_mode|pay_mode_value}}</span>
+                </div>
+            </div>
+          </div><!--End of grid-->
+
+        </div><!--End of mat-box-->
+</div>
+{% else %}
+<div class="access-error">
+  <p>{% trans "The page you requested could not be found or you are not allowed to access this page." %}</p>
+</div>
+{% endif %}
+{% endblock CONTENT %}

@@ -1,0 +1,26 @@
+{% load i18n %}
+{% load catalog_tags %}
+
+<li>
+<div class="attr-entry flex flex-left">
+{% for k, attr in product_attrs.attrs.items %}
+    {% if attr.selective %}
+        <div class="flex margin">
+            <span class="key">{% trans attr.display_name %}</span>
+            <div class="flex flex-right">
+            {% for e in attr.value %} <a href="{{e.url}}"><span class="js-attr-select chips {% if e.quantity < 1 %}disabled{% endif %}" data-quantity="{{e.quantity}}" data-value="{{e.variant}}" data-target="variant">{% core_trans e.value %}(<small>{{e.quantity}}</small>)</span></a>{% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="flex margin">
+            <span class="key">{% trans attr.display_name %}</span>
+            <a href="{{attr.value.url}}"><span class="js-attr-select chips {% if attr.value.quantity < 1 %}disabled{% endif %}" data-quantity="{{attr.value.quantity}}" data-value="{{attr.value.variant}}" data-target="variant">{% core_trans attr.value.value %}(<small>{{attr.value.quantity}}</small>)</span></a>
+            {% comment %}
+                <span class="chips">{% core_trans attr.value.value %}</span>
+            {% endcomment %}
+        </div>
+    {% endif %}
+{% endfor %}
+</div>
+</li>
+    

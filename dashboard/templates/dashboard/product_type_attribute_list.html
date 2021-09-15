@@ -1,0 +1,49 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+{% load catalog_tags %}
+
+{% block ACTIONS %}
+<a class="mat-button mat-button-default" href="{% url 'dashboard:product-type-attribute-create' %}"><i class="fas fa-plus icon"></i><span>{% trans "New Attribute Type" %}</span></a>    
+{% endblock ACTIONS %}
+
+{% block CONTENT_MAIN %}
+
+<div class="container">
+        <form action="{% url 'dashboard:product-type-attributes-delete' %}" method="POST">{% csrf_token %}
+            <div class="actions">
+            <button id="js-delete-attrs-btn" class="mat-button mat-button-outlined js-activable" disabled><i class="fas fa-trash icon"></i> <span>{% trans "Delete Selected Attributes" %}</span></button>
+            </div>
+            <div class="mat-table-wrapper">
+                <div class="mat-table-title padding-v">{% trans "Product Type Attributes" %}</div>
+                <table id="attr-list" class="mat-table js-filter-table">
+                    <thead>
+                            <tr>
+                                    <th class="th-checkbox"><label><input id="filter-select-all" class="js-select-all" type="checkbox" name="allselected" title="{% trans 'Select all' %}"></th>
+                                    <th>{% trans "Name" %}</th>
+                                    <th>{% trans "Display Name" %}</th>
+                                    <th>{% trans "Type" %}</th>
+                                    <th>{% trans "Description" %}</th>
+                                    <th class="th-actions">{% trans "Details" %}</th>
+                            </tr>
+                    </thead>
+                    <tbody>
+                            {% for attr in type_attribute_list %}
+                            <tr>
+                                    <td class="checkbox"><label><input class="js-selectable" type="checkbox" name="type_attributes" value="{{attr.pk}}"><span class="checkbox-label"></span></label></td>
+                                    <td>{{attr.name}}</td>
+                                    <td>{{attr.display_name}}</td>
+                                    <td>{{attr.attribute_type|attr_type_value}}</td>
+                                    <td>{{attr.description}}</td>
+                                    <td><a class="mat-button mat-button-text" href="{{attr.get_dashboard_url}}"><i class="fas fa-info icon"></i><span>{% trans "Details" %}</span></a></td>
+                            </tr>
+                            {% endfor %}
+                            
+                    </tbody>
+                </table>
+            {% include "tags/pagination.html" with page_set=type_attribute_list %}
+            </div><!--End of Table Wrapper-->
+        </form>
+    
+</div>
+
+{% endblock CONTENT_MAIN %}

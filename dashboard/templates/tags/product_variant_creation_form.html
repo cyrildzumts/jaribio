@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load l10n %}
+
+<div class="mat-box">
+    <form class="form" name="variant" action="{% url 'dashboard:product-variant-create' product.product_uuid %}" method="POST">{% csrf_token %}
+        <input type="hidden" name="product" value="{{product.pk}}">
+        {{ attribute_formset.management_form }}
+        <div class="mat-box">
+
+            <div class="form-group">
+                <label for="name">{% trans "Product Name" %}</label>
+                <input type="text" id="name" name="name" value="{{product.name}}">
+            </div>
+            <div class="form-group">
+                <label for="display_name">{% trans "Display Name" %}</label>
+                <input type="text" id="display_name" name="display_name" value="{{product.display_name}}" >
+            </div>
+            <div class="form-group">
+                <label for="price">{% trans "Price" %} </label>
+                <input type="text" id="price" name="price" value="{{product.price}}">
+            </div>
+            <div class="form-group">
+                <label for="promotion-price">{% trans "Promotion Price" %} </label>
+                <input type="text" id="promotion-price" name="promotion_price" >
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">{% trans "Quantity" %}</label>
+                <input type="text" id="quantity" name="quantity" >
+            </div>
+        </div>
+
+        <div class="actions">
+            <a class="mat-button mat-button-text js-cancel" href="{{product.get_dashboard_url}}">{% trans "Cancel" %}</a>
+            <button class="mat-button mat-button-default" type="submit">{% trans "Add" %}</button>
+        </div>
+    </form>
+</div>

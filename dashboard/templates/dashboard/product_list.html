@@ -1,0 +1,19 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+{% load catalog_tags %}
+{% load core_tags %}
+
+{% block ACTIONS %}
+
+{% endblock ACTIONS %}
+
+{% block CONTENT_MAIN %}
+
+<div class="container">
+    <div class="actions flex-left">
+    <a class="mat-button mat-button-default" href="{% url 'dashboard:product-create'%}"><i class="fas fa-plus icon"></i><span>{% trans "New Product" %}</span></a>
+    </div>
+    {% url 'dashboard:products-changes' as action_url %}
+    {% include 'tags/dashboard_products_snippet.html' with ACTIONS_URL=action_url ADD_FILTER=True %}  
+</div>
+{% endblock CONTENT_MAIN %}

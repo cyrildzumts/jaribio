@@ -1,0 +1,11 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+
+{% block CONTENT %}
+<div class="banner--actions">
+    <a class="mat-button mat-button-default" href="{% url 'dashboard:policy-create'%}"><i class="fas fa-plus icon"></i><span>{% trans "New Policy" %}</span></a>
+    <a class="mat-button mat-button-default" href="{% url 'dashboard:policies' %}"><i class="fas icon"></i><span>{% trans "Policies" %}</span></a>    
+</div><!--End of Banner-Actions-->
+{% include "tags/policy_update_form.html" %}
+
+{% endblock CONTENT %}

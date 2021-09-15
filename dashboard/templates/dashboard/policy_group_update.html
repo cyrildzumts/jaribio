@@ -1,0 +1,12 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+
+
+{% block CONTENT %}
+<div class="actions">
+    <a class="mat-button mat-button-default" href="{% url 'dashboard:policy-group-create'%}"><span class="add"></span>{% trans "New Policy Group" %}</a>
+    <a class="mat-button mat-button-default" href="{% url 'dashboard:policy-groups' %}"><span class="back"></span>{% trans "Policy Groups" %}</a>
+</div><!--End of Banner-Actions-->
+{% include "tags/policy_group_update_form.html" %}
+
+{% endblock CONTENT %}

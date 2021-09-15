@@ -1,0 +1,11 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+
+{% block CONTENT_MAIN %}
+
+<div class="container wrapper">
+    <div class="full">
+        {% include 'tags/sold_product_list_template.html' with product_list=product_list %}   
+    </div>
+</div>
+{% endblock CONTENT_MAIN %}

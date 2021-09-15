@@ -1,0 +1,14 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+{% block  ACTIONS %}
+<a class="mat-button mat-button-outline js-cancel" href="{{product.get_dashboard_url}}"><i class="fas fa-arrow-alt-circle-left icon"></i><span>{% trans "Back" %}</span></a>
+{% endblock ACTIONS %}
+
+
+{% block CONTENT_MAIN %}
+
+<div class="container">
+    {% include "tags/simple_calculator_tag.html" %}
+    {% include "tags/product_update_form_new.html" %}
+</div>
+{% endblock CONTENT_MAIN %}

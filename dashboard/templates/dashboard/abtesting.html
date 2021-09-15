@@ -1,0 +1,35 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+{% load core_tags %}
+
+
+{% block CONTENT %}
+
+<div class="container">
+    <div class="col-xs-12 col-7">
+        <div class="mat-box full create-form">
+        
+            <div class="mat-box-title">{% trans "AB/TEST" %}</div>
+            <div class="mat-box-content">
+                {% for track in trackings %}
+                <div class="flex flex-left">
+                    <div class="form-group">
+                        <span class="padding">{% trans "Action" %}</span>
+                        <div class="row"><span class="text-gray">{{track.action|action_value}}</span></div>
+                    </div>
+                    <div class="form-group">
+                        <span class="padding">{% trans "Hits" %}</span>
+                        <div class="row"><span class="text-gray">{{track.hits}}</span></div>
+                    </div>
+                    <div class="form-group">
+                        <span class="padding">{% trans "Last changed" %}</span>
+                        <div class="row"><span class="text-gray">{{track.modified_at}}</span></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock CONTENT %}

@@ -1,0 +1,203 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+{% load core_tags %}
+{% load order_tag %}
+
+{%block CONTENT %}
+
+                
+<div class="container">
+        <div class="actions">
+                <a class="mat-button mat-button-outline" href="{% url 'dashboard:user-delete' user_instance.pk %}"><i class="fas fa-remove icon"></i><span>{% trans "Delete" %}</span></a>
+                <a class="mat-button mat-button-outline" href="{% url 'dashboard:send-welcome-mail' user_instance.pk %}"><i class="fas fa-envelope icon"></i><span>{% trans "Send Welcome Mail" %}</span></a>
+                {% if user_instance.account and not user_instance.account.email_validated %}
+                <a class="mat-button mat-button-outline" href="{% url 'accounts:send-validation' user_instance.account.account_uuid %}">{% trans "Send Validation Link" %}</a>
+                {% endif %}
+                {% if not has_balance and can_have_balance %}
+                <a class="mat-button mat-button-outline" href="{% url 'dashboard:create-vendor-balance' user_instance.pk %}"><i class="fas fa-plus icon"></i><span>{% trans "Add Balance" %}</span></a>
+                {% endif %}
+                {% if is_seller %}
+                
+                <a class="mat-button mat-button-outline" href="{% url 'dashboard:update-vendors-products' user_instance.pk %}"><i class="fas fa-sync icon"></i><span>{% trans "Update Vendor" %}</span></a>
+                <a class="mat-button mat-button-outline" href="{% url 'dashboard:reset-vendor' user_instance.pk %}"><i class="fas fa-unlink icon"></i><span>{% trans "Reset Vendor" %}</span></a>
+                <a class="mat-button mat-button-outline" href="{% url 'payment:pay-vendor' user_instance.pk %}"><i class="fas fa-file-invoice icon"></i><span>{% trans "Pay Vendor" %}</span></a>
+                {% endif %}
+                <a class="mat-button mat-button-outline" href="{% url 'dashboard:users' %}"><i class="fas fa-users icon"></i><span>{% trans "Users" %}</span></a>
+                
+        </div><!--End of Banner-Actions-->
+        <div class="mat-box full">
+                <h5>{% trans "User Information" %}</h5>
+                <div class="mat-box-content row">
+                        <div class="box">
+                                <div class="entry">
+                                        <span class="key">{% trans "Username" %}</span> <span class="value">{{user_instance.username}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Lastname" %}</span> <span class="value">{{user_instance.last_name}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Firstname" %}</span> <span class="value">{{user_instance.first_name}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "E-Mail" %}</span> <span class="value">{{user_instance.email}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "User is Active" %}</span> <span class="value">{{user_instance.is_active|yesno}}</span>
+                                </div>
+                                
+                        </div>
+                        
+                        {% if user_instance.account %}
+                        <div class="box">
+                                <div class="entry">
+                                        <span class="key">{% trans "Country" %}</span> <span class="value">{{user_instance.account.country}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "City" %}</span> <span class="value">{{user_instance.account.city}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Telefon" %}</span> <span class="value">{{user_instance.account.telefon}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Account Type" %}</span> <span class="value">{{user_instance.account.account_type|account_type_value}}</span>
+                                </div>
+                                 <div class="entry">
+                                        <span class="key">{% trans "Account" %}</span> <span class="value">{{user_instance.account.account_uuid}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Email is Validated" %}</span> <span class="value">{{user_instance.account.email_validated|yesno}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Account is Active" %}</span> <span class="value">{{user_instance.account.is_active|yesno}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Customer ID" %}</span> <span class="value">{{user_instance.account.customer_id|default_if_none:''}}</span>
+                                </div>
+                        </div>
+                        {% endif %}
+                        <div class="box">
+                                {% if user_instance.balance %}
+                                <div class="entry">
+                                        <span class="key">{% trans "Balance" %}</span> <span class="value">{{user_instance.balance.balance|floatformat:"-2"}} {% trans CURRENCY %}</span>
+                                </div>
+                                {% endif %}
+                                {% if is_seller %}
+                                <div class="entry">
+                                        <span class="key">{% trans "Solds" %}</span> <span class="value">{{seller_report.report.sales|floatformat:"-2"}} {% if seller_report.report.sales %}{% trans CURRENCY %}{% endif %}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Products" %}</span> <span class="value">{{seller_report.product_count}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Sold Products" %}</span> <span class="value">{{seller_report.report.total_sold}}</span>
+                                </div>
+                                {% endif %}
+                                <div class="entry">
+                                        <span class="key">{% trans "Date joined" %}</span> <span class="value">{{user_instance.date_joined|date:"F j, Y H:i:s"}}</span>
+                                </div>
+                                <div class="entry">
+                                        <span class="key">{% trans "Last login" %}</span> <span class="value">{{user_instance.last_login|date:"F j, Y H:i:s"}}</span>
+                                </div>
+                        </div>
+
+                        <div class="box">
+                                <div class="actions">
+                                        <form action="{% url 'dashboard:generate-token' %}" method="POST">{% csrf_token %}
+                                                <input type="hidden" name="user" value="{{user_instance.pk}}">
+                                                <button class="mat-button mat-button-default" type="submit"><i class="fas fa-key icon"></i><span>{% trans "Create Access Token" %}</span></button>
+                                        </form>
+                                </div>
+                        </div>
+                </div>
+
+        </div>
+
+</div>
+<div class="container">
+<div class="mat-box full">
+        <h5>{% trans "User Groups" %} ({{user_instance.groups.count}}) </h5>
+        {% if user_instance.groups %}
+        <ul>
+                {% for g in user_instance.groups.all %}
+                <li>    
+                        <ul>
+                                <li>
+                                    <h5>{% trans "Group" %} {{g.name}}</h5>
+                                    <h6>{% trans "Group Permissions" %}</h6>
+                                </li>
+                                {% for p in g.permissions.all %}
+                                <li>{{p.name}} - {{p.codename}}</li>
+                                {% endfor %}
+                        </ul>
+                </li>
+                {% endfor %}
+        </ul>
+        {% endif %}
+
+
+        <h5>{% trans "User Permissions" %} ({{user_instance.user_permissions.count}})</h5>
+        {% if user_instance.user_permissions %}
+        <ul>
+                {% for p in user_instance.user_permissions.all %}
+                <li>{{p.name}} - {{p.codename}}</li>
+                {% endfor %}
+        </ul>
+        {% endif %}
+
+</div>
+</div>
+<div id="addressbook" class="container">
+<div class="flex flex-left">
+        <h4>{% trans "Addressbook" %}</h4>
+</div>
+{% if addressbook %}
+        {% for address in addressbook %}
+        <div class="mat-box full">
+                {% include "tags/address_snippet.html" %}
+        </div>
+        {% endfor %}
+        
+{% else %}
+<p>{% trans "No address found" %}</p>
+{% endif %}
+</div>
+{% if cart_items %}
+<div class="container">
+        <div class="mat-box full">
+                <h5>{% trans "User Shopping Cart" %}</h5>
+                <ul>
+                        {% for item in cart_items %}
+                        <li id="item-{{item.id}}">
+                                {% include "tags/user_cart.html" %}
+                        </li>
+                        {% endfor %}
+                </ul>
+                
+        </div><!--End mat-list-wrapper-->
+</div>
+{% endif %}
+
+{% if recent_orders %}
+<div class="container">
+        <div class="mat-box full">
+                <h5>{% trans "Recents Orders" %}</h5>
+                <ul class="spaced-list">
+                        {% for order in recent_orders %}
+                        <li><a class="mat-button mat-button-text" href="{{order.get_dashboard_url}}"><i class="fas fa-shopping-bag icon"></i><span>{{order.order_ref_number}}</span> - <span>{{order.total_price|floatformat:"-2"}} {% trans CURRENCY %}</span> - <span>{{order.status|order_status_value}}</span></a></li>
+                        {% endfor %}
+                </ul>
+        </div>
+</div>
+{% endif %}
+
+{% if is_seller %}
+<div class="container">
+        <div class="mat-box full">
+        {% include 'tags/product_list_template.html' with product_list=product_list %}   
+        </div>
+</div>
+{% endif %}
+                
+{% endblock CONTENT %}
+
+

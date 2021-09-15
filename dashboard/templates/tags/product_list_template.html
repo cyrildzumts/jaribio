@@ -1,0 +1,52 @@
+{% load i18n %}
+{% load catalog_tags %}
+{% load core_tags %}
+
+
+
+<div class="mat-table-wrapper">
+        {% if FILTER_CONFIG %}
+            <form action="{% url 'dashboard:products' %}" id="filter-form" method="GET">
+            {% include "core/core_filter.html" with FILTER_TEMPLATE="core/filter.html" %}
+            </form>
+        {% endif %}
+        <form action="{% url 'dashboard:products-changes' %}" method="POST">{% csrf_token %}
+        <table id="product-list" class="mat-table js-filter-table">
+             <ul class="actions">
+             {% for k,v in PRODUCT_ACTIONS %}<li><input id="action-{{k}}" type="radio" name="action" value="{{k}}"><label for="action-{{k}}">{% trans v %}</label></li>{% endfor %}
+             <li><button type="submit" class="js-activable mat-button mat-button-outlined" disabled><i class="fas fa-trash icon"></i><span>{% trans "APPLY" %}</span></button></li>
+             </ul>
+          <thead>
+                  <tr>
+                          <th scope="col" style="width:24px;"><label><input id="filter-select-all" class="js-select-all" type="checkbox" name="allselected" title="{% trans 'Select all' %}"></label></th>
+                          <th style="width:32px;"></th>
+                          <th scope="col" style="width:48px;">{% trans "Display Name" %}</th>
+                          <th scope="col" style="width:24px;">{% trans "Views" %}</th>
+                          <th scope="col" style="width:32px;">{% trans "Price" %}</th>
+                          <th scope="col" style="width:32px;">{% trans "Promotion Price" %}</th>
+                          <th scope="col" style="width:24px;">{% trans "Quantity" %}</th>
+                          <th scope="col" style="width:32px;">{% trans "Details" %}</th>
+                  </tr>
+          </thead>
+          <tbody>
+                  {% for product in product_list  %}
+                  <tr>
+        
+                  <td scope="row" class="checkbox"><label><input class="js-selectable" type="checkbox" name="products" value="{{product.pk}}"><span class="checkbox-label"></span></label></td>
+                  <td><div class="col-xs-3 col-4"><img class="img-responsive" src="{{product.image}}" alt="{{product.display_name}}"></div></td>
+                  <td data-label="{% trans 'Display Name' %}"><span>{{product.display_name}}</span></td>
+                  <td data-label="{% trans 'Views' %}"><span>{{product.view_count}}</span></td>
+                  <td data-label="{% trans 'Price' %}"><span>{{product.price|floatformat:"-2"}} {% trans CURRENCY %}</span></td>
+                  <td scope="row" data-label="{% trans 'Promotion Price' %}"><span>{{product.get_promotion_price|floatformat:"-2"}} {% trans CURRENCY %}</span></td>
+                  <td data-label="{% trans 'Quantity' %}"><span>{{product.quantity}}</span></td>
+                  <td data-label="{% trans 'Detail' %}"><a class="mat-button mat-button-default" href="{{product.get_dashboard_url}}"><span><i class="fas fa-info icon"></i>{% trans "Details" %}</span></a></td>
+                
+                  </tr>
+                  {% endfor %}
+                  
+          </tbody>
+
+    </table>
+    </form>
+    {% include "tags/pagination.html" with page_set=product_list %}
+    </div><!--End of Table Wrapper-->

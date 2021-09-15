@@ -1,0 +1,56 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+
+{% block CONTENT %}
+
+{% if perms.auth.view_user %}
+
+<div class="container">    
+        <form action="{% url 'dashboard:users-delete' %}" method="POST">{% csrf_token %}
+        <div class="actions flex-left">
+              {% if perms.auth.add_user %}
+              <a class="mat-button mat-button-default" href="{% url 'dashboard:create-user' %}"> <i class="fas fa-user-plus icon"></i><span>{% trans "New Customer" %}</span></a>
+            {% endif %}
+              <button class="js-activable mat-button mat-button-outlined" disabled><i class="fas fa-trash icon"></i><span>{% trans "Delete Selected" %}</span></button>
+        </div>
+        <div class="mat-table-wrapper">
+        <div class="mat-table-title padding-v">{% trans "Sellers" %}</div>
+        <table id="user-list" class="mat-table js-filter-table">
+          <thead>
+                  <tr>
+                          <th class="th-checkbox"><input id="filter-select-all" class="js-select-all" type="checkbox" name="allselected" title="{% trans 'Select all' %}"></th>
+                          <th scope="col">{% trans "Seller" %}</th>
+                          <th scope="col">{% trans "Seller ID" %}</th>
+                          <th scope="col">{% trans "Sales" %}</th>
+                          <th scope="col">{% trans "Sold" %}</th>
+                          <th scope="col">{% trans "Last Sold" %}</th>
+                          <th scope="col" class="th-actions">{% trans "Actions" %}</th>
+                  </tr>
+          </thead>
+          <tbody>
+                  {% for u in sellers  %}
+                  <tr>
+                    <td class="checkbox"><input class="js-selectable" type="checkbox" name="users" value="{{u.id}}"></td>
+                    <td data-label="{% trans 'Seller' %}"><span>{{u.username}}</span></td>
+                    <td data-label="{% trans 'Seller ID' %}"><span>{{u.customer_id}}</span></td>
+                    <td data-label="{% trans 'Sales' %}"><span>{{u.sales|floatformat:"-2"|default:''}} {% if u.sales %}{% trans CURRENCY %}{% endif %}</span></td>
+                    <td data-label="{% trans 'Sold' %}"><span>{{u.total_sold}}</span></td>
+                    <td data-label="{% trans 'Last Sold' %}"><span>{{u.last_sold|date:"F j,Y H:i:s"|default:'-'}}</span></td>
+                    <td data-label="{% trans 'Actions' %}"><a class="mat-button mat-button-default" href="{% url 'dashboard:user-detail' u.id %}">{% trans "More" %} </a></td>
+                  </tr>
+                  {% endfor %}
+                  
+          </tbody>
+    </table>
+    </div><!--End of Table Wrapper-->
+    </form>
+    {% include "tags/pagination.html" with page_set=users %}
+    
+</div>
+
+{% else %}
+<div class="access-error">
+  <p>{% trans "The page you requested could not be found or you are not allowed to access this page." %}</p>
+</div>
+{% endif %}
+{% endblock CONTENT %}

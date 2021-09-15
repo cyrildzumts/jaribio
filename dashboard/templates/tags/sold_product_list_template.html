@@ -1,0 +1,46 @@
+{% load i18n %}
+{% load catalog_tags %}
+<form action="{% url 'dashboard:sold-products-delete' %}" method="POST">{% csrf_token %}
+<div class="mat-table-wrapper">
+        <div class="mat-table-title">{% trans "Sold Products" %}</div>
+        <table id="product-list" class="mat-table js-filter-table">
+            <div class="actions">
+                <button id="js-delete-all-btn" class="mat-button mat-button-outlined js-activable" disabled>{% trans "Delete Selected" %}</button>
+            </div>
+          <thead>
+                  <tr>
+                          <th><label><input id="filter-select-all" class="js-select-all" type="checkbox" name="allselected" title="{% trans 'Select all' %}"></label></th>
+                          <th></th>
+                          <th scope="col">{% trans "Customer" %}</th>
+                          <th scope="col">{% trans "Order" %}</th>
+                          <th scope="col">{% trans "Article" %}</th>
+                          <th scope="col">{% trans "Gender" %}</th>
+                          <th scope="col">{% trans "Price" %}</th>
+                          <th scope="col">{% trans "Promotion Price" %}</th>
+                          <th scope="col">{% trans "Quantity" %}</th>
+                          <th scope="col">{% trans "Details" %}</th>
+
+                  </tr>
+          </thead>
+          <tbody>
+                  {% for sold_product in product_list  %}
+                  <tr>
+                  <td class="checkbox"><label><input class="js-selectable" type="checkbox" name="products" value="{{sold_product.pk}}"><span class="checkbox-label"></span></label></td>
+                  <td><div class="col-xs-3 col-4"><img class="img-responsive" src="{{sold_product.product.image}}" alt="{{sold_product.product.display_name}}"></div></td>
+                  <td scope="row" data-label="{% trans 'Customer' %}"><span>{{sold_product.customer.username}}</span></td>
+                  <td scope="row" data-label="{% trans 'Order' %}">{{sold_product.order.order_ref_number}}</td>
+                  <td scope="row" data-label="{% trans 'Article' %}">{{sold_product.product.display_name}}</td>
+                  <td scope="row" data-label="{% trans 'Gender' %}">{{sold_product.product.product.gender|gender_value}}</td>
+                  <td scope="row" data-label="{% trans 'Price' %}"><span><span>{{sold_product.price|floatformat:"-2"}}</span> <span>{% trans CURRENCY %}</span></span></td>
+                  <td scope="row" data-label="{% trans 'Promotion Price' %}"><span><span>{{sold_product.promotion_price|default_if_none:'0'|floatformat:"-2"}}</span> <span>{% trans CURRENCY %}</span></span></td>
+                  <td scope="row" data-label="{% trans 'Quantity' %}">{{sold_product.quantity}}</td>
+                  <td scope="row" data-label="{% trans 'Details' %}"><a class="mat-button mat-button-default" href="{{sold_product.get_dashboard_url}}"> <i class="fas fa-info icon"></i><span>{% trans "Details" %}</span></a></td>
+                  </tr>
+                  {% endfor %}
+                  
+          </tbody>
+
+    </table>
+    {% include "tags/pagination.html" with page_set=product_list %}
+    </div><!--End of Table Wrapper-->
+</form>

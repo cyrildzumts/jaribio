@@ -1,0 +1,165 @@
+{% extends "product_base.html"%}
+{% load static %}
+{% load catalog_tags %}
+{% load i18n %}
+{% block ACTIONS %}
+
+{% if perms.catalog.change_product %}
+<a class="mat-button mat-button-default" href="{% url 'dashboard:product-variant-create' product.product_uuid %}"><i class="fas fa-plus icon"></i> <span>{% trans "Add Variant" %}</span></a>
+<a class="mat-button mat-button-default" href="{{variant.get_update_url}}"><i class="fas fa-pen icon"></i><span class="">{% trans "Edit" %}</span></a>
+<a class="mat-button mat-button-default" href="{{product.get_dashboard_url}}"><i class="fas fa-tag icon"></i><span class="">{% trans "Parent Product" %}</span></a>
+<a class="mat-button mat-button-default" href="{% url 'dashboard:products' %}"><i class="fas fa-list icon"></i><span>{% trans "Products" %}</span></a>
+<form action="{{variant.get_delete_url}}" method="POST">{% csrf_token %}
+    <button class="mat-button mat-button-default warn" type="submit"><i class="fas fa-trash icon"></i><span class="">{% trans "Delete" %}</span></button>
+</form>
+
+{% endif %}
+
+{% endblock ACTIONS %}
+{% block CONTENT_MAIN %}
+<div class="container">
+  <div class="mat-box wrapper full">
+      <div class="mat-box-content row">
+          <div class="col-12 col-m-12 col-xs-12 title">
+              <span>{% trans "Product Variant Information" %}</span>
+          </div>
+          <div class="box">
+            <div class="entry">
+              <span class="key">{% trans "Name" %}</span> <span class="value">{{product.name}}</span>
+            </div>
+            <div class="entry">
+              <span class="key">{% trans "Display Name" %}</span> <span class="value">{{product.display_name}}</span>
+            </div>
+            <div class="entry">
+              <span class="key">{% trans "Brand" %}</span> <span class="value">{{product.brand.display_name}}</span>
+            </div>
+            <div class="entry">
+              <span class="key">{% trans "Gender" %}</span> <span class="value">{{product.gender|gender_value}}</span>
+            </div>
+            
+            
+          </div>
+          <div class="box">
+              
+              <div class="entry">
+                <span class="key">{% trans "Quantity" %}</span> <span class="value">{{variant.quantity}}</span>
+              </div>
+              
+              <div class="entry">
+                <span class="key">{% trans "Unit Price" %}</span> <span class="value">{{variant.price|floatformat:"-2"}} {% trans CURRENCY %}</span>
+              </div>
+              <div class="entry">
+                <span class="key">{% trans "Promotion Price" %}</span> <span class="value">{{variant.get_promotion_price|floatformat:"-2"}} {% trans CURRENCY %}</span>
+              </div>
+          </div>
+          <div class="box">
+            
+            <div class="entry">
+              <span class="key">{% trans "Views" %}</span> <span class="value">{{product.view_count}}</span>
+            </div>
+          </div>
+        </div><!--End of mat-box-content-->
+  </div>
+  <div class="mat-box wrapper full">
+      <div class="actions">
+        <span class="mat-button js-add-attr-btn js-dialog-open" data-target="attr-dialog"><i class="fas fa-plus icon"></i> <span>{% trans "Add Attribute" %}</span></span>
+        <span class="mat-button js-reveal-btn" data-target="#variant-attrs"><i class="fas fa-pen icon"></i><span>{% trans "Edit Attribute" %}</span></span>
+      </div>
+      <div class="mat-box-content row">
+          <form class="row" action="{% url 'dashboard:attribute-remove' variant.product_uuid %}" method="POST">{% csrf_token %}
+              <ul id="variant-attrs" class="box">
+                
+                  {% for attr in attribute_list %}
+                  <li class="mat-list-item entry"><span class="key">{{attr.display_name}}</span><span class="value">{{attr.value}}</span> <input class="hidden js-revealable" type="checkbox" name="attributes" value="{{attr.pk}}"></li>
+                  {% empty %}
+                  <li class="mat-list-item entry"><span>--</span></li>
+                  {% endfor %}
+                  
+              </ul>
+              <div class="actions hidden js-revealable">
+                    <span class="mat-button js-revealable-hide" data-target="#variant-attrs" >{% trans "Cancel" %}</span>
+                    <button class="mat-button mat-button-default" type="submit">{% trans "Remove Attributes" %}</button>
+              </div>
+          </form>
+      </div><!--nd of box-content-->
+  </div><!--End of mat-box-->
+  <div id="attr-dialog" class="mat-dialog dialog">
+
+    <div class="dialog-title">
+      <h4>{% trans "Add Attribute Dialog" %}</h4>
+    </div>
+    <span class="mat-button mat-button-text js-dialog-close dialog-close" data-target="attr-dialog"><i class="fas fa-times"></i></span>
+    <span class="mat-button js-clear-input" data-target="available-attrs">{% trans "Clear Form" %}</span>
+    <div class="dialog-content container">
+      <div class="mat-list-wrapper full">
+      <form class="row" action="{% url 'dashboard:attribute-add' variant.product_uuid %}" method="post"> {% csrf_token %}
+        <ul id="available-attrs" class="box">
+          {% for attr in available_attribute_list %}
+            <li class="mat-list-item entry"><span class="key">{{attr.display_name}}</span><span class="value">{{attr.value}}</span><input type="checkbox" name="attributes" value="{{attr.pk}}"></li>
+          {% endfor %}
+        </ul>
+        <div class="actions">
+              <span class="mat-button mat-button-text js-dialog-close" data-target="attr-dialog">{% trans "Cancel" %}</span>
+              <button class="mat-button mat-button-default" type="submit">{% trans "Add Attributes" %}</button>
+        </div>
+      </form>
+      </div>
+      <div class="mat-box full">
+            <h4>{% trans "New Attribtute" %}</h4>
+            <div class="actions">
+              <button class="mat-button mat-button-default js-add-new-attribute" data-form="#form-add-attributes" data-target="#form-attr-container">{% trans "Add" %}</button>
+            </div>
+            <div class="mat-box-content">
+                <form id="form-add-attributes" action="{% url 'dashboard:attribute-create' variant.product_uuid %}" method="POST">{% csrf_token %}
+                    <input id="id_form-TOTAL_FORMS" type="hidden" name="form-TOTAL_FORMS" value="0">
+                    <input id="id_form-INITIAL_FORMS" type="hidden" name="form-INITIAL_FORMS" value="0">
+                    <input id="id_form-MIN_NUM_FORMS" type="hidden" name="form-MIN_NUM_FORMS" value="0">
+                    <input id="id_form-MAX_NUM_FORMS" type="hidden" name="form-MAX_NUM_FORMS" value="0">
+                    <div id="form-attr-container" class="container">
+                    
+                    </div>
+                    <div class="form-group actions">
+                        <span class="mat-button mat-button-text js-dialog-close" data-target="attr-dialog">{% trans "Cancel" %}</span>
+                        <button class="mat-button mat-button-default" type="submit">{% trans "Create" %}</button>
+                    </div>
+                </form>
+            </div><!--End of box content-->
+        </div><!--End of box-->
+      
+    </div>  
+  </div>
+</div>
+{% endblock CONTENT_MAIN %}
+
+{% block SCRIPT %}
+<script type="text/javascript">
+var types = [
+{% for k,v in ATTRIBUTE_TYPE %}
+  {% if forloop.last %}
+  '{{k}}'
+  {% else %}
+  '{{k}}',
+  {% endif %}
+{% endfor %}
+];
+var attr_template = {
+  name: '{% trans "Name" %}',
+  display_name: '{% trans "Display Name" %}',
+  value : '{% trans "Value" %}',
+  is_primary : '{% trans "Primary" %}',
+  value_type : '{% trans "Value Type" %}',
+  value_types : [
+{% for k,v in ATTRIBUTE_TYPE %}
+  {% if forloop.last %}
+  { key :'{{k}}', value: '{{v}}' }
+  {% else %}
+  { key :'{{k}}', value: '{{v}}' },
+  {% endif %}
+{% endfor %}
+]
+};
+</script>
+{% comment %}
+<script  type="application/javascript" src="{% static 'js/lib/attributes.js' %}"></script>
+{% endcomment %}
+{% endblock SCRIPT %}

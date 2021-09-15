@@ -1,0 +1,92 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+{% load order_tag %}
+
+
+{% block CONTENT %}
+
+{% if perms.orders.view_paymentrequest %}
+
+{% comment %}
+    <div class="container">
+        <div class="mat-table-wrapper">
+            <div class="mat-table-title">
+              <span>{% trans "Payment Requests" %}</span>
+            </div>
+            <table id="request-list" class="mat-table js-filter-table">
+              <thead>
+                      <tr>
+                              <!--<th><input id="filter-select-all" type="checkbox" name="allselected"></th>-->
+                              <th scope="col">{% trans "Customer" %}</th>
+                              <th scope="col">{% trans "Amount" %}</th>
+                              <th scope="col">{% trans "Payment Status" %}</th>
+                              <th scope="col">{% trans "Date" %}</th>
+                              <th scope="col">{% trans "Details" %}</th>
+                      </tr>
+              </thead>
+              <tbody>
+                      {% for r in requests  %}
+                      <tr>
+                        <!--<td class="checkbox"><input type="checkbox" name="selected-service"></td>-->
+                        <td scope="row" data-label="Customer"><span>{{r.customer.get_full_name}}</span></td>
+                        <td data-label="Amount"><span>{{r.amount|floatformat:"-2"}} {% trans "XAF" %}</span></td>
+                        <td data-label="Payment Status"><span>{{r.payment_status|pay_status_value}}</span></td>
+                        <td data-label="Date"><span>{{r.created_at|date:"F j,Y H:i:s"}}</span></td>
+                        <td data-label="Details"><a class="mat-button mat-button-default" href="{{r.get_dashboard_url}}">{% trans "More" %}</a></td>
+                      </tr>
+                      {% endfor %}
+              </tbody>
+            </table>
+        {% include "tags/pagination.html" with page_set=requests %}
+        </div><!--End of Table Wrapper-->
+    </div>
+{% endcomment %}
+
+<div class="container">
+
+    <form id="fetch-payments-form" action="{% url 'dashboard:fetch-payments' %}" method="POST">{% csrf_token %}
+        <div class="mat-box">
+            <div class="form-group">
+                <label for="page"><span>{% trans "Page" %}</span></label>
+                <input id="page" type="text" name="page">
+            </div>
+            <div class="form-group">
+                <label for="limit"><span>{% trans "Limit" %}</span></label>
+                <input id="limit" type="text" name="limit">
+            </div>
+            <div class="form-group">
+                <label for="created-at"><span>{% trans "Date" %}</span></label>
+                <input id="created-at" type="date" name="created_at">
+            </div>
+        </div>
+        <div class="actions">
+            <button class="mat-button mat-button-default">{% trans "Query" %}</button>
+        </div>
+    </form>
+    {% if results %}
+    <div class="mat-box">
+        <div class="mat-box-title">{% trans "Payments" %}</div>
+        <div class="mat-box-content">
+            {{results}}
+        </div>
+    </div>
+    {% endif %}
+    <div id="payments-container" class="mat-box hidden">
+        <div class="mat-box-title">{% trans "Payments" %} <span id="payment-count"></span></div>
+        <div class="mat-box-content">
+            <ul id="payments" class="mat-list">
+            
+            </ul>
+        </div>
+        
+    </div>
+
+
+</div>
+
+{% else %}
+<div class="access-error">
+  <p>{% trans "The page you requested could not be found or you are not allowed to access this page." %}</p>
+</div>
+{% endif %}
+{% endblock CONTENT %}

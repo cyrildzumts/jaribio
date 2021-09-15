@@ -1,0 +1,48 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+{% load shipment_status %}
+{% load order_tag %}
+
+{% block ACTIONS %}
+<a class="mat-button mat-button-outline" href="{{order.get_dashboard_url}}"><i class="fas fa-caret-left icon"></i><span>{% trans "Back to Order" %}</span></a>
+<a class="mat-button mat-button-outline" href="{% url 'dashboard:orders' %}"><i class="fas fa-list icon"></i><span>{% trans "Orders" %}</span></a>
+{% endblock ACTIONS %}
+
+{% block CONTENT_MAIN %}
+{% if history_list %}
+<div class="container">
+    
+    <div class="mat-table-wrapper">
+        <div class="mat-table-title">{% trans "Order History" %}</div>
+        <table id="order-list" class="mat-table js-filter-table">
+          <thead>
+                  <tr>
+                          <th scope="col">{% trans "Status" %}</th>
+                          <th scope="col">{% trans "Date" %}</th>
+                  </tr>
+          </thead>
+          <tbody>
+                  {% for h in history_list  %}
+                  <tr>
+
+                    <td data-label="{% trans 'Status' %}"><span>{{h.order_status|order_status_value}}</span></td>
+                    <td data-label="{% trans 'Date' %}"><span>{{h.created_at|date:"F j, Y"}}</span></td>
+                  </tr>
+                  {% endfor %}
+                  
+          </tbody>
+        </table>
+    </div><!--End of Table Wrapper-->
+</div>
+
+{% else %}
+<div class="container">
+  <div class="col-m-12 col-12">
+    <p>{% trans "There is no Order history yet." %}</p>
+  </div>
+  <div class="col-m-12 col-12">
+    <p>{% trans "Order history will be displayed here." %}</p>
+  </div>
+</div>
+{% endif %}
+{% endblock CONTENT_MAIN %}

@@ -1,0 +1,61 @@
+{% extends "dashboard_base.html"%}
+
+{% load i18n %}
+
+{% block CONTENT %}
+<form id="partner-token-form" name="partner-token-form" action="{% url 'dashboard:partner-token-update' p_token.token_uuid %}" method="POST">{% csrf_token %}
+<div class="padding">
+    <div class="mat-box">
+            <input id="partner" type="hidden" name="partner" value="{{p_token.partner.pk}}">
+            <input id="changed_by" type="hidden" name="changed_by" value="{{request.user.pk}}">
+            <div class="flex">
+                <div class="form-group">
+                    <label for="name">{% trans "Name" %}</label>
+                    <input id="name" type="text" name="name" value="{{p_token.name}}">
+                </div>
+            </div>
+            <div class="flex">
+                <div class="form-group">
+                    <label for="token">{% trans "Token" %}</label>
+                    <input id="token" type="text" name="token" value="{{p_token.token}}">
+                </div>
+            </div>
+            <div class="flex">
+                <div class="form-group">
+                    <label for="request-url">{% trans "Payment Request Url" %}</label>
+                    <input id="request-url" type="text" name="payment_request_url" value="{{p_token.payment_request_url}}">
+                </div>
+            </div>
+            <div class="flex">
+                <div class="form-group">
+                    <label for="fetch-url">{% trans "Fetch Url" %}</label>
+                    <input id="fetch-url" type="text" name="payment_fetch_url" value="{{p_token.payment_fetch_url|default_if_none:''}}">
+                </div>
+            </div>
+            <div class="flex">
+                <div class="form-group">
+                    <label for="cancel-url">{% trans "Cancel Url" %}</label>
+                    <input id="cancel-url" type="text" name="cancel_payment_request_url" value="{{p_token.cancel_payment_request_url|default_if_none:''}}">
+                </div>
+            </div>
+            <div class="flex">
+                <div class="form-group">
+                    <label for="valid-until">{% trans "Valid until" %}</label>
+                    <input id="valid-until" type="date" name="valid_until" value="{{p_token.valid_until}}">
+                </div>
+            </div>
+            <div class="flex">
+                <div class="form-group">
+                    <label for="is_active">{% trans "Is Active" %}</label>
+                    <input id="is_active" type="checkbox" name="is_active" {% if p_token.is_active %}checked{% endif %}>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <a class="mat-button mat-button-outline js-cancel" href="{{p_token.get_dashboard_url}}">{% trans "Cancel" %}</a>
+                <button class="mat-button mat-button-default" type="submit"><i class="fas fa-plus icon"></i>{% trans "Update Token" %}</button>
+            </div>
+    </div>
+</div>
+</form>
+{% endblock CONTENT %}

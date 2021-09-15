@@ -1,0 +1,26 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+{% load catalog_tags %}
+{% block ACTIONS %}
+
+{% if perms.catalog.delete_product %}
+<form action="{{attribute.get_delete_url}}" method="POST">{% csrf_token %}
+<div class="actions flex-left">
+  <a class="mat-button mat-button-default" href="{% url 'dashboard:attributes-create' %}"><i class="fas fa-plus icon"></i><span>{% trans "New Attributes" %}</span></a>    
+  <button type="submit" class="mat-button mat-button-outline"><i class="fas fa-trash icon"></i>{% trans "Delete" %}</button>
+  <a class="mat-button mat-button-outline" href="{% url 'dashboard:attributes' %}"><i class="fas fa-list icon"></i><span>{% trans "Attributes" %}</span></a>
+</div>
+</form>
+{% endif %}
+  
+{% endblock ACTIONS %}
+
+{% block CONTENT_MAIN %}
+
+<div class="container">
+    <div class="col-x-12 col-7">
+      {% include 'tags/attribute_tag.html' %}
+    </div>
+</div>
+
+{% endblock CONTENT_MAIN %}

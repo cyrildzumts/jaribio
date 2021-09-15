@@ -1,0 +1,19 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+{% block ACTIONS %}
+<a class="mat-button mat-button-default" href="{%url 'dashboard:product-home'%}">{% trans "Product Home" %}</a>
+{% endblock ACTIONS %}
+
+{% block CONTENT_MAIN %}
+
+<div class="container new-product-wrapper">
+    <div class="calc-wrapper row flex-left">
+            <div class="flex flex-left full">
+                <label for="simple-calculator-toggle">{% trans "Toggle Calculator" %}</label>
+            </div>
+            
+            {% include "tags/simple_calculator_tag.html" %}
+    </div>
+    {% include "tags/product_creation_form_new.html" %}
+</div>
+{% endblock CONTENT_MAIN %}

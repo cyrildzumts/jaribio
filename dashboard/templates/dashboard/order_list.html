@@ -1,0 +1,61 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+{% load order_tag %}
+{% block ACTIONS %}
+ <a class="mat-button mat-button-default" href="{% url 'dashboard:clean-unpaid-orders' %}"><i class="fas fa-sync icon"></i><span>{% trans "Clean Unpaid Orders" %}</span></a>
+{% endblock ACTIONS %}
+
+{% block CONTENT %}
+
+{% if perms.orders.view_order %}
+<form id="filter-form" action="" method="GET">{% comment %}{% csrf_token %}
+{% endcomment %}
+<div class="container">
+    {% if FILTER_CONFIG %}
+        {% include "core/core_filter.html" with FILTER_TEMPLATE="core/filter.html" %}
+    {% endif %}
+    <div class="mat-table-wrapper">
+        <div class="mat-table-title padding-v">{% trans "Orders" %}</div>
+        <table id="order-list" class="mat-table js-filter-table">
+          <thead>
+                  <tr>
+                          <!--<th><input id="filter-select-all" type="checkbox" name="allselected"></th>-->
+                          <th scope="col">{% trans "Customer" %}</th>
+                          <th scope="col">{% trans "Order Reference" %}</th>
+                          <th scope="col">{% trans "Amount" %}</th>
+                          <th scope="col">{% trans "Quantity" %}</th>
+                          <th scope="col">{% trans "Status" %}</th>
+                          <th scope="col">{% trans "Order Type" %}</th>
+                          <th scope="col">{% trans "Payment Option" %}</th>
+                          <th scope="col">{% trans "Date" %}</th>
+                          <th scope="col" class="th-actions">{% trans "Details" %}</th>
+                  </tr>
+          </thead>
+          <tbody>
+                  {% for o in orders  %}
+                  <tr>
+                    <!--<td class="checkbox"><input type="checkbox" name="selected-service"></td>-->
+                    <td scope="row" data-label="{% trans 'Customer' %}"><span>{{o.user.get_full_name}}</span></td>
+                    <td data-label="{% trans 'Order Reference' %}"><span>{{o.order_ref_number}}</span></td>
+                    <td data-label="{% trans 'Amount' %}"><span>{{o.amount|floatformat:"-2"}} {% trans CURRENCY %}</span></td>
+                    <td data-label="{% trans 'Quantity' %}"><span>{{o.quantity}}</span></td>
+                    <td data-label="{% trans 'Status' %}"><span>{{o.status|order_status_value}}</span></td>
+                    <td data-label="{% trans 'Order Type' %}"><span class="{% if o.order_type == ORDER_ON_DEMAND %}on-demand-order{% else %}standard-order{% endif %}">{{o.order_type|order_type_value}}</span></td>
+                    <td data-label="{% trans 'Payment Option' %}"><span>{{o.payment_option|payment_option_value}}</span></td>
+                    <td data-label="{% trans 'Date' %}"><span>{{o.created_at|date:"F j, Y H:i:s"}}</span></td>
+                    <td data-label="{% trans 'Details' %}"><a class="mat-button mat-button-default" href="{{o.get_dashboard_url}}"><span><i class="fas fa-info icon"></i>{% trans "See" %}</span></a></td>
+                  </tr>
+                  {% endfor %}
+                  
+          </tbody>
+    </table>
+    {% include "tags/pagination.html" with page_set=orders %}
+    </div><!--End of Table Wrapper-->
+</div>
+</form>
+{% else %}
+<div class="access-error">
+  <p>{% trans "The page you requested could not be found or you are not allowed to access this page." %}</p>
+</div>
+{% endif %}
+{% endblock CONTENT %}

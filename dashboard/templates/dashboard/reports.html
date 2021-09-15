@@ -1,0 +1,41 @@
+{% extends "dashboard_base.html"%}
+{% load static %}
+{% load i18n %}
+{% if not can_access_dashboard %}
+{% include "tags/unauthorized.html" %}
+{% else %}
+
+{% block SCRIPT_VAR %}
+    {% if report %}
+    {{report|json_script:"report_script"}}
+    {% endif %}
+{% endblock SCRIPT_VAR %}
+
+{% block CONTENT %}
+<div class="container">
+    
+    {% include "tags/report_summary.html" %}
+    <div class="actions">
+            <a class="mat-button mat-button-text" href="{% url 'dashboard:update-suspicious-requests' %}"><i class="fas fa-sync icon"></i><span>{% trans "Update Suspicious Requests" %}</span></a>    
+    </div><!--End of Banner-Actions-->
+</div>
+<div class="container">
+        <div id="reports" class="container">
+                {% if report %}
+                {% include "tags/analytics.html" %}
+                {% else %}
+                <div class="warn">
+                        {% trans "There is no report now." %}
+                </div>
+                {% endif %}
+        </div>
+</div>
+{% endblock CONTENT %}
+
+{% block BASE_SCRIPT %}
+<script  data-main="{% static 'js/report.min' %}" src="{% static 'js/require.js' %}"></script>        
+{% endblock BASE_SCRIPT %}
+{% block SCRIPT %}
+
+{% endblock SCRIPT %}
+{% endif %}

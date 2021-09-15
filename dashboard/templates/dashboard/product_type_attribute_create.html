@@ -1,0 +1,11 @@
+{% extends "product_base.html"%}
+{% load i18n %}
+{% block ACTIONS %}
+
+{% endblock ACTIONS %}
+
+{% block CONTENT_MAIN %}
+<div class="container">
+    {% include 'tags/product_type_attr_tag.html' with IS_CREATE_FORM=True%}     
+</div>
+{% endblock CONTENT_MAIN %}

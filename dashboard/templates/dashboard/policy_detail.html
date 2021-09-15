@@ -1,0 +1,28 @@
+{% extends "dashboard_base.html"%}
+{% load i18n %}
+
+{% block CONTENT %}
+
+{% if can_view_policy %}
+<div class="container">
+         <div class="actions">
+            <a class="mat-button mat-button-default" href="{{policy.get_dashboard_update_url}}"><i class="fas fa-pen icon"></i><span>{% trans "Edit" %}</span></a>
+            <a class="mat-button mat-button-default" href="{% url 'dashboard:policy-create'%}"><i class="fas fa-plus icon"></i><span>{% trans "Add New Policy" %}</span></a>
+            <a class="mat-button mat-button-default" href="{% url 'dashboard:policies' %}"><i class="fas icon"></i><span>{% trans "Policies" %}</span></a>
+        </div><!--End of Actions-->
+        <div class="mat-box">
+          <div class="mat-box-title">
+              <h3>{% trans "Policy" %}</h3>
+          </div>
+          <div class="mat-box-content">
+            <div class="entry">  <span class="key">{% trans "Monthly Limit" %}</span>  <span class="value">{{policy.monthly_limit}} {% trans CURRENCY %}</span> </div>
+            <div class="entry"> <span class="key"> {% trans "Commission" %}</span> <span class="value"> {{policy.commission}}</span></div>  
+          </div>
+        </div>
+</div>
+{% else %}
+<div class="access-error">
+  <p>{% trans "The page you requested could not be found or you are not allowed to access this page." %}</p>
+</div>
+{% endif %}
+{% endblock CONTENT %}
