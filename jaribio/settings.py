@@ -49,6 +49,11 @@ CELERY_DEFAULT_EXCHANGE_TYPE = 'direct'
 CELERY_NAMESPACE = 'CELERY'
 CELERY_APP_NAME = 'jaribio'
 
+ACCOUNT_ROOT_PATH = "/accounts/"
+HOME_URL = "/"
+DASHBOARD_ROOT_PATH = "/dashboard/"
+USER_PATH = "/users/detail/"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
