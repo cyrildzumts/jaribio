@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'accounts',
     'quiz.apps.QuizConfig',
+    'core.apps.CoreConfig',
 ]
 
 # RESTFRAMEWORK SETTINGS
@@ -136,6 +137,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'jaribio.context_processors.site_context',
                 'accounts.context_processors.account_context',
+                'core.context_processors.core_context',
             ],
         },
     },

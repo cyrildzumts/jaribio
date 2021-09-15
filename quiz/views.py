@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from quiz.models import Quiz
+from quiz import constants as QUIZ_CONSTANTS
 # Create your views here.
 
 
@@ -15,6 +16,7 @@ def create_quiz(request):
     template_name = "quiz/quiz_create.html"
     context = {
         'page_title': "New Quiz",
+        'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES
     }
     return render(request, template_name, context)
 
@@ -24,6 +26,7 @@ def update_quiz(request, quiz_uuid):
     template_name = "quiz/quiz_update.html"
     context = {
         'page_title': "Update Quiz",
+        'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES
     }
     return render(request, template_name, context)
 
