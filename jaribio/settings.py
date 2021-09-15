@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     'accounts',
     'quiz.apps.QuizConfig',
     'core.apps.CoreConfig',
+    'dashboard.apps.DashboardConfig',
 ]
 
 # RESTFRAMEWORK SETTINGS
@@ -138,6 +139,7 @@ TEMPLATES = [
                 'jaribio.context_processors.site_context',
                 'accounts.context_processors.account_context',
                 'core.context_processors.core_context',
+                'dashboard.context_processors.dashboard_context',
             ],
         },
     },
