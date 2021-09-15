@@ -139,7 +139,7 @@ UI_WHATSAPP_BODY = f'Bonjour, je suis interésé(e) par vos articles sur votre s
 UI_INVALID_USER_REQUEST = _('Invalid user request')
 UI_RESOURCE_NOT_FOUND_TITLE = _('Resource not found !')
 UI_RESOURCE_NOT_FOUND = _('The resource you requested does not exist or is no longer available. Visit our catalog to discover other products.')
-UI_DISCOVER_OUR_CATALOG = _('Discover our Catalog')
+UI_GO_TO_QUIZ = _('Go to QUIZ-Home')
 UI_CAMPAIGN_CREATE_BTN_LABEL = _('Create Campaign')
 UI_CAMPAIGN_IMAGE_TITLE = _('Campaign Image')
 UI_BACK_BTN_LABEL = _('Back')
@@ -166,7 +166,7 @@ UI_STRINGS_CONTEXT = {
     'UI_CONTACT_SUBJECT': UI_CONTACT_SUBJECT,
     'UI_CONTACT_BODY': UI_CONTACT_BODY,
     'UI_RESOURCE_NOT_FOUND': UI_RESOURCE_NOT_FOUND,
-    'UI_DISCOVER_OUR_CATALOG': UI_DISCOVER_OUR_CATALOG,
+    'UI_GO_TO_QUIZ': UI_GO_TO_QUIZ,
     'UI_RESOURCE_NOT_FOUND_TITLE': UI_RESOURCE_NOT_FOUND_TITLE,
 
     'UI_BACK_BTN_LABEL': UI_BACK_BTN_LABEL,
