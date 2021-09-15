@@ -31,7 +31,7 @@ urlpatterns = i18n_patterns(
     path('jaribio-admin-board/', admin.site.urls),
     path('quiz/', include('quiz.urls')),
     path('accounts/', include('accounts.urls')),
-    path('dashboard/', include('dashboard.urls')),
+    path('dashboard/', include('dashboard.urls', 'jaribio'), namespace='dashboard'),
     path('faq/', views.faq, name='faq'),
 ]
 )
