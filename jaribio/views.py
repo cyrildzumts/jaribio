@@ -30,21 +30,21 @@ def server_error(request):
     context={
         'page_title': CORE_UI_STRINGS.UI_500_TITLE
     }
-    return render(request, template_name)
+    return render(request, template_name, context)
 
 def permission_denied(request):
     template_name = '403.html'
     context={
         'page_title': CORE_UI_STRINGS.UI_403_TITLE
     }
-    return render(request, template_name)
+    return render(request, template_name, context)
 
 def bad_request(request):
     template_name = '400.html'
     context={
         'page_title': CORE_UI_STRINGS.UI_400_TITLE
     }
-    return render(request, template_name)
+    return render(request, template_name, context)
 
 
 def home(request):
