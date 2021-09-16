@@ -149,6 +149,7 @@ UI_403 = _('You can not access this page.')
 UI_500_TITLE = _('Server Error')
 UI_500 = _('Oups ! There is an intern error. If the errors persists please informe our team through our contact.')
 UI_GO_TO_QUIZ = _('Go to QUIZ-Home')
+UI_HOME_PAGE = _('Home')
 UI_CAMPAIGN_CREATE_BTN_LABEL = _('Create Campaign')
 UI_CAMPAIGN_IMAGE_TITLE = _('Campaign Image')
 UI_BACK_BTN_LABEL = _('Back')
@@ -176,6 +177,7 @@ UI_STRINGS_CONTEXT = {
     'UI_CONTACT_BODY': UI_CONTACT_BODY,
     'UI_RESOURCE_NOT_FOUND': UI_RESOURCE_NOT_FOUND,
     'UI_GO_TO_QUIZ': UI_GO_TO_QUIZ,
+    'UI_HOME_PAGE': UI_HOME_PAGE,
     'UI_RESOURCE_NOT_FOUND_TITLE': UI_RESOURCE_NOT_FOUND_TITLE,
     'UI_400_TITLE': UI_400_TITLE,
     'UI_400': UI_400,
