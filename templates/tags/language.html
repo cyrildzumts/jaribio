@@ -7,6 +7,7 @@
         <div class="flex">
                 <i class="fas fa-globe icon"></i>
                 <ul class="flex languages">
+                {% get_current_language as LANGUAGE_CODE %}
                 {% get_available_languages as LANGUAGES %}
                 {% get_language_info_list for LANGUAGES as languages %}
                 {% for language in languages %}
