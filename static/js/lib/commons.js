@@ -624,7 +624,7 @@ define(['ajax_api'], function(ajax_api) {
             }else{
                 description.classList.remove('warn');
             }
-            if(c_type_value == null){
+            if(c_type == null){
                 is_valid = false;
             }
             /*
