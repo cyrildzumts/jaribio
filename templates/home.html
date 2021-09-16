@@ -13,7 +13,9 @@
 <div class="container">
   <div class="mat-box-full">
     <p>Welcome to {{SITE_NAME}} QUIZ !</p>
-    <p><a href="{% url 'quiz:quiz-home' %}" class="mat-button mat-button-outline">Go To quiz!</a></p>
+    {% comment %}
+      <p><a href="{% url 'quiz:quiz-home' %}" class="mat-button mat-button-outline">Go To quiz!</a></p>
+    {% endcomment %}
   </div>
 </div>
 
