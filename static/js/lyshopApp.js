@@ -5,7 +5,7 @@ requirejs.config({
     }
 });
 
-requirejs(['ajax_api', 'components_api','commons', 'image_loader'], function(account ,ajax_api, Component){
+requirejs(['ajax_api', 'components_api','commons', 'image_loader'], function(ajax_api, Component){
     console.log("LyshopApp loaded ...");
 
     Component.initComponent();
