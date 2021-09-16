@@ -77,7 +77,7 @@ def create_question(request, quiz_uuid):
     question = quiz_service.create_question(postdata)
     status_result = status.HTTP_200_OK
     if question:
-        data = {'success': True,'title': question.quiz.title, 'url': question.quiz.get_absolute_url()}
+        data = {'success': True,'title': 'Created', 'url': ''}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
@@ -90,7 +90,7 @@ def create_answer(request, question_uuid):
     answer = quiz_service.create_answer(postdata)
     status_result = status.HTTP_200_OK
     if answer:
-        data = {'success': True, 'title': answer.question.quiz.title, 'url': answer.question.quiz.get_absolute_url()}
+        data = {'success': True, 'title': 'Created', 'url': ''}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
