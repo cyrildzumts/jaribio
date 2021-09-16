@@ -31,7 +31,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Nunito:ital,wght@0,300;0,400;0,700;1,400;1,700&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet"> 
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-        <link rel="canonical" href="{{OG_URL}}">
         
         <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
         <!-- Add icon library -->
@@ -55,13 +54,13 @@
                 <button class="js-menu  menu-button mat-button mat-button-text" data-action="0"><i class="btn-icon fas fa-bars"></i></button>
                 <button class="js-menu-close  menu-close menu-button mat-button" data-action="0"><i class="btn-icon fas fa-times"></i></button>
                 <ul class="logo">
-                <li class="mat-list-item " data-action="3"><a class="mat-button mat-button-text" href="{%url 'home'%}">{{site_name}}</a></li>
+                <li class="mat-list-item " data-action="3"><a class="mat-button mat-button-text" href="{%url 'home'%}">{{SITE_NAME}}</a></li>
                 </ul>
         </div>
   </div>
     <ul class="mat-list site-panel">
         <li class="mat-list-item catalog-overlay-item" data-action="6"><label for="catalog-overlay-toggle"><i class="fas fa-bars icon hidden"></i><span class="mat-button mat-button-text">{% trans "Catalog" %}</span></label></li>
-      {% if is_dashboard_allowed %}
+      {% if perms.dashboard.can_view_dashboard %}
        <li class="mat-list-item"><a class="mat-button mat-button-text" href="{%url 'dashboard:home'%}" title="{% trans 'Dashboard' %}"><i class="fas fa-tachometer-alt icon"></i>{% trans "Dashboard" %}</a></li>
       {% endif %}
       
@@ -75,22 +74,13 @@
       {% endif %}
       <li  class="mat-list-item">
         {% include "tags/language.html" %}
-      </li>
-      <li class="mat-list-item">
-
-      </li>
-      {% if dev_mode %}
-        {% block GRID %}
-        <li><button class="js-grid-enable baseline-grid-btn mat-button mat-button-text">{% trans "Enable Grid" %}</button></li>
-        {% endblock GRID %}
-      {% endif %}
-      
+      </li> 
     </ul>
     <ul class="mat-list mobile-site-panel hidden-xl">
         {% if request.user.is_authenticated %}
                 {% if account %}<li class="mat-list-item"><a class="mat-button mat-button-text" href="{% url 'accounts:account' %}" title="{% trans 'My Account' %}"><i class="fas fa-user"></i></a></li>{% endif %}
                 
-                {% comment %}<li class="mat-list-item"><a class="mat-button mat-button-text" href="{% url 'wishlist:wishlist-home' %}"><i class="fas fa-heart icon"></i></a></li>{% endcomment %}
+                
                 <li class="mat-list-item"><a class="signout-btn mat-button mat-button-text signout" href="{% url 'accounts:logout' %}" title="{% trans 'Logout' %}"><i class="fas fa-sign-out-alt icon"></i></a></li>
         {% else %}
         <li class="mat-list-item " data-action="1"><a class="dialog-btn mat-button mat-button-text" href="{% url 'accounts:login' %}?next={{request.path}}" data-tab="0" data-target="#signup-dialog" title="{% trans 'Login' %}"><i class="fas fa-sign-in-alt"></i></a></li>
@@ -103,30 +93,13 @@
 </header>
 {% endblock HEADER %}
  
-{% block NEWS %}
-{% if news %}
-<div class="news">
-    <span class="news-title">{% trans news.title %}</span>
-    <div class="news-content"> {% trans news.content %}</div>
-</div>
-{% endif %}
-{% endblock NEWS %}
-{% if banner %}
 {% block HEADER_BANNER %}
 
 {% endblock HEADER_BANNER %}
 
-{% endif %}
-
 {% block DIALOGS %}
 
 {% endblock DIALOGS %}
-
-{% block SIGNUP_DIALOG %}
-
-{% endblock SIGNUP_DIALOG %}
-
-
 
 <div class="container full-h">
 {% block MAIN %}
