@@ -23,18 +23,6 @@ from django.contrib.sitemaps.views import sitemap
 from jaribio import views
 
 
-root_ulrpatterns = [
-    path('', views.home, name='home'),
-    path('about/', views.about, name='about'),
-    #path('api/', include('api.urls', namespace='api')),
-    #path('api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('jaribio-admin-board/', admin.site.urls),
-    path('quiz/', include('quiz.urls')),
-    path('accounts/', include('accounts.urls')),
-    path('dashboard/', include('dashboard.urls')),
-    path('faq/', views.faq, name='faq'),
-]
-
 
 urlpatterns = i18n_patterns(
     *[
