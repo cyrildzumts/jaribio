@@ -139,6 +139,15 @@ UI_WHATSAPP_BODY = f'Bonjour, je suis interésé(e) par vos articles sur votre s
 UI_INVALID_USER_REQUEST = _('Invalid user request')
 UI_RESOURCE_NOT_FOUND_TITLE = _('Resource not found !')
 UI_RESOURCE_NOT_FOUND = _('The resource you requested does not exist or is no longer available. Visit our catalog to discover other products.')
+UI_400_TITLE = _('Bad Request')
+UI_400 = _('You submitted a bad request.')
+UI_404_TITLE = UI_RESOURCE_NOT_FOUND_TITLE
+UI_404 = UI_RESOURCE_NOT_FOUND
+UI_403_TITLE = _('Access Forbidden')
+UI_403 = _('You can not access this page.')
+
+UI_500_TITLE = _('Server Error')
+UI_500 = _('Oups ! There is an intern error. If the errors persists please informe our team through our contact.')
 UI_GO_TO_QUIZ = _('Go to QUIZ-Home')
 UI_CAMPAIGN_CREATE_BTN_LABEL = _('Create Campaign')
 UI_CAMPAIGN_IMAGE_TITLE = _('Campaign Image')
@@ -168,7 +177,14 @@ UI_STRINGS_CONTEXT = {
     'UI_RESOURCE_NOT_FOUND': UI_RESOURCE_NOT_FOUND,
     'UI_GO_TO_QUIZ': UI_GO_TO_QUIZ,
     'UI_RESOURCE_NOT_FOUND_TITLE': UI_RESOURCE_NOT_FOUND_TITLE,
-
+    'UI_400_TITLE': UI_400_TITLE,
+    'UI_400': UI_400,
+    'UI_403_TITLE' : UI_403_TITLE,
+    'UI_403': UI_403,
+    'UI_404_TITLE': UI_404_TITLE,
+    'UI_404': UI_404,
+    'UI_500_TITLE': UI_500_TITLE,
+    'UI_500': UI_500,
     'UI_BACK_BTN_LABEL': UI_BACK_BTN_LABEL,
     'UI_CREATE_BTN_LABEL' : UI_CREATE_BTN_LABEL,
     'UI_UPDATE_BTN_LABEL': UI_UPDATE_BTN_LABEL,

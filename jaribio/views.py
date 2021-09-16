@@ -9,6 +9,7 @@ from django.contrib.sitemaps import Sitemap
 # from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from jaribio import settings
+from core.resources import ui_strings as CORE_UI_STRINGS
 from django.utils import timezone
 import datetime
 
@@ -18,19 +19,31 @@ logger = logging.getLogger(__name__)
 
 def page_not_found(request):
     template_name = '404.html'
-    return render(request, template_name)
+    context={
+        'page_title': CORE_UI_STRINGS.UI_404_TITLE
+    }
+    return render(request, template_name, context)
 
 
 def server_error(request):
     template_name = '500.html'
+    context={
+        'page_title': CORE_UI_STRINGS.UI_500_TITLE
+    }
     return render(request, template_name)
 
 def permission_denied(request):
-    template_name = '500.html'
+    template_name = '403.html'
+    context={
+        'page_title': CORE_UI_STRINGS.UI_403_TITLE
+    }
     return render(request, template_name)
 
 def bad_request(request):
-    template_name = '500.html'
+    template_name = '400.html'
+    context={
+        'page_title': CORE_UI_STRINGS.UI_400_TITLE
+    }
     return render(request, template_name)
 
 
