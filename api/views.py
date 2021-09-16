@@ -64,7 +64,7 @@ def create_quiz(request):
     quiz = quiz_service.create_quiz(postdata)
     status_result = status.HTTP_200_OK
     if quiz:
-        data = {'success': True, 'title': quiz.title, 'url': quiz.get_slug_url()}
+        data = {'success': True, 'title': quiz.title, 'url': quiz.get_absolute_url()}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
