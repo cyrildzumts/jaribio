@@ -40,6 +40,7 @@ def home(request):
     By default the About html page is saved
     on the root template folder.
     """
+    logger.info("Home page request")
     template_name = "home.html"
     page_title = settings.HOME_TITLE
     context = {
@@ -50,6 +51,7 @@ def home(request):
         #'OG_IMAGE': static('assets/jaribio_banner.png'),
         'OG_URL': request.build_absolute_uri(),
     }
+    logger.info("Home page request ready")
     return render(request, template_name,context)
 
 
