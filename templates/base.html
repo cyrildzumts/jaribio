@@ -18,17 +18,15 @@
         <meta name="twitter:creator"    content="@cyrildz"/>
         <meta name="keywords"           content="{{META_KEYWORDS}}">
         <meta name="description"        content="{{META_DESCRIPTION}}">
-        <meta property="og:title"       content="{{OG_TITLE}}">
-        <meta property="og:description" content="{{OG_DESCRIPTION}}">
-        <meta property="og:image"       content="{{OG_IMAGE}}">
-        <meta property="og:url"         content="{{OG_URL}}">
         <meta property="og:type"        content="website">
         <meta property="og:site_name"   content="{{SITE_NAME}}">
-        <meta property="fb:app_id"      content="853760118576844">
+
         <meta name="theme-color"        content="#0A0A0A">
 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+        {% comment %}
+                <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+        {% endcomment %}
         
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Nunito:ital,wght@0,300;0,400;0,700;1,400;1,700&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet"> 
@@ -179,20 +177,6 @@
 
 {% block SCRIPT %}
 {% endblock SCRIPT %}
-{% block GOOGLE_ANALYTICS %}
-{% if ALLOW_GOOGLE_ANALYTICS %}
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-189272780-1">
-</script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-189272780-1');
-</script>
-{% endif %}
-{% endblock GOOGLE_ANALYTICS %}
 </body>
 
 </html>

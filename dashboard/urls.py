@@ -81,10 +81,10 @@ quiz_pattterns = [
 
 
 users_patterns = [
+    path('', views.users, name='users'),
     path('create-account/',views.create_account, name='create-account'),
     path('generate-token/', views.generate_token, name='generate-token'),
     path('tokens/', views.tokens, name='tokens'),
-    path('', views.users, name='users'),
     path('customers/', views.customers, name='customers'),
     path('create-user/', views.create_account, name='create-user'),
     path('detail/<int:pk>/', views.user_details, name='user-detail'),
