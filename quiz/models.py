@@ -127,6 +127,9 @@ class Question(models.Model):
 
     FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz', 'created_by']
 
+    def __str__(self) -> str:
+        return self.content
+    
 
 
 class Answer(models.Model):
@@ -140,6 +143,9 @@ class Answer(models.Model):
     answer_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     FORM_FIELDS = ['content', 'question','is_correct', 'is_active', 'created_by']
 
+    def __str__(self) -> str:
+        return self.content
+
 
 
 class QuizSession(models.Model):
@@ -151,6 +157,9 @@ class QuizSession(models.Model):
     end_at = models.DateTimeField(blank=True, null=True)
     FORM_FIELDS = ['quiz', 'user', 'session_key', 'score']
 
+    def __str__(self) -> str:
+        return self.session_key
+
 
 class QuizStep(models.Model):
     title = models.CharField(max_length=64)
@@ -159,3 +168,6 @@ class QuizStep(models.Model):
     rank = models.IntegerField()
     score_type = models.IntegerField(blank=True, null=True, default=Constants.ANSWER_SCORE_STANDARD, choices=Constants.ANSWER_SCORE_TYPES)
     FORM_FIELDS = ['quiz', 'title', 'questions', 'score_type', 'rank']
+
+    def __str__(self) -> str:
+        return self.title

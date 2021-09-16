@@ -12,5 +12,6 @@ urlpatterns = [
     path('api-token-auth/', drf_api_views.obtain_auth_token, name='api-token-auth'),
     path('authenticate/', views.authenticate, name='authenticate'),
     path('create-quiz/', views.create_quiz, name="create-quiz"),
+    path('quizzes/<uuid:quiz_uuid>/create-question/', views.create_question, name="create-question"),
     path('user-search/', views.UserSearchView.as_view(), name="user-search"),
 ]

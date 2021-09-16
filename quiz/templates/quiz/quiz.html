@@ -21,6 +21,27 @@
     <p><a href="{% url 'quiz:question-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add Question" %}</span></a></p>
     <p><a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a></p>
    </div>
+   <div class="mat-box-content">
+    <span>{% trans "Questions" %}</span>
+    <ul>
+      {% for q in question %} 
+      <li><span>{{q}}</span></li>
+      {% empty %}
+      <li><span>{% trans "No questions" %}</span></li>
+      {% endfor %}
+    </ul>
+   </div>
+
+   <div class="mat-box-content">
+    <span>{% trans "QuizStep" %}</span>
+    <ul>
+      {% for q in quiezsteps %} 
+      <li><span>{{q}}</span></li>
+      {% empty %}
+      <li><span>{% trans "No QuizSteps" %}</span></li>
+      {% endfor %}
+    </ul>
+   </div>
   </div>
 
 </div>

@@ -3,6 +3,7 @@ define(['ajax_api'], function(ajax_api) {
     var fileUpload;
     var productManager;
     let quizManager;
+    let questionManager;
     var messages;
     var notification_wrapper;
     var fadeDelay = 5000; // 5s
@@ -638,6 +639,230 @@ define(['ajax_api'], function(ajax_api) {
 
     })();
 
+
+    var QuestionManager = (function(){
+        function QuestionManager() {
+            this.images = null;
+            this.form = undefined;
+            this.formData = undefined;
+            this.input_file = undefined;
+            this.drag_area = undefined;
+            this.files_container = undefined;
+            this.send_btn = undefined;
+            this.clear_uploaded_files_btn = undefined;
+            this.quiz_container = undefined;
+            this.quiz_link = undefined;
+            this.supported_formats = ['jpg', 'jpeg', 'png', 'webp'];
+        };
+        QuestionManager.prototype.init = function(){
+            var self = this;
+            this.form = document.querySelector('#quiz-form') || document.querySelector('#quiz-update-form');
+            if(this.form == null ){
+                console.warn("No quiz form found");
+                return;
+            }
+            this.drag_area = document.querySelector('.drag-area');
+            if(!this.drag_area){
+                console.warn("No drag-area on quiz form found");
+                return;
+            }
+            this.input_file = document.querySelector('#files');
+            if(!this.input_file){
+                console.warn("No image input on quiz form found");
+                return;
+            }
+            this.quiz_container = document.querySelector('#created-producted-link');
+            this.quiz_link = document.querySelector('#created-producted-link a');
+            this.files_container = document.querySelector('.file-list');
+
+            $('.drag-area').on('drag dragstart dragend dragover dragenter drop', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            }).on('dragover dragenter', function(){
+                self.drag_area.classList.add('on-drag');
+            }).on('dragleave dragend drop', function(){
+                self.drag_area.classList.remove('on-drag');
+            }).on('drop', function(e){
+                self.images = e.originalEvent.dataTransfer.files;
+                self.input_file.files = self.images;
+                self.onImagesChanged();
+                self.imagesPreview();
+
+            });
+            $('#files').on('change', function(e){
+                self.images = self.input_file.files;
+                self.onImagesChanged();
+                self.imagesPreview();
+            });
+            $('.js-uploaded-files-clear').on('click', this.clearImages.bind(this));
+            this.validators = [];
+            
+            $(this.form).on('submit', function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                self.formData = new FormData(self.form);
+                self.upload();
+            });
+
+            console.log("QuizManager initialized");
+
+        };
+
+        QuestionManager.prototype.imagesPreview = function(){
+            let li;
+            let img;
+            while(this.files_container.firstChild){
+                this.files_container.removeChild(this.files_container.firstChild);
+            }
+            let f;
+            for(let i = 0; i < this.images.length; i++){
+                f = this.images[i];
+                li = document.createElement('li');
+                img = document.createElement('img');
+                img.src = URL.createObjectURL(f);
+                img.height = 60;
+                this.files_container.appendChild(li);
+                img.onload = function(){
+                    URL.revokeObjectURL(img.src);
+                };
+                li.classList.add('file-entry');
+                li.appendChild(img);
+                const info = document.createElement('span');
+                info.innerHTML = f.name + " : " + Math.ceil(f.size/1024) + ' KB';
+                li.appendChild(info);
+            }
+            $('.js-uploaded-files-clear').show();
+        };
+
+        QuestionManager.prototype.clearImages = function(){
+            while(this.files_container.firstChild){
+                this.files_container.removeChild(this.files_container.firstChild);
+            }
+            this.images = null;
+            this.input_file.files = null;
+            let li = document.createElement('li');
+            let span = document.createElement('span');
+            span.innerText = "No images";
+            li.appendChild(span);
+            this.files_container.appendChild(li);
+            this.onImagesChanged();
+        };
+
+        QuestionManager.prototype.clear = function(){
+            document.querySelector('#max_question').value = "";
+            document.querySelector('#title').value = "";
+            
+            document.querySelector('#description').value = "";
+            document.querySelector('#description-counter').innerText = '0';
+            this.input_file.files = null;
+            this.images = null;
+            this.quiz_link.href = '';
+            this.quiz_link.innerText = '';
+            this.quiz_container.style.display = 'none';
+            this.onImagesChanged();
+        }
+
+        QuestionManager.prototype.is_update_form = function(){
+            return this.form != null ? this.form.id == 'quiz-update-form' : false;
+        }
+
+        QuestionManager.prototype.onImagesChanged = function(){
+            this.drag_area.classList.toggle('active', this.images && (this.images.length > 0));
+        };
+
+        QuestionManager.prototype.onUploadResponse = function(data){
+            if(!data.success){
+                
+                return;
+            }
+            this.clear();
+            this.quiz_link.href = data.url;
+            this.quiz_link.innerText = data.url_text + " : " + data.name;
+            this.quiz_container.style.display = 'flex';
+        };
+
+        QuestionManager.prototype.upload = function(){
+            let self = this;
+            let form_is_valid = this.validate();
+            if(!form_is_valid){
+                console.log("Quiz form is invalid");
+                return;
+            }
+
+            let url = this.is_update_form() ? '/api/quizzes/' + this.form.dataset.quiz + '/update-question/' + this.form.dataset.question + '/' : '/api/quizzes/' + this.form.dataset.quiz + '/create-question/';
+
+            let options = {
+                url : url,
+                type: 'POST',
+                enctype : 'multipart/form-data',
+                data : this.formData,
+                dataType : 'json',
+                processData : false,
+                cache : false,
+                contentType : false
+            };
+            ajax_api.ajax(options).then(function(response){
+                let msg = {
+                    content : response.message,
+                    level : response.created
+                }
+                notify(msg);
+                self.onUploadResponse(response);
+                self.clearImages();
+                
+
+            }, function(reason){
+                console.error("Files could not be uploaded.");
+                console.error(reason);
+                self.clearImages();
+            });
+        };
+
+        
+        QuestionManager.prototype.validate = function(){
+            let content = document.querySelector('#content');
+            let score = document.querySelector('#score');
+            let answer_count = document.querySelector('#answer_count');
+            let explanation = document.querySelector('#explanation');
+            let c_type = document.querySelector('.js-input-question-type:checked');
+            
+            let is_valid = true;
+
+            if(content == null || score == null || answer_count == null || explanation == null){
+                is_valid = false;
+            }
+            if(content.value == ""){
+                content.classList.add('warn');
+                is_valid = false;
+            }else{
+                content.classList.remove('warn');
+            }
+            if(score.value == ""){
+                score.classList.add('warn');
+                is_valid = false;
+            }else{
+                score.classList.remove('warn');
+            }
+            if(answer_count.value == ""){
+                answer_count.classList.add('warn');
+                is_valid = false;
+            }else{
+                answer_count.classList.remove('warn');
+            }
+            if(c_type == null){
+                is_valid = false;
+            }
+            /*
+            if((this.images == null || this.images.length == 0) && !this.is_update_form()){
+                return false;
+            }*/
+            return is_valid;
+        };
+
+        return QuestionManager;
+
+    })();
+
     var ProductManager = (function(){
         function ProductManager() {
             this.images = null;
@@ -1234,7 +1459,9 @@ define(['ajax_api'], function(ajax_api) {
         var listfilter = new ListFilter();
         fileUpload = new FileUpload();
         quizManager = new QuizManager();
+        questionManager = new QuestionManager();
         quizManager.init();
+        questionManager.init();
         
         $('.collapsible .toggle').on('click', function(event){
             var parent = $(this).parent();

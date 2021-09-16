@@ -13,10 +13,12 @@ def create_quiz(data):
 
 
 def create_question(data):
-    pass
+    question = core_tools.create_instance(Question, data)
+    return question
 
 def create_answer(data):
-    pass
+    answer = core_tools.create_instance(Answer, data)
+    return answer
 
 
 def create_session(quiz, data):

@@ -107,8 +107,10 @@ def quiz_detail_uid(request, quiz_uuid):
 def quiz_detail(request, slug):
     template_name = "quiz/quiz.html"
     quiz = get_object_or_404(Quiz, slug=slug)
+    questions = Question.objects.filter(quiz=quiz)
     context = {
         'page_title': "Quiz",
-        'quiz': quiz
+        'quiz': quiz,
+        'questions': questions
     }
     return render(request, template_name, context)
