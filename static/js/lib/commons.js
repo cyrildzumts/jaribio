@@ -656,9 +656,9 @@ define(['ajax_api'], function(ajax_api) {
         };
         QuestionManager.prototype.init = function(){
             var self = this;
-            this.form = document.querySelector('#quiz-form') || document.querySelector('#quiz-update-form');
+            this.form = document.querySelector('#question-form') || document.querySelector('#question-update-form');
             if(this.form == null ){
-                console.warn("No quiz form found");
+                console.warn("No Question form found");
                 return;
             }
             this.drag_area = document.querySelector('.drag-area');
@@ -749,10 +749,10 @@ define(['ajax_api'], function(ajax_api) {
         };
 
         QuestionManager.prototype.clear = function(){
-            document.querySelector('#max_question').value = "";
-            document.querySelector('#title').value = "";
-            
-            document.querySelector('#description').value = "";
+            document.querySelector('#content').value = "";
+            document.querySelector('#answer_count').value = "";
+            document.querySelector('#score').value = "";
+            document.querySelector('#explanation').value = "";
             document.querySelector('#description-counter').innerText = '0';
             this.input_file.files = null;
             this.images = null;
@@ -763,7 +763,7 @@ define(['ajax_api'], function(ajax_api) {
         }
 
         QuestionManager.prototype.is_update_form = function(){
-            return this.form != null ? this.form.id == 'quiz-update-form' : false;
+            return this.form != null ? this.form.id == 'question-update-form' : false;
         }
 
         QuestionManager.prototype.onImagesChanged = function(){
