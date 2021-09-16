@@ -107,7 +107,7 @@ class Quiz(models.Model):
         return reverse("quiz:quiz-update", kwargs={"quiz_uuid": self.quiz_uuid})
     
     def get_delete_url(self):
-        return reverse("dashboard:quiz-delete", kwargs={"quiz_uuid": self.quiz_uuid})
+        return reverse("quiz:quiz-delete", kwargs={"quiz_uuid": self.quiz_uuid})
 
 
 class Question(models.Model):
