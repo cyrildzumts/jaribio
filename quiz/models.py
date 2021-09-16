@@ -7,7 +7,7 @@ import uuid
 # Create your models here.
 
 def upload_to(instance, filename):
-    return f"images/{instance.name}/{instance.height}x{instance.width}-{filename}"
+    return f"quizzes/{instance.name}/{instance.height}x{instance.width}-{filename}"
 
 
 class QuizImage(models.Model):
