@@ -704,7 +704,7 @@ define(['ajax_api'], function(ajax_api) {
                 self.upload();
             });
 
-            console.log("QuizManager initialized");
+            console.log("QuestionManager initialized");
 
         };
 
