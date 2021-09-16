@@ -94,7 +94,7 @@ class Quiz(models.Model):
     FORM_FIELDS = ['title', 'description', 'image', 'max_questions', 'quiz_type', 'created_by']
 
     def __str__(self):
-        return f"{self.tile}"
+        return f"{self.title}"
 
     def get_absolute_url(self):
         return reverse("quiz:quiz-detail", kwargs={"slug": self.slug})
