@@ -55,9 +55,6 @@ DASHBOARD_ROOT_PATH = "/dashboard/"
 USER_PATH = "/users/detail/"
 
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = [os.getenv('JARIBIO_ALLOWED_HOST')]
 SITE_HOST = os.getenv('JARIBIO_HOST')
 
@@ -192,8 +189,8 @@ ALLOW_GOOGLE_ANALYTICS = os.environ.get('JARIBIO_ALLOW_GOOGLE_ANALYTICS', 'false
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEV_MODE
-#DEBUG = True
+#DEBUG = DEV_MODE
+DEBUG = True
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
