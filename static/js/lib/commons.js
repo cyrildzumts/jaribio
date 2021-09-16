@@ -422,8 +422,8 @@ define(['ajax_api'], function(ajax_api) {
         
     }
 
-    var CampaignManager = (function(){
-        function CampaignManager() {
+    var QuizManager = (function(){
+        function QuizManager() {
             this.images = null;
             this.form = undefined;
             this.formData = undefined;
@@ -432,29 +432,29 @@ define(['ajax_api'], function(ajax_api) {
             this.files_container = undefined;
             this.send_btn = undefined;
             this.clear_uploaded_files_btn = undefined;
-            this.campaign_container = undefined;
-            this.campaign_link = undefined;
+            this.quiz_container = undefined;
+            this.quiz_link = undefined;
             this.supported_formats = ['jpg', 'jpeg', 'png', 'webp'];
         };
-        CampaignManager.prototype.init = function(){
+        QuizManager.prototype.init = function(){
             var self = this;
-            this.form = document.querySelector('#campaign-upload-form') || document.querySelector('#campaign-update-form');
+            this.form = document.querySelector('#quiz-form') || document.querySelector('#quiz-update-form');
             if(this.form == null ){
-                console.warn("No campaign form found");
+                console.warn("No quiz form found");
                 return;
             }
             this.drag_area = document.querySelector('.drag-area');
             if(!this.drag_area){
-                console.warn("No drag-area on campaign form found");
+                console.warn("No drag-area on quiz form found");
                 return;
             }
             this.input_file = document.querySelector('#files');
             if(!this.input_file){
-                console.warn("No image input on campaign form found");
+                console.warn("No image input on quiz form found");
                 return;
             }
-            this.campaign_container = document.querySelector('#created-producted-link');
-            this.campaign_link = document.querySelector('#created-producted-link a');
+            this.quiz_container = document.querySelector('#created-producted-link');
+            this.quiz_link = document.querySelector('#created-producted-link a');
             this.files_container = document.querySelector('.file-list');
 
             $('.drag-area').on('drag dragstart dragend dragover dragenter drop', function(e){
@@ -477,7 +477,6 @@ define(['ajax_api'], function(ajax_api) {
                 self.imagesPreview();
             });
             $('.js-uploaded-files-clear').on('click', this.clearImages.bind(this));
-            $('.js-input-campaign-type').on('change', this.onCampaignTpyeChanged);
             this.validators = [];
             
             $(this.form).on('submit', function(e){
@@ -487,11 +486,11 @@ define(['ajax_api'], function(ajax_api) {
                 self.upload();
             });
 
-            console.log("Campaign initialized");
+            console.log("QuizManager initialized");
 
         };
 
-        CampaignManager.prototype.imagesPreview = function(){
+        QuizManager.prototype.imagesPreview = function(){
             let li;
             let img;
             while(this.files_container.firstChild){
@@ -517,7 +516,7 @@ define(['ajax_api'], function(ajax_api) {
             $('.js-uploaded-files-clear').show();
         };
 
-        CampaignManager.prototype.clearImages = function(){
+        QuizManager.prototype.clearImages = function(){
             while(this.files_container.firstChild){
                 this.files_container.removeChild(this.files_container.firstChild);
             }
@@ -531,50 +530,48 @@ define(['ajax_api'], function(ajax_api) {
             this.onImagesChanged();
         };
 
-        CampaignManager.prototype.clear = function(){
-            document.querySelector('#name').value = "";
+        QuizManager.prototype.clear = function(){
+            document.querySelector('#max_question').value = "";
             document.querySelector('#title').value = "";
-            document.querySelector('#start_at').value = "";
-            document.querySelector('#end_at').value = "";
-            document.querySelector('#is_active').checked = false;
+            
             document.querySelector('#description').value = "";
             document.querySelector('#description-counter').innerText = '0';
             this.input_file.files = null;
             this.images = null;
-            this.campaign_link.href = '';
-            this.campaign_link.innerText = '';
-            this.campaign_container.style.display = 'none';
+            this.quiz_link.href = '';
+            this.quiz_link.innerText = '';
+            this.quiz_container.style.display = 'none';
             this.onImagesChanged();
         }
 
-        CampaignManager.prototype.is_update_form = function(){
-            return this.form != null ? this.form.id == 'campaign-update-form' : false;
+        QuizManager.prototype.is_update_form = function(){
+            return this.form != null ? this.form.id == 'quiz-update-form' : false;
         }
 
-        CampaignManager.prototype.onImagesChanged = function(){
+        QuizManager.prototype.onImagesChanged = function(){
             this.drag_area.classList.toggle('active', this.images && (this.images.length > 0));
         };
 
-        CampaignManager.prototype.onUploadResponse = function(data){
+        QuizManager.prototype.onUploadResponse = function(data){
             if(!data.success){
                 
                 return;
             }
             this.clear();
-            this.campaign_link.href = data.url;
-            this.campaign_link.innerText = data.url_text + " : " + data.name;
-            this.campaign_container.style.display = 'flex';
+            this.quiz_link.href = data.url;
+            this.quiz_link.innerText = data.url_text + " : " + data.name;
+            this.quiz_container.style.display = 'flex';
         };
 
-        CampaignManager.prototype.upload = function(){
+        QuizManager.prototype.upload = function(){
             let self = this;
             let form_is_valid = this.validate();
             if(!form_is_valid){
-                console.log("Campaign form is invalid");
+                console.log("Quiz form is invalid");
                 return;
             }
 
-            let url = this.is_update_form() ? '/api/update-campaign/' + this.form.dataset.campaign + '/' : '/api/create-campaign/';
+            let url = this.is_update_form() ? '/api/update-quiz/' + this.form.dataset.quiz + '/' : '/api/create-quiz/';
 
             let options = {
                 url : url,
@@ -603,40 +600,23 @@ define(['ajax_api'], function(ajax_api) {
             });
         };
 
-        CampaignManager.prototype.onCampaignTpyeChanged = function(){
-            let c_type = document.querySelector('.js-input-campaign-type:checked');
-            let c_type_entries = document.querySelectorAll('.campaign-type');
-            let c_type_value = parseInt(c_type.value);
-            c_type_entries.forEach((e)=>{
-                if((parseInt(e.dataset.campaignType) == c_type_value) || (parseInt(e.dataset.campaignAltType) == c_type_value)){
-                    e.style.display = 'block';
-                }else{
-                    e.style.display = 'block';
-                }
-
-            });
-            
-
-        };
-
-
-        CampaignManager.prototype.validate = function(){
-            let name = document.querySelector('#name');
+        
+        QuizManager.prototype.validate = function(){
             let title = document.querySelector('#title');
+            let max_questions = document.querySelector('#max_questions');
             let description = document.querySelector('#description');
-            let c_type = document.querySelector('.js-input-campaign-type:checked');
-            let c_type_entries = document.querySelectorAll('.campaign-type');
-            let c_type_value = c_type != null ? parseInt(c_type.value) : null;
+            let c_type = document.querySelector('.js-input-quiz-type:checked');
+            
             let is_valid = true;
 
-            if(name == null || title == null || description == null){
+            if(max_questions == null || title == null || description == null){
                 is_valid = false;
             }
-            if(name.value == ""){
-                name.classList.add('warn');
+            if(max_questions.value == ""){
+                max_questions.classList.add('warn');
                 is_valid = false;
             }else{
-                name.classList.remove('warn');
+                max_questions.classList.remove('warn');
             }
             if(title.value == ""){
                 title.classList.add('warn');
@@ -653,42 +633,6 @@ define(['ajax_api'], function(ajax_api) {
             if(c_type_value == null){
                 is_valid = false;
             }
-            let start_at = document.querySelector('#start_at');
-            let end_at = document.querySelector('#end_at');
-            let repeat_day = document.querySelector('#repeat_day');
-            if(c_type_value == CAMPAIGN_TYPE_REPEAT_ONCE){
-                if(start_at == null || end_at == null){
-                    is_valid = false;
-                }
-                if( (start_at != null &&  start_at.value.length == 0)){
-                    start_at.classList.add('warn');
-                }
-                if( (end_at != null &&  end_at.value.length == 0)){
-                    end_at.classList.add('warn');
-                }
-                let start_date = new Date(start_at.value);
-                let end_date = new Date(end_at.value);
-                let today = new Date();
-                if((start_date < today) || (end_date < today)){
-                    start_at.classList.add('warn');
-                    end_at.classList.add('warn');
-                    is_valid = false;
-                }else{
-                    start_at.classList.remove('warn');
-                    end_at.classList.remove('warn');
-                }
-            }
-            if(c_type_value == CAMPAIGN_TYPE_REPEAT_WEEKLY || c_type_value == CAMPAIGN_TYPE_REPEAT_MONTHLY){
-                if(repeat_day == null || isNaN(parseInt(repeat_day.value))){
-                    c_type.classList.add('warn');
-                    repeat_day.classList.add('warn');
-                    is_valid = false;
-                }else{
-                    c_type.classList.remove('warn');
-                    repeat_day.classList.remove('warn');
-                }
-            }
-            
             /*
             if((this.images == null || this.images.length == 0) && !this.is_update_form()){
                 return false;
@@ -696,7 +640,7 @@ define(['ajax_api'], function(ajax_api) {
             return is_valid;
         };
 
-        return CampaignManager;
+        return QuizManager;
 
     })();
 
@@ -1295,10 +1239,8 @@ define(['ajax_api'], function(ajax_api) {
         notify_init(notification_wrapper, messages);
         var listfilter = new ListFilter();
         fileUpload = new FileUpload();
-        campaignManager = new CampaignManager();
-        productManager = new ProductManager();
-        productManager.init();
-        campaignManager.init();
+        quizManager = new QuizManager();
+        quizManager.init();
         
         $('.collapsible .toggle').on('click', function(event){
             var parent = $(this).parent();

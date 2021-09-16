@@ -18,6 +18,7 @@ class QuizImage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     image_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    FORM_FIELDS = ['name', 'image']
 
 
     def delete_image_file(self):
@@ -90,6 +91,7 @@ class Quiz(models.Model):
     plays_count = models.IntegerField(blank=True, null=True, default=0)
     slug = models.SlugField(max_length=250, blank=True, null=True)
     quiz_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    FORM_FIELDS = ['title', 'description', 'image', 'max_questions', 'quiz_type']
 
     def __str__(self):
         return f"{self.tile}"
@@ -125,6 +127,8 @@ class Question(models.Model):
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     question_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
+    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz']
+
 
 
 class Answer(models.Model):
@@ -136,6 +140,7 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     answer_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    FORM_FIELDS = ['content', 'question','is_correct', 'is_active']
 
 
 
@@ -146,6 +151,7 @@ class QuizSession(models.Model):
     score = models.IntegerField(default=0)
     started_at = models.DateTimeField(auto_now_add=True)
     end_at = models.DateTimeField(blank=True, null=True)
+    FORM_FIELDS = ['quiz', 'user', 'session_key', 'score']
 
 
 class QuizStep(models.Model):
@@ -154,3 +160,4 @@ class QuizStep(models.Model):
     questions = models.CharField(max_length=64)
     rank = models.IntegerField()
     score_type = models.IntegerField(blank=True, null=True, default=Constants.ANSWER_SCORE_STANDARD, choices=Constants.ANSWER_SCORE_TYPES)
+    FORM_FIELDS = ['quiz', 'title', 'questions', 'score_type', 'rank']

@@ -1,5 +1,6 @@
 from quiz.models import Quiz, Question,QuizImage, QuizSession, QuizStep, Answer, Category
 from quiz import constants as QuizConstants
+from core import core_tools
 import logging
 import datetime
 
@@ -7,7 +8,8 @@ logger = logging.getLogger(__name__)
 
 
 def create_quiz(data):
-    pass
+    quiz = core_tools.create_instance(Quiz, data)
+    return quiz
 
 
 def create_question(data):
