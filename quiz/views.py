@@ -1,5 +1,5 @@
-from django.shortcuts import get_object_or_404, render
-from quiz.models import Quiz
+from django.shortcuts import get_object_or_404, redirect, render
+from quiz.models import Question, Quiz
 from quiz import constants as QUIZ_CONSTANTS
 # Create your views here.
 
@@ -40,12 +40,9 @@ def update_quiz(request, quiz_uuid):
 
 
 def delete_quiz(request, quiz_uuid):
-    template_name = "quiz/quiz_delete.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
-    context = {
-        'page_title': "Delete Quiz",
-    }
-    return render(request, template_name, context)
+    Quiz.objects.filter(pk=quiz.pk).delete()
+    return redirect('quiz:quiz-home')
 
 
 def create_question(request, quiz_uuid):
@@ -60,6 +57,12 @@ def create_question(request, quiz_uuid):
     }
     return render(request, template_name, context)
 
+
+def delete_question(request, question_uuid):
+    question = get_object_or_404(Question, question_uuid=question_uuid)
+    quiz = question.quiz
+    Question.objects.filter(pk=question.pk).delete()
+    return redirect(quiz)
 
 def create_quizstep(request, quiz_uuid):
     template_name = "quiz/question_create.html"

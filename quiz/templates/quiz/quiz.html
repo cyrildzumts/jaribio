@@ -12,6 +12,9 @@
 
 {% block MAIN %}
 <div class="container">
+  <div class="actions flex-left">
+    <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-text"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
+  </div>
   <div class="mat-box-full">
    <div><span>{{quiz}}</span></div>
    <div class="mat-box-content">

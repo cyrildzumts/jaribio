@@ -23,7 +23,7 @@
     </div>
     <ul class="mat-list">
       {% for quiz in quizzes %}
-        <li class="mat-list-item"><a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-text"><span>{{quiz}}</span></a></li>
+        <li class="mat-list-item"><div class="flex"><a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-text"><span>{{quiz}}</span></a> <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-outline"><span><i class="fas fa-trash icon"></i></span></a></div> </li>
       {% empty %}
       <li class="mat-list-item"><span>{% trans "No Quiz found" %} </span></li>
       {% endfor %}
