@@ -12,9 +12,11 @@
 
 {% block MAIN %}
 <div class="container">
-  <div class="mat-box-full">
-    <p>Welcome to {{SITE_NAME}} QUIZ !</p>
+    <div class="flex"><span>{{quiz}}</span></div>
+    <div class="mat-box-full">
+    <p>{% trans "New Question" %}</p>
   </div>
+  {% include 'tags/question_form.html' %}
 </div>
 
 {% endblock MAIN %}

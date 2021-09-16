@@ -4,13 +4,12 @@
     <div class="row" id="created-producted-link">
         <a class="mat-button mat-button-outline" href=""></a>
     </div>
-    <form id="quiz-form" action="{% url 'quiz:quiz-create' %}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <form id="question-form" action="{% url 'quiz:question-create' quiz.quiz_uuid %}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="quiz" value={{quiz.pk}}>
-        {% if request.user.is_authenticated %} 
         <input type="hidden" name="created_by" value={{request.user.pk}}>
-        {% endif %}
+
         <div class="actions flex-left padding-v">
-            <a class="mat-button mat-button-text js-cancel" href="{%url 'quiz:quiz-home'%}">{% trans "Back" %}</a>
+            <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
         </div>
         <div class="mat-box container">
         
