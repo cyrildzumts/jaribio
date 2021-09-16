@@ -3264,12 +3264,12 @@ li .order-tag{
 }
 :root{
     --primary-color: #26C6DA;
-    --secondary-color: #48D8EC;
-    --third-color : #72E7F7;
-    --fourth-color : #72E7F7;
-    --light-color : #72E7F7;
+    --secondary-color: #FAFAFA;
+    --third-color : #FAFAFA;
+    --fourth-color : #FAFAFA;
+    --light-color : #FAFAFA;
     --label-color : #06707F;
-    --body-bg : #72E7F7;
+    --body-bg : #FAFAFA;
     --body-color: #09A8BE;
     --notification-bg : #72E7F7;
     --notification-color : #06707F;
