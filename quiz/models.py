@@ -97,10 +97,8 @@ class Quiz(models.Model):
         return f"{self.tile}"
 
     def get_absolute_url(self):
-        return reverse("quiz:quiz-detail", kwargs={"quiz_uuid": self.quiz_uuid})
-    
-    def get_slug_url(self):
         return reverse("quiz:quiz-detail", kwargs={"slug": self.slug})
+
     
     def get_dashboard_url(self):
         return reverse("dashboard:quiz-detail", kwargs={"quiz_uuid": self.quiz_uuid})

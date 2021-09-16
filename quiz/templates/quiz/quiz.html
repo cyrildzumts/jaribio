@@ -13,8 +13,13 @@
 {% block MAIN %}
 <div class="container">
   <div class="mat-box-full">
-    <p>Create your QUIZ !</p>
+   <div><span>{{quiz}}</span></div>
+   <div class="mat-box-content">
+    <p><a href="{% url 'quiz:question-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add Question" %}</span></a></p>
+    <p><a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a></p>
+   </div>
   </div>
+
 </div>
 
 {% endblock MAIN %}

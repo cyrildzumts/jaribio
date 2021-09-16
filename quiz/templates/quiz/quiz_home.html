@@ -14,7 +14,20 @@
 <div class="container">
   <div class="mat-box-full">
     <p>Welcome to {{SITE_NAME}} QUIZ  Home!</p>
-    <p><a class="mat-button mat-button-default" href="{% url 'quiz:quiz-create' %}">New Quiz</a></p>
+    <p><a class="mat-button mat-button-default" href="{% url 'quiz:quiz-create' %}"><span><i class="fas fa-plus icon"></i>{% trans "New Quiz" %}</span></a></p>
+  </div>
+  
+  <div class="mat-list-wrapper">
+    <div class="mat-box-full">
+      <p>{% trans "Quiz List" %}</p>
+    </div>
+    <ul class="mat-list">
+      {% for quiz in quizzes %}
+        <li class="mat-list-item"><a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-text"><span>{{quiz}}</span></a></li>
+      {% empty %}
+      <li class="mat-list-item"><span>{% trans "No Quiz found" %} </span></li>
+      {% endfor %}
+    </ul>
   </div>
 </div>
 
