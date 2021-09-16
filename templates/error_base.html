@@ -39,15 +39,12 @@
                 <button class="js-menu  menu-button mat-button mat-button-text" data-action="0"><i class="btn-icon fas fa-bars"></i></button>
                 <button class="js-menu-close  menu-close menu-button mat-button" data-action="0"><i class="btn-icon fas fa-times"></i></button>
                 <ul class="logo">
-                <li class="mat-list-item " data-action="3"><a class="mat-button mat-button-text" href="{%url 'home'%}">{{site_name}}</a></li>
+                <li class="mat-list-item " data-action="3"><a class="mat-button mat-button-text" href="{%url 'home'%}">JARIBIO</a></li>
                 </ul>
         </div>
   </div>
     <ul class="mat-list site-panel">
         <li class="mat-list-item catalog-overlay-item" data-action="6"><label for="catalog-overlay-toggle"><i class="fas fa-bars icon hidden"></i><span class="mat-button mat-button-text">{% trans "Catalog" %}</span></label></li>
-      {% if is_dashboard_allowed %}
-       <li class="mat-list-item"><a class="mat-button mat-button-text" href="{%url 'dashboard:home'%}" title="{% trans 'Dashboard' %}"><i class="fas fa-tachometer-alt icon"></i>{% trans "Dashboard" %}</a></li>
-      {% endif %}
       
       {% if request.user.is_authenticated %}
                 <li class="mat-list-item"><a class="mat-button mat-button-text" href="{% url 'accounts:account' %}" title="{% trans 'My Account' %}"><i class="fas fa-user"></i></a></li>
@@ -58,11 +55,6 @@
 
       {% endif %}
 
-      {% if dev_mode %}
-        {% block GRID %}
-        <li><button class="js-grid-enable baseline-grid-btn mat-button mat-button-text">{% trans "Enable Grid" %}</button></li>
-        {% endblock GRID %}
-      {% endif %}
       
     </ul>
     <ul class="mat-list mobile-site-panel hidden-xl">
@@ -88,22 +80,7 @@
 
 {% endblock MAIN %}
 </div>
-{% block NOTIFICATIONS %}
-        <div id="notifications-wrapper" class="notifications-wrapper">
-                <div class="flex-column">
-                        <ul id="messages" class="messages notification-list" data-toggle="#notifications-wrapper">
-                        {% for message in messages %}
-                                <li {% if message.tags %} class="{{message.tags}}" {% endif %}>
-                                        <div class="notification flex">
-                                                <i class="js-close fas fa-info-circle icon"></i>
-                                                <p>{{message}}</p>
-                                        </div>
-                                </li>
-                        {% endfor %}
-                        </ul>
-                </div>
-        </div>
-{% endblock NOTIFICATIONS %}
+
 </div>
 {% block FOOTER %}
  <footer class="footer">
@@ -113,7 +90,7 @@
         <div class="footer-list">
                 {% now "Y" as current_year %}
                 <ul class="mat-list small">
-                        <li class="list-item"><span>Copyright</span> <i class="fa fa-copyright"></i><span class="copyright-year">{{current_year}}</span> <span class="site">{{site_name}} - {%trans 'ONLINE QUIZ' %} </span></li>
+                        <li class="list-item"><span>Copyright</span> <i class="fa fa-copyright"></i><span class="copyright-year">{{current_year}}</span> <span class="site"> JARIBIO - {%trans 'ONLINE QUIZ' %} </span></li>
                         <li class="list-item">
                                 <div class="actions">
                                         <a class="mat-button mat-button-text" href="{% url 'about' %}">{% trans "About us" %}</a>
