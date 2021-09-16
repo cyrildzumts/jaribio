@@ -78,7 +78,7 @@ class Category(models.Model):
 
 
 class Quiz(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_quizzes', blank=False, null=False)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_quizzes')
     title = models.CharField(max_length=Constants.QUESTION_MAX_LENGTH)
     description = models.CharField(max_length=Constants.DESCRIPTION_MAX_SIZE)
     image = models.ForeignKey(QuizImage, blank=True, null=True, related_name="quizzes", on_delete=models.SET_NULL)
@@ -91,7 +91,7 @@ class Quiz(models.Model):
     plays_count = models.IntegerField(blank=True, null=True, default=0)
     slug = models.SlugField(max_length=250, blank=True, null=True)
     quiz_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    FORM_FIELDS = ['title', 'description', 'image', 'max_questions', 'quiz_type']
+    FORM_FIELDS = ['title', 'description', 'image', 'max_questions', 'quiz_type', 'created_by']
 
     def __str__(self):
         return f"{self.tile}"
@@ -113,7 +113,7 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_questions', blank=False, null=False)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_questions')
     content = models.CharField(max_length=Constants.QUESTION_MAX_LENGTH)
     explanation = models.CharField(max_length=Constants.DESCRIPTION_MAX_SIZE, blank=True, null=True)
     answer_count = models.IntegerField(blank=True, null=True, default=1)
@@ -127,12 +127,12 @@ class Question(models.Model):
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     question_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
-    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz']
+    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz', 'created_by']
 
 
 
 class Answer(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_answers', blank=False, null=False)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_answers')
     content = models.CharField(max_length=Constants.QUESTION_MAX_LENGTH)
     question = models.ForeignKey(Question, related_name="answers", on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
@@ -140,7 +140,7 @@ class Answer(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     answer_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    FORM_FIELDS = ['content', 'question','is_correct', 'is_active']
+    FORM_FIELDS = ['content', 'question','is_correct', 'is_active', 'created_by']
 
 
 

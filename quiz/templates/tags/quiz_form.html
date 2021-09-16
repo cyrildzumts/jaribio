@@ -5,10 +5,7 @@
         <a class="mat-button mat-button-outline" href=""></a>
     </div>
     <form id="quiz-form" action="{% url 'quiz:quiz-create' %}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
-
-        {% if request.user.is_authenticated %} 
         <input type="hidden" name="created_by" value={{request.user.pk}}>
-        {% endif %}
         <div class="actions flex-left padding-v">
             <a class="mat-button mat-button-text js-cancel" href="{%url 'quiz:quiz-home'%}">{% trans "Back" %}</a>
         </div>
