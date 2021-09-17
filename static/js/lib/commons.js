@@ -888,7 +888,7 @@ define(['ajax_api'], function(ajax_api) {
             this.validators = [];
             $('.js-qs-question-select').on('change', function(event){
                 let value = "";
-                let checked_list = $('.js-qs-question-select:ckeched');
+                let checked_list = $('.js-qs-question-select:checked');
                 checked_list.each(function(index, input){
                     if(index < checked_list.length -1){
                         value+= input.value + ',';
