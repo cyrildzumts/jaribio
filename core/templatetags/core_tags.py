@@ -64,3 +64,20 @@ def quiz_type_value(key):
         logger.info(f"quiz_type_value : Could not found value  for key \"{key}\"")
         return key
     return v
+
+@register.filter
+def question_type_value(key):
+    k,v = utils.find_element_by_key_in_tuples(key, QUIZ_CONSTANTS.QUESTION_TYPES)
+    if v is None:
+        logger.info(f"question_type_value : Could not found value  for key \"{key}\"")
+        return key
+    return v
+
+
+@register.filter
+def score_type_value(key):
+    k,v = utils.find_element_by_key_in_tuples(key, QUIZ_CONSTANTS.ANSWER_SCORE_TYPES)
+    if v is None:
+        logger.info(f"score_type_value : Could not found value  for key \"{key}\"")
+        return key
+    return v

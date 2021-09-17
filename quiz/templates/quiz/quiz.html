@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %} 
 {% load static %}
+{% load core_tags %}
 {% if banner %}
 
 {% block HEADER_BANNER %}
@@ -18,12 +19,12 @@
     <a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a>
   </div>
   <div class="mat-box-full">
-   <div><span>{{quiz}}</span></div>
+   <div><span>{{quiz}}</span> - <span>{{quiz.quiz_type|quiz_type_value}}</span></div>
    <div class="mat-box-content">
     <span>{% trans "Questions" %}</span>
     <ul>
       {% for q in questions %} 
-      <li><span>{{q}}</span></li>
+      <li><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span></li>
       {% empty %}
       <li><span>{% trans "No questions" %}</span></li>
       {% endfor %}
@@ -34,7 +35,7 @@
     <span>{% trans "QuizSteps" %}</span>
     <ul>
       {% for q in quizsteps %} 
-      <li><span>{{q}}</span> - <span>{{q.questions}}</span></li>
+      <li><span>{{q}}</span> - <span>{{q.questions}}</span> - <span>{{q.rank}}</span> - <span>{{q.score_type|score_type_value}}</span></li>
       {% empty %}
       <li><span>{% trans "No QuizSteps" %}</span></li>
       {% endfor %}
