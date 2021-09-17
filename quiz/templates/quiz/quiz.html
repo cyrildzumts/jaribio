@@ -20,7 +20,7 @@
     <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-default warn"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
   </div>
   <div class="mat-box-full">
-   <div><span>{{quiz}}</span> - <span>{{quiz.quiz_type|quiz_type_value}}</span></div>
+   <div class="flex flex-left"><span>{{quiz}}</span> - <span>{{quiz.quiz_type|quiz_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
    <div class="mat-box-content">
     <span>{% trans "Questions" %}</span>
     <ul>
