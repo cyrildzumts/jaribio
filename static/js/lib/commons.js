@@ -882,11 +882,22 @@ define(['ajax_api'], function(ajax_api) {
                 console.warn("No QuizStep form found");
                 return;
             }
-            
+            this.questions_input = document.querySelector('#question');
             this.quiz_container = document.querySelector('#created-producted-link');
             this.quiz_link = document.querySelector('#created-producted-link a');
             this.validators = [];
-            
+            $('.js-qs-question-select').on('change', function(event){
+                let value = "";
+                let checked_list = $('.js-qs-question-select:ckeched');
+                checked_list.each(function(index, input){
+                    if(index < checked_list.length -1){
+                        value+= input.value + ',';
+                    }else{
+                        value +=input.value;
+                    }
+                });
+                self.questions_input.value = value;
+            });
             $(this.form).on('submit', function(e){
                 e.preventDefault();
                 e.stopPropagation();

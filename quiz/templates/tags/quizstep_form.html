@@ -6,7 +6,7 @@
     </div>
     <form id="quizstep-form" action="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="quiz" value={{quiz.pk}}>
-
+        <input id="questions" type="hidden" name="questions">
         <div class="actions flex-left padding-v">
             <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
         </div>
@@ -39,8 +39,8 @@
                             <div id="answers-wrapper" class="row">
                                 <ul id="question-list">
                                 {% for q in questions %}
-                                        <li class="mat-list-item js-question-select" data-question="{{q.pk}}">
-                                            <span>{{q}}</span>
+                                        <li class="mat-list-item" data-question="{{q.pk}}">
+                                            <span><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}</label></span>
                                         </li>
                                 {% endfor %}
                                         
