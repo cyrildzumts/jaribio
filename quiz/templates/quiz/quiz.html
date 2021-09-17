@@ -13,14 +13,12 @@
 {% block MAIN %}
 <div class="container">
   <div class="actions flex-left">
-    <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-text"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
+    <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-default"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
+    <a href="{% url 'quiz:question-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add Question" %}</span></a>
+    <a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a>
   </div>
   <div class="mat-box-full">
    <div><span>{{quiz}}</span></div>
-   <div class="mat-box-content">
-    <p><a href="{% url 'quiz:question-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add Question" %}</span></a></p>
-    <p><a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a></p>
-   </div>
    <div class="mat-box-content">
     <span>{% trans "Questions" %}</span>
     <ul>
