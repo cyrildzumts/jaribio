@@ -36,7 +36,7 @@
     <span>{% trans "QuizSteps" %}</span>
     <ul>
       {% for q in quizsteps %} 
-      <li><span>{{q}}</span></li>
+      <li><span>{{q}}</span> - <span>{{q.questions}}</span></li>
       {% empty %}
       <li><span>{% trans "No QuizSteps" %}</span></li>
       {% endfor %}
