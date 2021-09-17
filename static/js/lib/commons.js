@@ -895,7 +895,7 @@ define(['ajax_api'], function(ajax_api) {
                     self.selected_questions.splice(self.selected_questions.indexOf(this), 1);
                 }
                 self.selected_questions.forEach(function(input, index){
-                    if(index < selected_questions.length -1){
+                    if(index < self.selected_questions.length -1){
                         value+= input.value + ',';
                     }else{
                         value +=input.value;
