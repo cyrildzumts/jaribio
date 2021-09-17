@@ -31,9 +31,9 @@ def create_answers(question, data):
     Formset = modelformset_factory(Answer, form=AnswerForm)
     formset = Formset(data)
     answers = None
-    # for form in formset:
-    #     form.fields['question'] = question.pk
-    #     form.fields['created_by'] = question.created_by.pk
+    for form in formset:
+        form.fields['question'] = question.pk
+        form.fields['created_by'] = question.created_by.pk
     try:
         if formset.is_valid():
             answers = formset.save()
