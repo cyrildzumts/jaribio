@@ -1,4 +1,4 @@
-define(['ajax_api'], function(ajax_api) {
+define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
     'use strict';
     var fileUpload;
     var productManager;
@@ -704,6 +704,9 @@ define(['ajax_api'], function(ajax_api) {
                 self.formData = new FormData(self.form);
                 self.upload();
             });
+            $('.js-add-answer').on('click', function(event){
+                self.add_response();
+            });
 
             console.log("QuestionManager initialized");
 
@@ -819,6 +822,10 @@ define(['ajax_api'], function(ajax_api) {
             });
         };
 
+
+        QuestionManager.prototype.add_response = function(){
+            element_utils.init();
+        };
         
         QuestionManager.prototype.validate = function(){
             let content = document.querySelector('#content');
@@ -863,6 +870,8 @@ define(['ajax_api'], function(ajax_api) {
         return QuestionManager;
 
     })();
+    
+
 
     var QuizStepManager = (function(){
         function QuizStepManager() {
@@ -1774,6 +1783,7 @@ define(['ajax_api'], function(ajax_api) {
         $('.js-action-abtest').on('click', function(e){
             track_action(this);
         });
+        
         console.log("commons.js loaded");
         /*
         $('.js-revealable-hide').on('click', function(){

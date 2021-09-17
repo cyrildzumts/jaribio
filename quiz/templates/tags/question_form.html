@@ -44,21 +44,6 @@
                             <input type="text" name="score" id="score">
                         </div>
                     </div>
-                    <div class="flex flex-left">
-                        <div class="form-group">
-                            <span class="padding-bottom">{% trans "Answers" %}</span><span class="js-add-answer padding-h"><i class="fas fa-plus icon"></i>{% trans "Add Answer" %}</span>
-                            <div id="answers-wrapper" class="row">
-                                <ul id="answers">
-                                        <li>
-                                            <div><input type="text" class="answers" name="content-0"> <span class="padding-h"><label for="is_correct-0">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-0" id="is_correct-0"></span><span class="padding-h"><i class="fas fa-trash icon"></i></span></div>
-                                            <div><input type="text" class="answers" name="content-1"> <span class="padding-h"><label for="is_correct-1">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-1" id="is_correct-1"></span><span class="padding-h"><i class="fas fa-trash icon"></i></span></div>
-                                            <div><input type="text" class="answers" name="content-2"> <span class="padding-h"><label for="is_correct-2">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-2" id="is_correct-2"></span><span class="padding-h"><i class="fas fa-trash icon"></i></span></div>
-                                            <div><input type="text" class="answers" name="content-3"> <span class="padding-h"><label for="is_correct-3">{% trans "Is Accepted" %}</label><input type="checkbox" name="is_correct-3" id="is_correct-3"></span><span class="padding-h"><i class="fas fa-trash icon"></i></span></div>
-                                        </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="flex flex-left flex-wrap">
                         <div class="form-group">
@@ -67,6 +52,16 @@
                         </div>
                         
                         <div class="row padding-l"> <span id="length-counter" class="char-counter">0</span><span class="text-max-length">/{{DESCRIPTION_MAX_SIZE}}</span></div>
+                    </div>
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <div class="row"><span class="padding-bottom">{% trans "Answers" %}</span><span class="js-add-answer padding-h"><i class="fas fa-plus icon"></i>{% trans "Add Answer" %}</span></div>
+                            <div id="answers-wrapper" class="row">
+                                <ul id="answers">
+                                        
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="actions flex-right">
                         <span class="mat-button mat-button-outline js-cancel">{% trans "Cancel" %}</span>
