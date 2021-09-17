@@ -9,6 +9,7 @@ define([], function() {
                     input.classList.add(cls);
                 });
             }
+            input.id = option.id;
             input.type = option.type;
             input.value = option.value;
             input.name = option.name;
