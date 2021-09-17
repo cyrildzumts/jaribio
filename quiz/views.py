@@ -113,6 +113,6 @@ def quiz_detail(request, slug):
         'page_title': "Quiz",
         'quiz': quiz,
         'questions': questions,
-        'quiezsteps': quizsteps
+        'quizsteps': quizsteps
     }
     return render(request, template_name, context)
