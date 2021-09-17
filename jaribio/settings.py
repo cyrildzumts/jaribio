@@ -270,7 +270,7 @@ LOGGING = {
         'django.template': {
             'handlers': ['console', 'file'],
             'level': 'WARNING',
-            'propagate': False,
+            'propagate': True,
         },
         'PIL':{
             'handlers': ['console', 'file'],
