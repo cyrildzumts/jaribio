@@ -73,6 +73,7 @@ def create_quiz(request):
 
 @api_view(['POST'])
 def create_question(request, quiz_uuid):
+    logger.info(f"API create question Request from user {request.user.username}")
     postdata = utils.get_postdata(request)
     question = quiz_service.create_question(postdata)
     status_result = status.HTTP_200_OK
