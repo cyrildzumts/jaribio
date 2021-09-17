@@ -833,9 +833,9 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             //var options = [];
             for(let i = 0; i < answer_count; i++){
                 let form_prefix = "form-" + i;
-                let content_input = element_utils.create_input({'cls':'answer-content','name':form_prefix + 'content','value':'', 'type': 'text', 'id': form_prefix + 'content'});
-                let is_correct_input = element_utils.create_input({'cls':'answer-is-correct','name': form_prefix + 'is_correct','value':'','type':'checkbox', 'id': form_prefix + 'is_correct'});
-                let label = element_utils.create_label({'input_id':form_prefix + 'is_correct','value': 'Is correct'});
+                let content_input = element_utils.create_input({'cls':'answer-content','name':form_prefix + '-' + 'content','value':'', 'type': 'text', 'id': form_prefix + '-' + 'content'});
+                let is_correct_input = element_utils.create_input({'cls':'answer-is-correct','name': form_prefix + '-' + 'is_correct','value':'','type':'checkbox', 'id': form_prefix + '-' + 'is_correct'});
+                let label = element_utils.create_label({'input_id':form_prefix + '-' + 'is_correct','value': 'Is correct'});
                 let icon = element_utils.create_element({'element': 'i', 'cls': 'fas fa-trash icon'});
                 let span_icon= element_utils.create_element({'element': 'span', 'cls': 'padding-h','children':[icon]});
                 let span_iscorrect = element_utils.create_element({'element': 'span', 'cls': 'padding-h', 'children': [label,is_correct_input]});
