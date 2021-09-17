@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from quiz.models import Question, Quiz
+from quiz.models import Question, Quiz, QuizStep
 from quiz import constants as QUIZ_CONSTANTS
 # Create your views here.
 
@@ -108,9 +108,11 @@ def quiz_detail(request, slug):
     template_name = "quiz/quiz.html"
     quiz = get_object_or_404(Quiz, slug=slug)
     questions = quiz.question_set.all()
+    quizsteps = QuizStep.objects.filter(quiz=quiz)
     context = {
         'page_title': "Quiz",
         'quiz': quiz,
-        'questions': questions
+        'questions': questions,
+        'quiezsteps': quizsteps
     }
     return render(request, template_name, context)
