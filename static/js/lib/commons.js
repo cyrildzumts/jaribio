@@ -654,6 +654,8 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             this.quiz_container = undefined;
             this.quiz_link = undefined;
             this.supported_formats = ['jpg', 'jpeg', 'png', 'webp'];
+            this.answer_formset_total_form = "form-TOTAL_FORMS";
+            this.answer_formset_initial_form = "form-INITIAL_FORMS";
         };
         QuestionManager.prototype.init = function(){
             var self = this;
@@ -829,6 +831,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
         QuestionManager.prototype.add_response = function(){
             element_utils.init();
             let answer_count = 4;
+            let quiz = document.querySelector('#quiz');
             let answers_container = document.querySelector('#answers');
             //var options = [];
             for(let i = 0; i < answer_count; i++){
@@ -836,13 +839,17 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
                 let content_input = element_utils.create_input({'cls':'answer-content','name':form_prefix + '-' + 'content','value':'', 'type': 'text', 'id': form_prefix + '-' + 'content'});
                 let is_correct_input = element_utils.create_input({'cls':'answer-is-correct','name': form_prefix + '-' + 'is_correct','value':'','type':'checkbox', 'id': form_prefix + '-' + 'is_correct'});
                 let label = element_utils.create_label({'input_id':form_prefix + '-' + 'is_correct','value': 'Is correct'});
-                let icon = element_utils.create_element({'element': 'i', 'cls': 'fas fa-trash icon'});
-                let span_icon= element_utils.create_element({'element': 'span', 'cls': 'padding-h','children':[icon]});
+                //let delete_icon = element_utils.create_element({'element': 'i', 'cls': 'fas fa-trash icon'});
+                //let span_icon= element_utils.create_element({'element': 'span', 'cls': 'padding-h','children':[delete_icon]});
                 let span_iscorrect = element_utils.create_element({'element': 'span', 'cls': 'padding-h', 'children': [label,is_correct_input]});
-                let div  = element_utils.create_element({'element': 'div', 'cls': 'flex flex-left', 'children':[content_input,span_iscorrect, span_icon]});
-                let li = element_utils.create_li({'cls':'mat-list-item', 'child': div});
+                let div  = element_utils.create_element({'element': 'div', 'cls': 'flex flex-left', 'children':[content_input,span_iscorrect]});
+                let li = element_utils.create_li({'cls':'', 'child': div});
                 answers_container.appendChild(li);
             }
+            let form_management_total_input = element_utils.create_input({'name': this.answer_formset_total_form, 'value': answer_count, 'type': 'hidden', 'id': this.answer_formset_total_form});
+            let form_management_initial_input = element_utils.create_input({'name': this.answer_formset_total_form, 'value': 0, 'type': 'hidden', 'id': this.answer_formset_initial_form});
+            this.form.appendChild(form_management_initial_input);
+            this.form.appendChild(form_management_total_input)
             
         };
 
@@ -851,6 +858,8 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             while(answers_container.firstChild){
                 answers_container.removeChild(answers_container.firstChild);
             }
+            this.form.removeChild(document.querySelector('#' + this.answer_formset_total_form));
+            this.form.removeChild(document.querySelector('#' + this.answer_formset_initial_form));
             
         };
         

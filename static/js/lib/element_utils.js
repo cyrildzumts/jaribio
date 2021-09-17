@@ -4,7 +4,7 @@ define([], function() {
     var element_factory = {
         create_input : function(option){
             let input = document.createElement('input');
-            if(option.cls.length){
+            if(option.hasOwnProperty('cls') && option.cls.length){
                 option.cls.split(' ').forEach(cls =>{
                     input.classList.add(cls);
                 });
@@ -43,7 +43,7 @@ define([], function() {
         },
         create_li : function(option){
             let li = document.createElement('li');
-            if(option.cls.length){
+            if(option.hasOwnProperty('cls') && option.cls.length){
                 option.cls.split(' ').forEach(cls =>{
                     li.classList.add(cls);
                 });
@@ -55,7 +55,7 @@ define([], function() {
         },
         create_ul : function(option){
             let ul = document.createElement('ul');
-            if(option.cls.length){
+            if(option.hasOwnProperty('cls') && option.cls.length){
                 option.cls.split(' ').forEach(cls =>{
                     ul.classList.add(cls);
                 });
@@ -69,7 +69,7 @@ define([], function() {
         },
         create_element : function(option){
             let el = document.createElement(option.element);
-            if(option.cls.length){
+            if(option.hasOwnProperty('cls') && option.cls.length){
                 option.cls.split(' ').forEach(cls =>{
                     el.classList.add(cls);
                 });
