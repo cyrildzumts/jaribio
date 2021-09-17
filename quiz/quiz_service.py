@@ -20,6 +20,10 @@ def create_answer(data):
     answer = core_tools.create_instance(Answer, data)
     return answer
 
+def create_quizstep(data):
+    step = core_tools.create_instance(QuizStep, data)
+    return step
+
 
 def create_session(quiz, data):
     pass

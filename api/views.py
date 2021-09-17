@@ -64,7 +64,7 @@ def create_quiz(request):
     quiz = quiz_service.create_quiz(postdata)
     status_result = status.HTTP_200_OK
     if quiz:
-        data = {'success': True, 'title': quiz.title, 'url': quiz.get_absolute_url()}
+        data = {'success': True, 'title': quiz.title, 'message': 'Quiz created', 'url': quiz.get_absolute_url()}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
@@ -77,7 +77,7 @@ def create_question(request, quiz_uuid):
     question = quiz_service.create_question(postdata)
     status_result = status.HTTP_200_OK
     if question:
-        data = {'success': True,'title': 'Created', 'url': ''}
+        data = {'success': True,'message': 'Question Created', 'url': ''}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
@@ -90,7 +90,20 @@ def create_answer(request, question_uuid):
     answer = quiz_service.create_answer(postdata)
     status_result = status.HTTP_200_OK
     if answer:
-        data = {'success': True, 'title': 'Created', 'url': ''}
+        data = {'success': True, 'message': 'Answer Created', 'url': ''}
+    else:
+        status_result = status.HTTP_400_BAD_REQUEST
+        data = {'success': False, 'error': 'Bad request'}
+    return Response(data,status=status_result)
+
+
+@api_view(['POST'])
+def create_quizstep(request, quiz_uuid):
+    postdata = utils.get_postdata(request)
+    step = quiz_service.create_quizstep(postdata)
+    status_result = status.HTTP_200_OK
+    if step:
+        data = {'success': True, 'message': 'QuizStep Created', 'url': step.quiz.get_absolute_url()}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}

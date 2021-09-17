@@ -65,14 +65,14 @@ def delete_question(request, question_uuid):
     return redirect(quiz)
 
 def create_quizstep(request, quiz_uuid):
-    template_name = "quiz/question_create.html"
+    template_name = "quiz/quizstep_create.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
     context = {
         'page_title': "New QuizStep",
         'quiz': quiz,
-        'QUESTION_TYPES': QUIZ_CONSTANTS.QUESTION_TYPES,
-        'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
-        'QUESTION_TYPE_MCQ' : QUIZ_CONSTANTS.QUESTION_TYPE_MCQ
+        'questions': quiz.question_set.all(),
+        'SCORE_TYPES': QUIZ_CONSTANTS.ANSWER_SCORE_TYPES,
+        'ANSWER_SCORE_STANDARD': QUIZ_CONSTANTS.ANSWER_SCORE_STANDARD
     }
     return render(request, template_name, context)
 

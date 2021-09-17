@@ -1,0 +1,60 @@
+{% load i18n %}
+
+<div class="container padding">
+    <div class="row" id="created-producted-link">
+        <a class="mat-button mat-button-outline" href=""></a>
+    </div>
+    <form id="quizstep-form" action="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <input type="hidden" name="quiz" value={{quiz.pk}}>
+
+        <div class="actions flex-left padding-v">
+            <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
+        </div>
+        <div class="mat-box container">
+            <div class="col-xs-12 col-7">
+                <div class="box create-form full">
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <label for="title">{% trans "Title" %}</label>
+                            <input type="text" name="title" id="title">
+                        </div>
+                        <div class="form-group">
+                            <label for="rank">{% trans "Rank" %}</label>
+                            <input type="text" name="rank" id="rank">
+                        </div>
+                    </div>
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <span class="padding-bottom">{% trans "Score Type" %}</span>
+                            <div class="row">
+                                {% for k,v in SCORE_TYPES %} 
+                                <span class="padding"><input id="score-type-{{v}}" class="js-input-score-type" type="radio" name="score_type" value="{{k}}" {% if k == ANSWER_SCORE_STANDARD %} checked {% endif %}> <label for="score-type-{{v}}">{{v}}</label></span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <span class="padding-bottom">{% trans "Questions" %}</span><span class="js-add-answer padding-h"><i class="fas fa-plus icon"></i>{% trans "Add Answer" %}</span>
+                            <div id="answers-wrapper" class="row">
+                                <ul id="question-list">
+                                {% for q in questions %}
+                                        <li class="mat-list-item js-question-select" data-question="{{q.pk}}">
+                                            <span>{{q}}</span>
+                                        </li>
+                                {% endfor %}
+                                        
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actions flex-right">
+                        <span class="mat-button mat-button-outline js-cancel">{% trans "Cancel" %}</span>
+                        <button class="mat-button mat-button-default" type="submit">{{UI_STRINGS_CONTEXT.UI_SEND_BTN_LABEL}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
