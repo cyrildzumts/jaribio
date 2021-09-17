@@ -707,6 +707,9 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             $('.js-add-answer').on('click', function(event){
                 self.add_response();
             });
+            $('.js-clear-answers').on('click', function(){
+                self.remove_responses();
+            });
 
             console.log("QuestionManager initialized");
 
@@ -825,6 +828,30 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
 
         QuestionManager.prototype.add_response = function(){
             element_utils.init();
+            let answer_count = 4;
+            let answers_container = document.querySelector('#answers');
+            //var options = [];
+            for(let i = 0; i < answer_count; i++){
+                let form_prefix = "form-" + i;
+                let content_input = element_utils.create_input({'cls':'answer-content','name':form_prefix + 'content','value':'', 'type': 'text', 'id': form_prefix + 'content'});
+                let is_correct_input = element_utils.create_input({'cls':'answer-is-correct','name': form_prefix + 'is_correct','value':'','type':'checkbox', 'id': form_prefix + 'is_correct'});
+                let label = element_utils.create_label({'input_id':form_prefix + 'is_correct','value': 'Is correct'});
+                let icon = element_utils.create_element({'element': 'i', 'cls': 'fas fa-trash icon'});
+                let span_icon= element_utils.create_element({'element': 'span', 'cls': 'padding-h','children':[icon]});
+                let span_iscorrect = element_utils.create_element({'element': 'span', 'cls': 'padding-h', 'children': [label,is_correct_input]});
+                let div  = element_utils.create_element({'element': 'div', 'cls': 'flex flex-left', 'children':[content_input,span_iscorrect, span_icon]});
+                let li = element_utils.create_li({'cls':'mat-list-item', 'child': div});
+                answers_container.appendChild(li);
+            }
+            
+        };
+
+        QuestionManager.prototype.remove_responses = function(){
+            let answers_container = document.querySelector('#answers');
+            while(answers_container.firstChild){
+                answers_container.removeChild(answers_container.firstChild);
+            }
+            
         };
         
         QuestionManager.prototype.validate = function(){

@@ -4,7 +4,11 @@ define([], function() {
     var element_factory = {
         create_input : function(option){
             let input = document.createElement('input');
-            input.classList.add(option.cls);
+            if(option.cls.length){
+                option.cls.split(' ').forEach(cls =>{
+                    input.classList.add(cls);
+                });
+            }
             input.type = option.type;
             input.value = option.value;
             input.name = option.name;
@@ -38,7 +42,11 @@ define([], function() {
         },
         create_li : function(option){
             let li = document.createElement('li');
-            li.classList.add(option.cls);
+            if(option.cls.length){
+                option.cls.split(' ').forEach(cls =>{
+                    li.classList.add(cls);
+                });
+            }
             if(option.hasOwnProperty('child')){
                 li.appendChild(option.child);
             }
@@ -46,7 +54,11 @@ define([], function() {
         },
         create_ul : function(option){
             let ul = document.createElement('ul');
-            ul.classList.add(option.cls);
+            if(option.cls.length){
+                option.cls.split(' ').forEach(cls =>{
+                    ul.classList.add(cls);
+                });
+            }
             if(option.hasOwnProperty('children')){
                 option.children.forEach(child =>{
                     ul.appendChild(child);
@@ -54,6 +66,21 @@ define([], function() {
             }
             return ul;
         },
+        create_element : function(option){
+            let el = document.createElement(option.element);
+            if(option.cls.length){
+                option.cls.split(' ').forEach(cls =>{
+                    el.classList.add(cls);
+                });
+            }
+            if(option.hasOwnProperty('children')){
+                option.children.forEach(child =>{
+                    el.appendChild(child);
+                });
+            }
+            return el;
+        },
+        
         init : function(){
             console.log("Element Utils ready");
         }
