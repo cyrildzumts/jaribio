@@ -19,7 +19,7 @@ define([], function() {
         },
         create_label : function(option){
             let label = document.createElement('label');
-            label.for = option.input_id;
+            label.htmlFor = option.input_id;
             label.innerText = option.value;
             return label;
         },
