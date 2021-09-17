@@ -898,6 +898,10 @@ define(['ajax_api'], function(ajax_api) {
                 });
                 self.questions_input.value = value;
             });
+            $('.js-clear-selected-questions').on('click', function(){
+                $('.js-qs-question-select').prop('checked', false);
+                self.questions_input.value = "";
+            });
             $(this.form).on('submit', function(e){
                 e.preventDefault();
                 e.stopPropagation();

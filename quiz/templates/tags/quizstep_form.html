@@ -41,7 +41,7 @@
                     </div>
                     <div class="flex flex-left">
                         <div class="form-group">
-                            <span class="padding-bottom"><label">{% trans "Questions" %}</label></span>
+                            <span class="padding-bottom"><label">{% trans "Questions" %}</label></span><span class="js-clear-selected-questions"><i class="fas fa erase icon"></i>{% trans "Clear" %}</span>
                             <div id="answers-wrapper" class="row">
                                 <ul id="question-list">
                                 {% for q in questions %}
