@@ -44,7 +44,7 @@ def create_answers(question, data):
     except Exception as e:
         logger.warn(f"Error on processing Answer Formset", e)
         logger.error(f"Answer Formset Error : {formset.errors}")
-        logger.error(f"Answer Formset Non Form Error : {formset.non_form_errors}")
+        logger.error(f"Answer Formset Non Form Error : {formset.non_form_errors()}")
     return answers
 
 
