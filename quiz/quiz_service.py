@@ -27,18 +27,22 @@ def create_question(data):
 
 
 def create_answers(question, data):
+    logger.info(f"quiz_service : creating answers for question {question}")
     Formset = modelformset_factory(Answer, form=AnswerForm)
     formset = Formset(data)
+    answers = None
     for form in formset:
         form.fields['question'] = question.pk
         form.fields['created_by'] = question.created_by.pk
-    
-    if formset.is_valid():
-        answers = formset.save()
-        logger.info("Saved Answer Formset")
-    else:
-        answers = None
-        logger.warn('Answer Formset is invalid')
+    try:
+        if formset.is_valid():
+            answers = formset.save()
+            logger.info("Saved Answer Formset")
+        else:
+            answers = None
+            logger.warn('Answer Formset is invalid')
+    except Exception as e:
+        logger.warn(f"Error on processing Answer Formset")
     return answers
 
 
