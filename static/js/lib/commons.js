@@ -874,6 +874,7 @@ define(['ajax_api'], function(ajax_api) {
             this.clear_uploaded_files_btn = undefined;
             this.quiz_container = undefined;
             this.quiz_link = undefined;
+            this.selected_questions = [];
         };
         QuizStepManager.prototype.init = function(){
             var self = this;
@@ -888,9 +889,13 @@ define(['ajax_api'], function(ajax_api) {
             this.validators = [];
             $('.js-qs-question-select').on('change', function(event){
                 let value = "";
-                let checked_list = $('.js-qs-question-select:checked');
-                checked_list.each(function(index, input){
-                    if(index < checked_list.length -1){
+                if(this.checked){
+                    self.selected_questions.push(this);
+                }else{
+                    self.selected_questions.splice(self.selected_questions.indexOf(this), 1);
+                }
+                self.selected_questions.forEach(function(input, index){
+                    if(index < selected_questions.length -1){
                         value+= input.value + ',';
                     }else{
                         value +=input.value;
@@ -901,6 +906,7 @@ define(['ajax_api'], function(ajax_api) {
             $('.js-clear-selected-questions').on('click', function(){
                 $('.js-qs-question-select').prop('checked', false);
                 self.questions_input.value = "";
+                self.selected_questions.splice(0, self.selected_questions.length);
             });
             $(this.form).on('submit', function(e){
                 e.preventDefault();
