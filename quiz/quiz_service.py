@@ -1,4 +1,6 @@
+from django.forms import modelformset_factory
 from quiz.models import Quiz, Question,QuizImage, QuizSession, QuizStep, Answer, Category
+from quiz.forms import AnswerForm
 from quiz import constants as QuizConstants
 from core import core_tools
 import logging
@@ -14,7 +16,32 @@ def create_quiz(data):
 
 def create_question(data):
     question = core_tools.create_instance(Question, data)
+    answers = create_answers(question, data)
+    if answers:
+        logger.info("Question created")
+    else:
+        logger.warn("Error on creating Question. Answers not valid. Rolling back")
+        Question.objects.filter(pk=question.pk).delete()
+        question = None
     return question
+
+
+def create_answers(question, data):
+    Formset = modelformset_factory(Answer, form=AnswerForm)
+    formset = Formset(data)
+    for form in formset:
+        form.fields['question'] = question.pk
+        form.fields['created_by'] = question.created_by.pk
+    
+    if formset.is_valid():
+        answers = formset.save()
+        logger.info("Saved Answer Formset")
+    else:
+        answers = None
+        logger.warn('Answer Formset is invalid')
+    return answers
+
+
 
 def create_answer(data):
     answer = core_tools.create_instance(Answer, data)
