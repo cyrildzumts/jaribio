@@ -877,9 +877,9 @@ define(['ajax_api'], function(ajax_api) {
         };
         QuizStepManager.prototype.init = function(){
             var self = this;
-            this.form = document.querySelector('#question-form') || document.querySelector('#question-update-form');
+            this.form = document.querySelector('#quizstep-form') || document.querySelector('#quizstep-update-form');
             if(this.form == null ){
-                console.warn("No Question form found");
+                console.warn("No QuizStep form found");
                 return;
             }
             

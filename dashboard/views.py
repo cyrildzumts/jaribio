@@ -244,7 +244,7 @@ def category_manage_products(request, category_uuid):
 
 
 @login_required
-def category_products(request, category_uuid=None):
+def category_quizzes(request, category_uuid=None):
     template_name = 'dashboard/category_product_list.html'
     username = request.user.username
     
@@ -267,67 +267,6 @@ def category_products(request, category_uuid=None):
 
     return render(request,template_name, context)
 
-
-
-@login_required
-def add_products_highlight(request, highlight_uuid):
-    username = request.user.username
-    if not PermissionManager.user_can_access_dashboard(request.user):
-        logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if not PermissionManager.user_can_add_product(request.user):
-        logger.warning("PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    form = None
-    username = request.user.username
-    #highlight = get_object_or_404(Highlight, highlight_uuid=highlight_uuid)
-    if request.method == 'POST':
-        postdata = utils.get_postdata(request)
-        #form = AddAttributeForm(postdata)
-        logger.info("Attribute formset valid checking")
-        if form.is_valid():
-
-            messages.success(request, _('formset valid'))
-            logger.info(f'New attributes added by user \"{username}\"')
-            logger.info(attributes)
-        else:
-            messages.error(request, _(' not added'))
-            logger.error(f'Error on adding new. Action requested by user \"{username}\"')
-            logger.error(form.errors)
-            
-    return render(request,"", {})
-
-
-@login_required
-def highlight_add_products(request, highlight_uuid):
-    username = request.user.username
-    if not PermissionManager.user_can_access_dashboard(request.user):
-        logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if not PermissionManager.user_can_delete_product(request.user):
-        logger.warning("PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if request.method != "POST":
-        raise SuspiciousOperation('Bad request')
-
-    #highlight = get_object_or_404(Highlight, highlight_uuid=highlight_uuid)
-    postdata = utils.get_postdata(request)
-    id_list = postdata.getlist('products')
-
-    if len(id_list):
-        id_list = list(map(int, id_list))
-        #highlight.products.add(*id_list)
-        #messages.success(request, f"Products \"{id_list}\" added to highlight {highlight.display_name}")
-        #logger.info(f"Products \"{id_list}\" added to highlight {highlight.display_name} by user {username}")
-        
-    else:
-        messages.error(request, f"ID list invalid. Error : {id_list}")
-        logger.error(f"ID list invalid. Error : {id_list}")
-    return redirect('dashboard:home')
 
 @login_required
 def highlights(request):
@@ -499,7 +438,7 @@ def highlights_delete(request):
 
 
 @login_required
-def product_home(request):
+def quiz_home(request):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -517,12 +456,11 @@ def product_home(request):
     
     context['page_title'] = page_title
     context['content_title'] = CORE_STRINGS.DASHBOARD_PRODUCT_HOME_TITLE
-    context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
     return render(request,template_name, context)
 
 
 @login_required
-def products(request):
+def quizzes(request):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -540,12 +478,11 @@ def products(request):
     queryDict = request.GET.copy()
     
     context['page_title'] = page_title
-    context['content_title'] = CORE_STRINGS.DASHBOARD_PRODUCTS_TITLE
-    context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
+    context['content_title'] = CORE_STRINGS.UI_GO_TO_QUIZ
     return render(request,template_name, context)
 
 @login_required
-def product_detail(request, product_uuid=None):
+def quiz_detail(request, quiz_uuid=None):
     template_name = 'dashboard/product_detail.html'
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
@@ -562,11 +499,10 @@ def product_detail(request, product_uuid=None):
         'page_title': page_title,
 
     }
-    context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
     return render(request,template_name, context)
 
 @login_required
-def product_update(request, product_uuid=None):
+def quiz_update(request, product_uuid=None):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -583,29 +519,14 @@ def product_update(request, product_uuid=None):
 
     }
     form = None
-   
-    context['content_title'] = CORE_STRINGS.DASHBOARD_PRODUCT_UPDATE_TITLE
-    context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
+
     return render(request, template_name, context)
 
 
-@login_required
-def products_changes(request):
-    username = request.user.username
-    if not PermissionManager.user_can_access_dashboard(request.user):
-        logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if not PermissionManager.user_can_change_product(request.user):
-        logger.warning("PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    
-    return redirect('dashboard:products')
 
 
 @login_required
-def product_toggle_active(request,product_uuid, toggle):
+def quiz_toggle_active(request, quiz_uuid, toggle):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -634,7 +555,7 @@ def product_toggle_active(request,product_uuid, toggle):
 
 
 @login_required
-def product_delete(request, product_uuid=None):
+def quiz_delete(request, quiz_uuid=None):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -653,7 +574,7 @@ def product_delete(request, product_uuid=None):
 
 
 @login_required
-def products_delete(request):
+def quizzes_delete(request):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -672,17 +593,17 @@ def products_delete(request):
 
     if len(id_list):
         product_id_list = list(map(int, id_list))
-        messages.success(request, f"Products \"{id_list}\" deleted")
-        logger.info(f"Products \"{id_list}\" deleted by user {username}")
+        messages.success(request, f"Quizzes \"{id_list}\" deleted")
+        logger.info(f"Quizzes \"{id_list}\" deleted by user {username}")
         
     else:
-        messages.error(request, f"Products \"{id_list}\" could not be deleted")
+        messages.error(request, f"Quizzes \"{id_list}\" could not be deleted")
         logger.error(f"ID list invalid. Error : {id_list}")
-    return redirect('dashboard:products')
+    return redirect('dashboard:quizzes')
 
 
 @login_required
-def product_image_create(request, product_uuid=None):
+def quiz_image_create(request, quiz_uuid=None):
     username = request.user.username
     if not PermissionManager.user_can_access_dashboard(request.user):
         logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
@@ -704,33 +625,13 @@ def product_image_create(request, product_uuid=None):
 
         if request.is_ajax():
             return JsonResponse({'status': 'OK', 'message' : 'files uploaded'})
-        return redirect('dashboard:product-detail', product_uuid=product_uuid)
+        return redirect('dashboard:quiz-detail', quiz_uuid=quiz_uuid)
         
 
     context['content_title'] = CORE_STRINGS.DASHBOARD_PRODUCT_IMAGE_CREATE_TITLE
     context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
     return render(request,template_name, context)
 
-@login_required
-def product_image_detail(request, image_uuid=None):
-    username = request.user.username
-    if not PermissionManager.user_can_access_dashboard(request.user):
-        logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if not PermissionManager.user_can_view_product(request.user):
-        logger.warning("PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    context = {}
-
-    template_name = "dashboard/product_image_detail.html"
-    page_title = "Product Image" + " - " + settings.SITE_NAME
-    context['page_title'] = page_title
-    context['image'] = p_image
-    context['content_title'] = CORE_STRINGS.DASHBOARD_PRODUCT_IMAGE_TITLE
-    context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
-    return render(request,template_name, context)
 
 
 def product_image_delete(request, image_uuid=None):
@@ -752,46 +653,6 @@ def product_image_delete(request, image_uuid=None):
     
     return redirect('dashboard:home')
 
-@login_required
-def product_image_update(request, image_uuid=None):
-    username = request.user.username
-    if not PermissionManager.user_can_access_dashboard(request.user):
-        logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if not PermissionManager.user_can_change_product(request.user):
-        logger.warning("PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    page_title = "Edit Product Image" + ' - ' + settings.SITE_NAME
-    template_name = "dashboard/product_image_update.html"
-    
-    context = {
-            'page_title': page_title,
-            'template_name': template_name,
-        }
-    context['content_title'] = CORE_STRINGS.DASHBOARD_PRODUCT_IMAGE_UPDATE_TITLE
-    context.update(Constants.DASHBOARD_PRODUCT_CONTEXT)
-    return render(request, template_name,context )
-
-@login_required
-def product_images(request, product_uuid):
-    username = request.user.username
-    if not PermissionManager.user_can_access_dashboard(request.user):
-        logger.warning("Dashboard : PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    if not PermissionManager.user_can_view_product(request.user):
-        logger.warning("PermissionDenied to user %s for path %s", username, request.path)
-        raise PermissionDenied
-
-    context = {}
-    
-    template_name = "dashboard/product_images_list.html"
-    page_title = "Product Images" + " - " + settings.SITE_NAME
-    context['page_title'] = page_title
-    context['content_title'] = f"Images" 
-    return render(request,template_name, context)
 
 
 

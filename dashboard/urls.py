@@ -63,20 +63,7 @@ group_patterns = [
 # ]
 
 quiz_pattterns = [
-    path('', views.product_home, name='quiz-home'),
-    path('products/products/', views.products, name='products'),
-    path('products/detail/<uuid:product_uuid>/', views.product_detail, name='product-detail'),
-    path('products/update/<uuid:product_uuid>/', views.product_update, name='product-update'),
-    path('products/delete/<uuid:product_uuid>/', views.product_delete, name='product-delete'),
-    path('products/delete/', views.products_delete, name='products-delete'),
-    path('products/products-changes/', views.products_changes, name='products-changes'),
-    path('products/activate/<uuid:product_uuid>/(?P<toggle>)/', views.product_toggle_active, name='product-activate'),
-    path('products/product-images/<uuid:product_uuid>/', views.product_images, name='product-images'),
-    path('products/product-image/detail/<uuid:image_uuid>/', views.product_image_detail, name='product-image-detail'),
-    path('products/product-image/update/<uuid:image_uuid>/', views.product_image_update, name='product-image-update'),
-    path('products/product-image/delete/<uuid:image_uuid>/', views.product_image_delete, name='product-image-delete'),
-    path('products/product-image/create/<uuid:product_uuid>', views.product_image_create, name='product-image-create'),
-
+    path('', views.quiz_home, name='quiz-home'),
 ]
 
 
