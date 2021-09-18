@@ -30,6 +30,7 @@
           <div class="collapsible">
             <div class="collapse-toggle" data-target="answer-{{q.pk}}"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
             <div id="answer-{{q.pk}}" class="collapse-content">
+              <span>{% trans "Answers" %}</span>
               {% for a in q.answers.all %}
               <div class="answer"><span>{{a}}</span> - <span><i class="fas {% if a.is_correct %}check-circle {% else %}times-circle{% endif %} icon"></i></span> </div>
               {% endfor %}
