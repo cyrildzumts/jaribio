@@ -3,6 +3,7 @@ from quiz.models import Quiz, Question,QuizImage, QuizSession, QuizStep, Answer,
 from quiz.forms import AnswerForm
 from quiz import constants as QuizConstants
 from core import core_tools
+from jaribio import utils
 import logging
 import datetime
 
@@ -31,9 +32,10 @@ def create_answers(question, data):
     Formset = modelformset_factory(Answer, form=AnswerForm)
     formset = Formset(data)
     answers = None
+    utils.show_dict_contents(data, "Forms Management")
     for form in formset:
-        form.fields['question'] = str(question.pk)
-        form.fields['created_by'] = str(question.created_by.pk)
+        form.fields['question'].initial = str(question.pk)
+        form.fields['created_by'].initial = str(question.created_by.pk)
     try:
         if formset.is_valid():
             answers = formset.save()
