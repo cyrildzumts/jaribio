@@ -26,7 +26,16 @@
     <ul class="medium">
       {% for q in questions %} 
       <li>
-        <div class="flex flex-left"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+        <div class="flex flex-left">
+          <div class="collapsible">
+            <div class="collapsible-toggle"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+            <div class="collapse-content">
+              {% for a in q.answers.all %}
+              <div class="answer"><span>{{a}}</span> - <span><i class="fas {% if a.is_correct %}check-circle {% else %}times-circle{% endif %} icon"></i></span> </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </li>
       {% empty %}
       <li><span>{% trans "No questions" %}</span></li>
