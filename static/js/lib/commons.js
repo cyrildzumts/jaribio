@@ -842,7 +842,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
                 //let span_icon= element_utils.create_element({'element': 'span', 'options' : {'cls': 'padding-h','children':[delete_icon]}});
                 let span_iscorrect = element_utils.create_element_api({'element': 'span', 'options': {'cls': 'padding-h', 'children': [label,is_correct_input]}});
                 let div  = element_utils.create_element_api({'element': 'div', 'options': {'cls': 'flex flex-left', 'children':[content_input,span_iscorrect]}});
-                let li = element_utils.create_element_api({'element': 'li','options': {'cls':'', 'child': div}});
+                let li = element_utils.create_element_api({'element': 'li','options': {'child': div}});
                 answers_container.appendChild(li);
             }
             let form_management_total_input = element_utils.create_element_api({ 'element': 'input','options': {'name': this.answer_formset_total_form, 'value': answer_count, 'type': 'hidden', 'id': this.answer_formset_total_form}});

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load static %}
+{% if banner %}
+
+{% block HEADER_BANNER %}
+<div class="banner">
+
+</div><!--End of Banner-->
+{% endblock HEADER_BANNER %}
+{% endif %}
+
+{% block MAIN %}
+<div class="container">
+    <div class="flex"><span>{{quiz}}</span></div>
+    <div class="mat-box-full">
+    <p>{% trans "Update Question" %}</p>
+  </div>
+  {% include 'tags/question_update_form.html' %}
+</div>
+
+{% endblock MAIN %}

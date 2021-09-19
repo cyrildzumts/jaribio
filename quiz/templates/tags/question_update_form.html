@@ -1,0 +1,97 @@
+{% load i18n %}
+
+<div class="container padding">
+    <div class="row" id="created-producted-link">
+        <a class="mat-button mat-button-outline" href=""></a>
+    </div>
+    <form id="question-update-form" action="{% url 'quiz:question-update' question.question_uuid %}" data-quiz="{{quiz.quiz_uuid}}" data-question="{{question.question_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <input id="quiz" type="hidden" name="quiz" value="{{quiz.pk}}">
+        <input type="hidden" name="created_by" value="{{question.created_by.pk}}">
+        {% comment %}
+            <input type="hidden" name="form-INITIAL_FORMS" value="0">
+            <input type="hidden" name="form-TOTAL_FORMS" value="4">
+        {% endcomment %}
+        {{ formset.management_form }}
+
+        <div class="actions flex-left padding-v">
+            <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
+        </div>
+        <div class="mat-box container">
+        
+            <div class="col-xs-12 col-3">
+                <div class="box">
+                    {% include "tags/images_uploader.html" with FORM_ID="quiz-form" INPUT_NAME="image" UPLOADER_TITLE='Question Image'%}
+                </div>
+            </div>
+            <div class="col-xs-12 col-7">
+                <div class="box create-form full">
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <label for="content">{% trans "Question" %}</label>
+                            <input type="text" name="content" id="content" value="{{question.content}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="answer_count">{% trans "Answer Count" %}</label>
+                            <input type="text" name="answer_count" id="answer_count" value="{{question.answer_count}}">
+                        </div>
+                    </div>
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <span class="padding-bottom">{% trans "Question Type" %}</span>
+                            <div class="row">
+                                {% for k,v in QUESTION_TYPES %} 
+                                <span class="padding"><input id="question-{{v}}" class="js-input-question-type" type="radio" name="question_type" value="{{k}}" {% if k == question.question_type %} checked {% endif %}> <label for="question-{{v}}">{{v}}</label></span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="score">{% trans "Score" %}</label>
+                            <input type="text" name="score" id="score" value="{{question.score}}">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-left flex-wrap">
+                        <div class="form-group">
+                            <label class="padding-bottom" for="explanation">{% trans "Explanation" %}</label>
+                            <textarea id="explanation" class="limited-input bordered" name="explanation" cols="30" rows="10" data-target="#length-counter" data-max-length="{{DESCRIPTION_MAX_SIZE}}">{{question.explanation}}</textarea>
+                        </div>
+                        
+                        <div class="row padding-l"> <span id="length-counter" class="char-counter">{{question.explanation|length}}</span><span class="text-max-length">/{{DESCRIPTION_MAX_SIZE}}</span></div>
+                    </div>
+                    <div class="flex flex-left">
+                        <div class="form-group">
+                            <div class="row"><span class="padding-bottom">{% trans "Answers" %}</span></div>
+                            <div id="answers-wrapper" class="row">
+                                <ul id="answers">
+                                    {% for a in question.answers.all %}
+                                    <li>
+                                        <div class="flex flex-left">
+                                            <input id="form-{{forloop.counter0}}-question" class="answer-question"  type="hidden" name="form-{{forloop.counter0}}-question" value="{{a.question.pk}}">
+                                            <input id="form-{{forloop.counter0}}-created_by" class="answer-created_by"  type="hidden" name="form-{{forloop.counter0}}-created_by" value="{{a.created_by.pk}}">
+                                            <input id="form-{{forloop.counter0}}-content" class="answer-content"  type="text" name="form-{{forloop.counter0}}-content" value="{{a.content}}">
+                                            <span class="padding-h"><input id="form-{{forloop.counter0}}-is_correct" class="answer-is-correct" type="text" name="form-{{forloop.counter0}}-is_correct" {% if a.is_correct %}checked{% endif %}><label for="form-{{forloop.counter0}}-is_correct"></label></span>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="form_rendering flex flex-left">
+                                    {% for form in formset %}
+                                        {% for field in form %}
+                                        <div class="form-group">
+                                            {{ field.label_tag }} {{field}}
+                                        </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="actions flex-right">
+                        <span class="mat-button mat-button-outline js-cancel">{% trans "Cancel" %}</span>
+                        <button class="mat-button mat-button-default" type="submit">{{UI_STRINGS_CONTEXT.UI_SEND_BTN_LABEL}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

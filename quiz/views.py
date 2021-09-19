@@ -1,5 +1,7 @@
+from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
-from quiz.models import Question, Quiz, QuizStep
+
+from quiz.models import Answer, Question, Quiz, QuizStep
 from quiz import constants as QUIZ_CONSTANTS
 # Create your views here.
 
@@ -35,6 +37,23 @@ def update_quiz(request, quiz_uuid):
         'quiz': quiz,
         'QUIZ_TYPES' : QUIZ_CONSTANTS.QUIZ_TYPES,
         'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE
+    }
+    return render(request, template_name, context)
+
+
+def update_question(request, question_uuid):
+    template_name = "quiz/question_update.html"
+    question = get_object_or_404(Question, question_uuid=question_uuid)
+    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
+    formset = AnswerFormset(instance=question)
+    context = {
+        'page_title': "Update Question",
+        'question': question,
+        'quiz': question.quiz,
+        'formset': formset,
+        'QUESTION_TYPES': QUIZ_CONSTANTS.QUESTION_TYPES,
+        'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
+        'QUESTION_TYPE_MCQ' : QUIZ_CONSTANTS.QUESTION_TYPE_MCQ
     }
     return render(request, template_name, context)
 

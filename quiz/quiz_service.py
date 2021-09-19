@@ -1,4 +1,5 @@
 from django.forms import modelformset_factory
+from django.forms import inlineformset_factory
 from quiz.models import Quiz, Question,QuizImage, QuizSession, QuizStep, Answer, Category
 from quiz.forms import AnswerForm
 from quiz import constants as QuizConstants
@@ -26,6 +27,27 @@ def create_question(data):
         question = None
     return question
 
+def update_question(question, data):
+    question = core_tools.update_instance(Question, question, data)
+    if question is None:
+        return None
+    answers = update_answers(question, data)
+    return {'question': question, 'answers': answers}
+    
+def update_answers(question, data):
+    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
+    formset = AnswerFormset(data, instance=question)
+    try:
+        if formset.is_valid():
+            answers = formset.save()
+            logger.info(f"Answers for question {question.question_uuid} updated")
+            return answers
+        else:
+            logger.warn(f"Answers for question {question.question_uuid} not updated. Errors : {formset.errors}")
+    except Exception as e:
+        logger.warn(f"Answers for question {question.question_uuid} not updated. Error on validating the formset")
+        logger.exception(e)
+    return None
 
 def create_answers(question, data):
     logger.info(f"quiz_service : creating answers for question {question}")
