@@ -43,7 +43,7 @@ def update_quiz(request, quiz_uuid):
 
 def update_question(request, quiz_slug ,question_uuid):
     template_name = "quiz/question_update.html"
-    question = get_object_or_404(Question, question_uuid=question_uuid, quiz__slug=quiz_slug)
+    question = get_object_or_404(Question, question_uuid=question_uuid)
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
     formset = AnswerFormset(instance=question)
     context = {
@@ -137,9 +137,9 @@ def quiz_detail(request, slug):
     return render(request, template_name, context)
 
 
-def question_details(request, quiz_slug, question_uuid):
+def question_details(request,quiz_slug, question_uuid):
     template_name = "quiz/question.html"
-    question = get_object_or_404(Question, question_uuid=question_uuid, quiz__slug=quiz_slug)
+    question = get_object_or_404(Question, question_uuid=question_uuid)
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
     formset = AnswerFormset(instance=question)
     context = {
