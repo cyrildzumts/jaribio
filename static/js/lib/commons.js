@@ -794,7 +794,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             let self = this;
             let form_is_valid = this.validate();
             if(!form_is_valid){
-                console.log("Quiz form is invalid");
+                console.log("Question form is invalid");
                 return;
             }
 
