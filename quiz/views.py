@@ -41,9 +41,9 @@ def update_quiz(request, quiz_uuid):
     return render(request, template_name, context)
 
 
-def update_question(request, question_uuid):
+def update_question(request, quiz_slug ,question_uuid):
     template_name = "quiz/question_update.html"
-    question = get_object_or_404(Question, question_uuid=question_uuid)
+    question = get_object_or_404(Question, question_uuid=question_uuid, quiz__slug=quiz_slug)
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
     formset = AnswerFormset(instance=question)
     context = {
@@ -133,5 +133,22 @@ def quiz_detail(request, slug):
         'quiz': quiz,
         'questions': questions,
         'quizsteps': quizsteps
+    }
+    return render(request, template_name, context)
+
+
+def question_details(request, quiz_slug, question_uuid):
+    template_name = "quiz/question.html"
+    question = get_object_or_404(Question, question_uuid=question_uuid, quiz__slug=quiz_slug)
+    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
+    formset = AnswerFormset(instance=question)
+    context = {
+        'page_title': "Update Question",
+        'question': question,
+        'quiz': question.quiz,
+        'formset': formset,
+        'QUESTION_TYPES': QUIZ_CONSTANTS.QUESTION_TYPES,
+        'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
+        'QUESTION_TYPE_MCQ' : QUIZ_CONSTANTS.QUESTION_TYPE_MCQ
     }
     return render(request, template_name, context)

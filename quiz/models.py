@@ -129,7 +129,15 @@ class Question(models.Model):
 
     def __str__(self) -> str:
         return self.content
+
+    def get_absolute_url(self):
+        return reverse("quiz:question-detail", kwargs={"question_uuid": self.question_uuid})    
+
+    def get_update_url(self):
+        return reverse("quiz:question-update", kwargs={"question_uuid": self.question_uuid})
     
+    def get_delete_url(self):
+        return reverse("quiz:question-delete", kwargs={"question_uuid": self.question_uuid})
 
 
 class Answer(models.Model):

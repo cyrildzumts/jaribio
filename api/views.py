@@ -1,7 +1,9 @@
+from quiz.models import Question
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -105,6 +107,23 @@ def create_quizstep(request, quiz_uuid):
     status_result = status.HTTP_200_OK
     if step:
         data = {'success': True, 'message': 'QuizStep Created', 'url': step.quiz.get_absolute_url()}
+    else:
+        status_result = status.HTTP_400_BAD_REQUEST
+        data = {'success': False, 'error': 'Bad request'}
+    return Response(data,status=status_result)
+
+
+@api_view(['POST'])
+def update_question(request, quiz_slug, question_uuid):
+    postdata = utils.get_postdata(request)
+    try:
+        question = Question.objects.get(question_uuid=question_uuid, quiz__slug=quiz_slug)
+    except ObjectDoesNotExist as e:
+        return Response({'success': False, 'message': 'Not found', 'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+    question, answers = quiz_service.update_question(question, postdata)
+    status_result = status.HTTP_200_OK
+    if question:
+        data = {'success': True, 'message': 'updated', 'url': question.get_absolute_url()}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
