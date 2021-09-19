@@ -116,10 +116,14 @@ def create_quizstep(request, quiz_uuid):
 @api_view(['POST'])
 def update_question(request, quiz_slug, question_uuid):
     postdata = utils.get_postdata(request)
+    logger.info(f"API Question update request from user {request.user.username}")
+    quiz = None
+    question = None
     try:
         question = Question.objects.get(question_uuid=question_uuid)
         quiz = Quiz.objects.get(slug=quiz_slug)
     except ObjectDoesNotExist as e:
+        logger.warn(f"API : Could not found question {quiz}[slug={quiz_slug}] or question {question}[uuid={question_uuid}")
         return Response({'success': False, 'message': 'Not found', 'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
     question, answers = quiz_service.update_question(question, postdata)
     status_result = status.HTTP_200_OK
