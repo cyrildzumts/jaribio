@@ -798,7 +798,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
                 return;
             }
 
-            let url = this.is_update_form() ? '/api/quizzes/' + this.form.dataset.quiz + '/update-question/' + this.form.dataset.question + '/' : '/api/quizzes/' + this.form.dataset.quiz + '/create-question/';
+            let url = this.is_update_form() ? '/api/quizzes/' + this.form.dataset.quiz + '/questions/' + this.form.dataset.question + '/update/' : '/api/quizzes/' + this.form.dataset.quiz + '/create-question/';
 
             let options = {
                 url : url,
