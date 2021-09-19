@@ -77,10 +77,10 @@
                                 <div class="form_rendering container">
                                     {% for form in formset %}
                                         <div class="flex flex-left">
-                                            {% for field in form %}
-                                            <div class="form-group">
+                                            {% for field in form.visible_fields %}
+                                            <span class="padding">
                                                 {{ field.label_tag }} {{field}}
-                                            </div>
+                                            </span>
                                             {% endfor %}
                                         </div>
                                     {% endfor %}
