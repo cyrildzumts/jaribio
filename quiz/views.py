@@ -142,7 +142,7 @@ def question_details(request,quiz_slug, question_uuid):
     template_name = "quiz/question.html"
     question = get_object_or_404(Question, question_uuid=question_uuid)
     quiz = get_object_or_404(Quiz, slug=quiz_slug)
-    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct', 'question'))
+    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct', 'question'), extra=0)
     formset = AnswerFormset(instance=question)
     context = {
         'page_title': "Update Question",
