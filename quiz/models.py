@@ -131,7 +131,7 @@ class Question(models.Model):
         return self.content
 
     def get_absolute_url(self):
-        return reverse("quiz:question-detail", kwargs={ "question_uuid": self.question_uuid})    
+        return reverse("quiz:question-details", kwargs={ "question_uuid": self.question_uuid})    
 
     def get_update_url(self):
         return reverse("quiz:question-update", kwargs={"question_uuid": self.question_uuid})
