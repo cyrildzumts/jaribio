@@ -44,12 +44,13 @@ def update_quiz(request, quiz_uuid):
 def update_question(request, quiz_slug ,question_uuid):
     template_name = "quiz/question_update.html"
     question = get_object_or_404(Question, question_uuid=question_uuid)
+    quiz = get_object_or_404(Quiz, slug=quiz_slug)
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
     formset = AnswerFormset(instance=question)
     context = {
         'page_title': "Update Question",
         'question': question,
-        'quiz': question.quiz,
+        'quiz': quiz,
         'formset': formset,
         'QUESTION_TYPES': QUIZ_CONSTANTS.QUESTION_TYPES,
         'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
@@ -140,12 +141,13 @@ def quiz_detail(request, slug):
 def question_details(request,quiz_slug, question_uuid):
     template_name = "quiz/question.html"
     question = get_object_or_404(Question, question_uuid=question_uuid)
+    quiz = get_object_or_404(Quiz, slug=quiz_slug)
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'))
     formset = AnswerFormset(instance=question)
     context = {
         'page_title': "Update Question",
         'question': question,
-        'quiz': question.quiz,
+        'quiz': quiz,
         'formset': formset,
         'QUESTION_TYPES': QUIZ_CONSTANTS.QUESTION_TYPES,
         'DESCRIPTION_MAX_SIZE' : QUIZ_CONSTANTS.DESCRIPTION_MAX_SIZE,
