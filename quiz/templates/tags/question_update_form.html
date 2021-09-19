@@ -74,13 +74,15 @@
                                     </li>
                                     {% endfor %}
                                 </ul>
-                                <div class="form_rendering flex flex-left">
+                                <div class="form_rendering container">
                                     {% for form in formset %}
-                                        {% for field in form %}
-                                        <div class="form-group">
-                                            {{ field.label_tag }} {{field}}
+                                        <div class="flex flex-left">
+                                            {% for field in form %}
+                                            <div class="form-group">
+                                                {{ field.label_tag }} {{field}}
+                                            </div>
+                                            {% endfor %}
                                         </div>
-                                        {% endfor %}
                                     {% endfor %}
                                 </div>
                             </div>
