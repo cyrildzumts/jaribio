@@ -9,13 +9,22 @@ define([], function() {
                     input.classList.add(cls);
                 });
             }
-            input.id = option.id;
+            for(const [key, value] of Object.entries(option)){
+                if((key == 'cls') && option.cls.length){
+                    option.cls.split(' ').forEach(cls =>{
+                        input.classList.add(cls);
+                    });
+                }else{
+                    input[key] = value;
+                }
+            }
+            /* input.id = option.id;
             input.type = option.type;
             input.value = option.value;
             input.name = option.name;
             if(option.hasOwnProperty('checked')){
                 input.checked = option.checked;
-            }
+            } */
             return input;
         },
         create_label : function(option){
@@ -80,6 +89,32 @@ define([], function() {
                 });
             }
             return el;
+        },
+        create_element_api : function(option){
+            let element = document.createElement(option.element);
+            if(!option.hasOwnProperty('options')){
+                return element;
+            }
+            let options = option.options;
+            for(const [key, value] of Object.entries(options)){
+                if((key == 'cls') && value.length){
+                    value.split(' ').forEach(cls =>{
+                        element.classList.add(cls);
+                    });
+                }else if(key == 'children'){
+                    value.forEach(child =>{
+                        element.appendChild(child);
+                    });
+                    
+                }else if(key == 'child'){
+                    element.appendChild(value);
+                }else if(key.startsWith('data-')){
+                    element.setAttribute(key, value);
+                }else{
+                    element[key] = value;
+                }
+            }
+            return element;
         },
         
         init : function(){
