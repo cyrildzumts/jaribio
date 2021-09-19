@@ -12,6 +12,9 @@
 
 {% block MAIN %}
 <div class="container">
+    <div class="actions flex-left padding-v">
+        <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back to Quiz" %}</a>
+    </div>
     <div class="flex">Quiz <span class="padding-h">{{quiz}}</span></div>
     <div class="mat-box-full">
     <p>{% trans "Question" %} : <span class="padding-h">{{question.content}}</span></p>
