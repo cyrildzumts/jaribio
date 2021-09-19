@@ -125,10 +125,10 @@ def update_question(request, quiz_slug, question_uuid):
     except ObjectDoesNotExist as e:
         logger.warn(f"API : Could not found question {quiz}[slug={quiz_slug}] or question {question}[uuid={question_uuid}")
         return Response({'success': False, 'message': 'Not found', 'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
-    question, answers = quiz_service.update_question(question, postdata)
+    results= quiz_service.update_question(question, postdata)
     status_result = status.HTTP_200_OK
-    if question:
-        data = {'success': True, 'message': 'updated', 'url': question.get_absolute_url()}
+    if results:
+        data = {'success': True, 'message': 'updated', 'url': results['question'].get_absolute_url()}
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
