@@ -69,7 +69,7 @@
                                             <input id="form-{{forloop.counter0}}-question" class="answer-question"  type="hidden" name="form-{{forloop.counter0}}-question" value="{{a.question.pk}}">
                                             <input id="form-{{forloop.counter0}}-created_by" class="answer-created_by"  type="hidden" name="form-{{forloop.counter0}}-created_by" value="{{a.created_by.pk}}">
                                             <input id="form-{{forloop.counter0}}-content" class="answer-content"  type="text" name="form-{{forloop.counter0}}-content" value="{{a.content}}">
-                                            <span class="padding-h"><input id="form-{{forloop.counter0}}-is_correct" class="answer-is-correct" type="text" name="form-{{forloop.counter0}}-is_correct" {% if a.is_correct %}checked{% endif %}><label for="form-{{forloop.counter0}}-is_correct"></label></span>
+                                            <span class="padding-h"><input id="form-{{forloop.counter0}}-is_correct" class="answer-is-correct" type="checkbox" name="form-{{forloop.counter0}}-is_correct" {% if a.is_correct %}checked{% endif %}><label for="form-{{forloop.counter0}}-is_correct"></label></span>
                                         </div>
                                     </li>
                                     {% endfor %}
