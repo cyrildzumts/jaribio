@@ -28,7 +28,7 @@
       <li>
         <div class="flex flex-left">
           <div class="collapsible">
-            <div class="collapse-toggle" data-target="answer-{{q.pk}}"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="{% url 'quiz:update-question' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+            <div class="collapse-toggle" data-target="answer-{{q.pk}}"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
             <div id="answer-{{q.pk}}" class="collapse-content">
               <span class="padding-v">{% trans "Answers" %}</span>
               {% for a in q.answers.all %}
