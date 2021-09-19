@@ -1,4 +1,4 @@
-from quiz.models import Question
+from quiz.models import Question, Quiz
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
@@ -117,7 +117,8 @@ def create_quizstep(request, quiz_uuid):
 def update_question(request, quiz_slug, question_uuid):
     postdata = utils.get_postdata(request)
     try:
-        question = Question.objects.get(question_uuid=question_uuid, quiz__slug=quiz_slug)
+        question = Question.objects.get(question_uuid=question_uuid)
+        quiz = Quiz.objects.get(slug=quiz_slug)
     except ObjectDoesNotExist as e:
         return Response({'success': False, 'message': 'Not found', 'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
     question, answers = quiz_service.update_question(question, postdata)
