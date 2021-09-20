@@ -1,3 +1,5 @@
+from quiz import forms
+from django import forms as django_forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F, Q, Count, Sum
 from django.contrib.auth.models import User
@@ -23,6 +25,7 @@ def create_instance(model, data):
     else:
         logger.warn(f"Error on creating a new instance of {model}")
         logger.error(form.errors)
+        raise django_forms.ValidationError(message=form.non_field_errors())
     return None
 
 
@@ -34,7 +37,7 @@ def update_instance(model, instance, data):
     else:
         logger.warn(f"Error on updating an instance of {model}")
         logger.error(form.errors)
-    return None
+        raise django_forms.ValidationError(message=form.non_field_errors())
 
 
 def delete_instance(model, data):

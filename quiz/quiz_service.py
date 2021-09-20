@@ -1,5 +1,7 @@
 from django.forms import modelformset_factory
 from django.forms import inlineformset_factory
+from django.forms import ValidationError
+from django.db import transaction
 from quiz.models import Quiz, Question,QuizImage, QuizSession, QuizStep, Answer, Category
 from quiz.forms import AnswerForm
 from quiz import constants as QuizConstants
@@ -17,22 +19,29 @@ def create_quiz(data):
 
 
 def create_question(data):
-    question = core_tools.create_instance(Question, data)
-    answers = create_answers(question, data)
-    if answers:
-        logger.info("Question created")
-    else:
-        logger.warn("Error on creating Question. Answers not valid. Rolling back")
-        Question.objects.filter(pk=question.pk).delete()
-        question = None
+    question = None
+    try:
+        with transaction.atomic():
+            question = core_tools.create_instance(Question, data)
+            answers = create_answers(question, data)
+            logger.info("Question created")
+    except Exception as e:
+        logger.warn("Error on creating Question.")
+        logger.exception(e)
+    
     return question
 
 def update_question(question, data):
-    question = core_tools.update_instance(Question, question, data)
-    if question is None:
-        return None
-    answers = update_answers(question, data)
-    return {'question': question, 'answers': answers}
+    results = {}
+    try:       
+        with transaction.atomic():
+            question = core_tools.update_instance(Question, question, data)
+            answers = update_answers(question, data)
+            results = {'question': question, 'answers': answers}
+    except Exception as e:
+        logger.error(f"Error on update question {question.question_uuid} : ")
+        logger.exception(e)
+    return results
     
 def update_answers(question, data):
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=0, can_delete=False)
@@ -47,33 +56,25 @@ def update_answers(question, data):
     except Exception as e:
         logger.warn(f"Answers for question {question.question_uuid} not updated. Error on validating the formset")
         logger.exception(e)
-    return None
+        raise e
 
 def create_answers(question, data):
     logger.info(f"quiz_service : creating answers for question {question}")
     Formset = modelformset_factory(Answer, form=AnswerForm)
-
     for i in range(4):
         data[f"form-{i}-question"] = question.pk
         data[f"form-{i}-created_by"] = question.created_by.pk
     formset = Formset(data)
-    answers = None
-    utils.show_dict_contents(data, "Forms Management")
-    try:
-        if formset.is_valid():
-            answers = formset.save()
-            logger.info("Saved Answer Formset")
-        else:
-            answers = None
-            logger.warn('Answer Formset is invalid')
-            logger.error(f"Answer Formset Error : {formset.errors}")
-            logger.error(f"Answer Formset Non Form Error : {formset.non_form_errors()}")
-    except Exception as e:
-        logger.warn(f"Error on processing Answer Formset : ")
-        logger.exception(e)
-        logger.error(f"Answer Formset Error : {formset.errors}")
-        logger.error(f"Answer Formset Non Form Error : {formset.non_form_errors()}")
-    return answers
+    if formset.is_valid():
+        answers = formset.save()
+        logger.info("Saved Answer Formset")
+        return answers
+    else:
+        msg = f"Answer Formset Error : {formset.errors} - Non form Errors : {formset.non_form_errors()}"
+        logger.warn('Answer Formset is invalid')
+        logger.error(f"Answer Formset Error : {msg}")
+        raise ValidationError(msg)
+
 
 
 
