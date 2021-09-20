@@ -35,7 +35,7 @@ def update_question(question, data):
     return {'question': question, 'answers': answers}
     
 def update_answers(question, data):
-    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=0, can_delete=False)
+    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=0)
     formset = AnswerFormset(data, instance=question)
     try:
         if formset.is_valid():
