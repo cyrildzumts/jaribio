@@ -19,16 +19,18 @@
     <a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a>
     <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-default warn"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
   </div>
-  <div class="mat-box-full">
+  <div class="mat-box full">
    <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span> - <span class="padding-h">{{quiz.quiz_type|quiz_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
-   <div class="mat-box-content">
+   <div class="mat-box-content padding">
     <span class="bold medium">{% trans "Questions" %}</span>
     <ul class="medium">
       {% for q in questions %} 
       <li>
         <div class="flex flex-left">
           <div class="collapsible">
-            <div class="collapse-toggle" data-target="answer-{{q.pk}}"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+            <div class="collapse-toggle" data-target="answer-{{q.pk}}">
+              <div class="flex flex-left"><span>{{q}}</span> - <span>{{q.question_type|question_type_value}}</span> <a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+            </div>
             <div id="answer-{{q.pk}}" class="collapse-content">
               <span class="padding-v">{% trans "Answers" %}</span>
               {% for a in q.answers.all %}
@@ -44,7 +46,7 @@
     </ul>
    </div>
 
-   <div class="mat-box-content">
+   <div class="mat-box-content padding">
     <span class="bold medium">{% trans "QuizSteps" %}</span>
     <ul class="medium">
       {% for q in quizsteps %} 
