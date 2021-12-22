@@ -6,7 +6,6 @@
     </div>
     <form id="question-form" action="{% url 'quiz:question-create' quiz.quiz_uuid %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input id="quiz" type="hidden" name="quiz" value={{quiz.pk}}>
-        <input type="hidden" name="created_by" value={{request.user.pk}}>
 
         <div class="actions flex-left padding-v">
             <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>

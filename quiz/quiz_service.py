@@ -54,7 +54,7 @@ def update_answers(question, data):
         else:
             logger.warn(f"Answers for question {question.question_uuid} not updated. Errors : {formset.errors}")
     except Exception as e:
-        logger.warn(f"Answers for question {question.question_uuid} not updated. Error on validating the formset")
+        logger.warn(f"Answers for question {question.question_uuid} not updated. Error on validating or saving the formset")
         logger.exception(e)
         raise e
 

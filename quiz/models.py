@@ -111,21 +111,18 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_questions')
     content = models.CharField(max_length=Constants.QUESTION_MAX_LENGTH)
     explanation = models.CharField(max_length=Constants.DESCRIPTION_MAX_SIZE, blank=True, null=True)
     answer_count = models.IntegerField(blank=True, null=True, default=1)
     score = models.IntegerField()
     question_type = models.IntegerField(default=Constants.QUESTION_TYPE_MCQ, choices=Constants.QUESTION_TYPES)
-    
     image = models.ForeignKey(QuizImage, blank=True, null=True, related_name="questions", on_delete=models.SET_NULL)
-    quiz = models.ManyToManyField(Quiz)
-    is_active = models.BooleanField(default=False)
+    quiz = models.ForeignKey(Quiz, related_name="questions", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     question_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
-    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz', 'created_by']
+    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz']
 
     def __str__(self) -> str:
         return self.content
@@ -141,15 +138,13 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_answers')
     content = models.CharField(max_length=Constants.QUESTION_MAX_LENGTH)
     question = models.ForeignKey(Question, related_name="answers", on_delete=models.CASCADE)
     is_correct = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=False, null=False)
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     answer_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    FORM_FIELDS = ['content', 'question','is_correct', 'is_active', 'created_by']
+    FORM_FIELDS = ['content', 'question','is_correct']
 
     def __str__(self) -> str:
         return self.content

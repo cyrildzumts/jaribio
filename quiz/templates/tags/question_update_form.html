@@ -6,7 +6,6 @@
     </div>
     <form id="question-update-form" action="{% url 'quiz:question-update' quiz.slug question.question_uuid %}" data-quiz="{{quiz.slug}}" data-question="{{question.question_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input id="quiz" type="hidden" name="quiz" value="{{quiz.pk}}">
-        <input type="hidden" name="created_by" value="{{question.created_by.pk}}">
         {% comment %}
             <input type="hidden" name="form-INITIAL_FORMS" value="0">
             <input type="hidden" name="form-TOTAL_FORMS" value="4">
