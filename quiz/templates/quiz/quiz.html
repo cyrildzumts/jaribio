@@ -51,7 +51,7 @@
     <ul class="medium">
       {% for q in quizsteps %} 
       <li>
-        <div class="flex flex-left"><span>{{q}}</span> - <span>[{{q.questions}}]</span> - <span>{{q.rank}}</span> - <span>{{q.score_type|score_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+        <div class="flex flex-left"><span> {{q}} </span> - <span> {{q.rank}} </span> - <span>[{{q.questions}}]</span> - <span> {{q.score_type|score_type_value}} </span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
       </li>
       {% empty %}
       <li><span>{% trans "No QuizSteps" %}</span></li>
