@@ -127,8 +127,8 @@ def quiz_detail_uid(request, quiz_uuid):
 def quiz_detail(request, slug):
     template_name = "quiz/quiz.html"
     quiz = get_object_or_404(Quiz, slug=slug)
-    questions = quiz.question_set.all()
-    quizsteps = QuizStep.objects.filter(quiz=quiz)
+    questions = quiz.questions.all()
+    quizsteps = quiz.quiz_steps.all()
     context = {
         'page_title': "Quiz",
         'quiz': quiz,
