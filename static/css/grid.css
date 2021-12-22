@@ -109,7 +109,7 @@
 }
 
 .inline-flex{
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: baseline;
 }
 .row-left, .flex-left{
