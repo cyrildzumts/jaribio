@@ -63,7 +63,6 @@ def create_answers(question, data):
     Formset = modelformset_factory(Answer, form=AnswerForm)
     for i in range(4):
         data[f"form-{i}-question"] = question.pk
-        data[f"form-{i}-created_by"] = question.created_by.pk
     formset = Formset(data)
     if formset.is_valid():
         answers = formset.save()
