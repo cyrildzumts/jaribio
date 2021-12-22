@@ -105,14 +105,13 @@
 	display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  /*margin-right: -15px;*/
-  /*margin-left: -15px;*/
-  /*align-items: center;*/
-
-  /*justify-content: center;*/
 	width: 100%;
 }
 
+.inline-flex{
+  display: inline-flex;
+  align-items: baseline;
+}
 .row-left, .flex-left{
   justify-content: flex-start !important;
 }

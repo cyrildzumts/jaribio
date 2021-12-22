@@ -280,9 +280,10 @@ label .icon{
 	margin: 0.2;
 }
 
-.option-list-filter .form-group, .form-group label{
+.option-list-filter .form-group{
 	text-transform: capitalize;
 }
+
 
 .header {
 	

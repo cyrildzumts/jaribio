@@ -28,7 +28,7 @@
                             <span class="padding-bottom">{% trans "Score Type" %}</span>
                             <div class="row">
                                 {% for k,v in SCORE_TYPES %} 
-                                <span class="padding"><input id="score-type-{{v}}" class="js-input-score-type" type="radio" name="score_type" value="{{k}}" {% if k == ANSWER_SCORE_STANDARD %} checked {% endif %}> <label for="score-type-{{v}}">{{v}}</label></span>
+                                <span class="padding inline-flex"><input id="score-type-{{v}}" class="js-input-score-type" type="radio" name="score_type" value="{{k}}" {% if k == ANSWER_SCORE_STANDARD %} checked {% endif %}> <label for="score-type-{{v}}">{{v}}</label></span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                                 <ul id="question-list">
                                 {% for q in questions %}
                                         <li class="mat-list-item" data-question="{{q.pk}}">
-                                            <span><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}({{q.pk}})</label></span>
+                                            <span class="inline-flex"><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}({{q.pk}})</label></span>
                                         </li>
                                 {% endfor %}
                                         
