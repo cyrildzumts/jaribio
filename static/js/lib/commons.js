@@ -829,7 +829,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
 
 
         QuestionManager.prototype.add_response = function(){
-            let answer_count = parseInt(document.querySelector('#answer_count'));
+            let answer_count = parseInt(document.querySelector('#answer_count').value);
             let quiz = document.querySelector('#quiz');
             let answers_container = document.querySelector('#answers');
             //var options = [];
