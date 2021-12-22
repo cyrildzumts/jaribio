@@ -90,7 +90,7 @@ def create_quizstep(request, quiz_uuid):
     context = {
         'page_title': "New QuizStep",
         'quiz': quiz,
-        'questions': quiz.question_set.all(),
+        'questions': quiz.questions.all(),
         'SCORE_TYPES': QUIZ_CONSTANTS.ANSWER_SCORE_TYPES,
         'ANSWER_SCORE_STANDARD': QUIZ_CONSTANTS.ANSWER_SCORE_STANDARD
     }
