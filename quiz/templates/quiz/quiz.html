@@ -14,7 +14,7 @@
 {% block MAIN %}
 <div class="container">
   <div class="actions flex-left">
-    <a href="#" class="mat-button mat-button-default"><span><i class="fas fa-play icon"></i>{% trans "Play" %}</span></a>
+    <a href="{% url 'quiz:play-quiz' quiz.slug 1 %}" class="mat-button mat-button-default"><span><i class="fas fa-play icon"></i>{% trans "Play" %}</span></a>
     <a href="{% url 'quiz:question-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add Question" %}</span></a>
     <a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a>
     <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-default warn"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>

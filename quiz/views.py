@@ -107,6 +107,23 @@ def start_quiz(request, quiz_uuid):
     return render(request, template_name, context)
 
 
+def play_quiz(request, quiz_slug, step):
+    template_name = "quiz/play_step.html"
+    quiz = get_object_or_404(Quiz, slug=quiz_slug)
+    quiz_step = None
+    try:
+        quiz_step = QuizStep.objects.filter(quiz=quiz, rank=step).get()
+    except QuizStep.DoesNotExist:
+        pass
+    
+    context = {
+        'page_title': "Start Quiz",
+        'quiz': quiz,
+        'quiz_step': quiz_step
+    }
+    return render(request, template_name, context)
+
+
 def stop_quiz(request, quiz_uuid):
     template_name = "quiz/quiz_stop.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)

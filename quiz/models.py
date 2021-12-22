@@ -169,6 +169,7 @@ class QuizStep(models.Model):
     quiz = models.ForeignKey(Quiz, related_name="quiz_steps", on_delete=models.CASCADE)
     questions = models.CharField(max_length=64, blank=True, null=True)
     rank = models.IntegerField()
+    is_played = models.BooleanField(default=False)
     score_type = models.IntegerField(blank=True, null=True, default=Constants.ANSWER_SCORE_STANDARD, choices=Constants.ANSWER_SCORE_TYPES)
     FORM_FIELDS = ['quiz', 'title', 'questions', 'score_type', 'rank']
 
