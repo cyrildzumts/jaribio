@@ -46,7 +46,7 @@
                                 <ul id="question-list">
                                 {% for q in questions %}
                                         <li class="mat-list-item" data-question="{{q.pk}}">
-                                            <span><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}</label></span>
+                                            <span><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}({{q.pk}})</label></span>
                                         </li>
                                 {% endfor %}
                                         
