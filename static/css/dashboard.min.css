@@ -3655,19 +3655,19 @@ main {
     text-transform: capitalize;
 }
 :root{
-    --primary-color: #0A0A0A;
-    --secondary-color: #FF0D00;
-    --third-color : #FFFFFF;
-    --fourth-color : #FFFFFF;
+    --primary-color: #26C6DA;
+    --secondary-color: #FAFAFA;
+    --third-color : #FAFAFA;
+    --fourth-color : #FAFAFA;
     --light-color : #FAFAFA;
-    --label-color : #CCC;
-    --body-bg : #FFFFFF;
-    --body-color: #0A0A0A;
-    --notification-bg : #fafafa;
-    --notification-color : #0A0A0A;
+    --label-color : #06707F;
+    --body-bg : #FAFAFA;
+    --body-color: #09A8BE;
+    --notification-bg : #72E7F7;
+    --notification-color : #06707F;
     --action-color : #FF0D00;
     --sidebar-bg-color: #fafafa;
-    --sidebar-color: #0A0A0A;
+    --sidebar-color: #09A8BE;
     --sidebar-active-color: #FF0D00;
     --text-grey: #CCC;
     --color-stone : #707C80;
@@ -3679,6 +3679,7 @@ main {
     --debug-color: #1e88e5;
     --on-demand-order : #f39c12;
     --standard-order : #2980b9;
+    
 }
 body{
     background-color: var(--body-bg);
