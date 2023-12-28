@@ -1,6 +1,9 @@
 
 from django.utils.translation import gettext_lazy as _
 
+REQUEST_METHOD_GET = "GET"
+REQUEST_METHOD_POST = "POST"
+
 QUESTION_MAX_LENGTH = 250
 DESCRIPTION_MAX_SIZE = 512
 MAX_QUIZ_QUESTIONS = 20

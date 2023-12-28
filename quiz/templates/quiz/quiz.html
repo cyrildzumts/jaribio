@@ -20,7 +20,7 @@
     <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-default warn"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
   </div>
   <div class="mat-box full">
-   <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span> - <span class="padding-h">{{quiz.quiz_type|quiz_type_value}}</span> <a href="#" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+   <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span> - <span class="padding-h">{{quiz.quiz_type|quiz_type_value}}</span> <a href="{{quiz.get_update_url}}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
    <div class="mat-box-content padding">
     <span class="bold medium">{% trans "Questions" %}</span>
     <ul class="medium">

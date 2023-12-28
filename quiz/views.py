@@ -1,8 +1,11 @@
 from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from quiz.models import Answer, Question, Quiz, QuizStep
 from quiz import constants as QUIZ_CONSTANTS
+from quiz import quiz_service
+from jaribio import utils
 # Create your views here.
 
 
@@ -14,7 +17,7 @@ def quiz_home(request):
     }
     return render(request, template_name, context)
 
-
+@login_required
 def create_quiz(request):
     template_name = "quiz/quiz_create.html"
     context = {
@@ -28,10 +31,19 @@ def create_quiz(request):
     return render(request, template_name, context)
 
 
-
+@login_required
 def update_quiz(request, quiz_uuid):
     template_name = "quiz/quiz_update.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
+    
+    if request.method == QUIZ_CONSTANTS.REQUEST_METHOD_POST:
+        try:
+            results = quiz_service.update_quiz(quiz, utils.get_postdata(request))
+            messages.success(request, "Quiz updated")
+            return redirect(quiz)
+        except Exception as e:
+            messages.error(request, "Quiz not updated")
+
     context = {
         'page_title': "Update Quiz",
         'quiz': quiz,

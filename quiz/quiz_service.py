@@ -42,6 +42,18 @@ def update_question(question, data):
         logger.error(f"Error on update question {question.question_uuid} : ")
         logger.exception(e)
     return results
+
+
+def update_quiz(quiz, data):
+    results = {}
+    try:       
+        with transaction.atomic():
+            q = core_tools.update_instance(Quiz, quiz, data)
+            results = {'quiz': q}
+    except Exception as e:
+        logger.error(f"Error on update quiz {quiz.title} : ")
+        logger.exception(e)
+    return results
     
 def update_answers(question, data):
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=0, can_delete=False)
