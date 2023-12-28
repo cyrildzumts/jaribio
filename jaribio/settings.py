@@ -231,6 +231,10 @@ LOGGING = {
             'format': '{asctime} {levelname} {module} {message}',
             'style': '{',
         },
+        'async': {
+            'format': '{module} {message}',
+            'style': '{',
+        },
     },
 
     'handlers': {
@@ -255,7 +259,7 @@ LOGGING = {
         '' : {
             'level': 'DEBUG',
             'handlers': ['console', 'file'],
-            'propagate': False,
+            'propagate': True,
         },
         'django': {
             'level': 'WARNING',
