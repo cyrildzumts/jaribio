@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path, reverse_lazy
+from django.conf.urls import  include
+from django.urls import path
 # from demosite import settings
 from dashboard import views
 
