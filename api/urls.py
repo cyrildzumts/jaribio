@@ -12,6 +12,7 @@ urlpatterns = [
     path('api-token-auth/', drf_api_views.obtain_auth_token, name='api-token-auth'),
     path('authenticate/', views.authenticate, name='authenticate'),
     path('create-quiz/', views.create_quiz, name="create-quiz"),
+    path('quizzes/<uuid:quiz_uuid>/update-quiz/', views.update_quiz, name="update-quiz"),
     path('quizzes/<uuid:quiz_uuid>/create-question/', views.create_question, name="create-question"),
     path('quizzes/<uuid:quiz_uuid>/create-quizstep/', views.create_quizstep, name="create-quizstep"),
     path('quizzes/<slug:quiz_slug>/questions/<uuid:question_uuid>/update/', views.update_question, name="update-question"),

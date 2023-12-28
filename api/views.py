@@ -75,7 +75,7 @@ def create_quiz(request):
 
 
 @api_view(['POST'])
-def update_question(request, quiz_uuid):
+def update_quiz(request, quiz_uuid):
     logger.info(f"API update quiz Request from user {request.user.username}")
     data = None
     status_result = status.HTTP_200_OK
