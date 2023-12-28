@@ -8,7 +8,7 @@
             method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="created_by" value={{quiz.created_by.pk}}>
         <div class="actions flex-left padding-v">
-            <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
+            <a class="mat-button mat-button-outline js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
         </div>
         <div class="mat-box container">
         
