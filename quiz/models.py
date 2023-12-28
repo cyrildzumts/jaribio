@@ -95,6 +95,11 @@ class Quiz(models.Model):
 
     def __str__(self):
         return f"{self.title}"
+    
+    def get_image_url(self):
+        if self.image:
+            return self.image.get_image_url()
+        return None
 
     def get_absolute_url(self):
         return reverse("quiz:quiz-detail", kwargs={"slug": self.slug})
@@ -113,7 +118,7 @@ class Quiz(models.Model):
         return {
             'title': self.title,
             'description': self.description,
-            'image': self.image.get_image_url(),
+            'image': self.get_image_url(),
             'quiz_type': self.quiz_type,
             'max_questions': self.max_questions,
             'player_count': self.player_count,
