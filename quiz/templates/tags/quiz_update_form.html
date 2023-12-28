@@ -4,8 +4,12 @@
     <div class="row" id="created-producted-link">
         <a class="mat-button mat-button-outline" href=""></a>
     </div>
-    <form id="quiz-form" action="{{quiz.get_update_url}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
-        <input type="hidden" name="created_by" value={{request.user.pk}}>
+    <form id="quiz-update-form" 
+            action="{{quiz.get_update_url}}" 
+            class="form" 
+            data-quiz="{{quiz.quiz_uuid}}"
+            method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <input type="hidden" name="created_by" value={{quiz.created_by.pk}}>
         <div class="actions flex-left padding-v">
             <a class="mat-button mat-button-text js-cancel" href="{{quiz.get_absolute_url}}">{% trans "Back" %}</a>
         </div>

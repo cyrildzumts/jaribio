@@ -1,4 +1,4 @@
-define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
+define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
     'use strict';
     var fileUpload;
     var productManager;
@@ -11,6 +11,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
     var AVAILABILITY_ON_DEMAND = 1;
     
     var filter_form;
+    let create_api = tag_api.create_tag;
 
     function clean_form_before_submit(form){
         $('.filter-input', form).each(function(){
@@ -582,7 +583,7 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             ajax_api.ajax(options).then(function(response){
                 let msg = {
                     content : response.message,
-                    level : response.created
+                    level : response.success
                 }
                 notify(msg);
                 self.onUploadResponse(response);
@@ -835,18 +836,18 @@ define(['ajax_api','element_utils'], function(ajax_api, element_utils) {
             //var options = [];
             for(let i = 0; i < answer_count; i++){
                 let form_prefix = "form-" + i;
-                let content_input = element_utils.create_element_api({'element': 'input','options':{'cls':'answer-content','name':form_prefix + '-' + 'content', 'type': 'text', 'id': form_prefix + '-' + 'content'}});
-                let is_correct_input = element_utils.create_element_api({'element':'input','options' : {'cls':'answer-is-correct','name': form_prefix + '-' + 'is_correct','type':'checkbox', 'id': form_prefix + '-' + 'is_correct'}});
-                let label = element_utils.create_element_api({'element':'label', 'options':{ 'htmlFor':form_prefix + '-' + 'is_correct','innerText': 'Is correct'}});
-                //let delete_icon = element_utils.create_element_api({'element': 'i', 'options':{'cls': 'fas fa-trash icon'}});
-                //let span_icon= element_utils.create_element({'element': 'span', 'options' : {'cls': 'padding-h','children':[delete_icon]}});
-                let span_iscorrect = element_utils.create_element_api({'element': 'span', 'options': {'cls': 'padding-h', 'children': [label,is_correct_input]}});
-                let div  = element_utils.create_element_api({'element': 'div', 'options': {'cls': 'flex flex-left', 'children':[content_input,span_iscorrect]}});
-                let li = element_utils.create_element_api({'element': 'li','options': {'child': div}});
+                let content_input = create_api({'element': 'input','options':{'cls':'answer-content','name':form_prefix + '-' + 'content', 'type': 'text', 'id': form_prefix + '-' + 'content'}});
+                let is_correct_input = create_api({'element':'input','options' : {'cls':'answer-is-correct','name': form_prefix + '-' + 'is_correct','type':'checkbox', 'id': form_prefix + '-' + 'is_correct'}});
+                let label = create_api({'element':'label', 'options':{ 'htmlFor':form_prefix + '-' + 'is_correct','innerText': 'Is correct'}});
+                //let delete_icon = create_api({'element': 'i', 'options':{'cls': 'fas fa-trash icon'}});
+                //let span_icon= tag_api.create_element({'element': 'span', 'options' : {'cls': 'padding-h','children':[delete_icon]}});
+                let span_iscorrect = create_api({'element': 'span', 'options': {'cls': 'padding-h', 'children': [label,is_correct_input]}});
+                let div  = create_api({'element': 'div', 'options': {'cls': 'flex flex-left', 'children':[content_input,span_iscorrect]}});
+                let li = create_api({'element': 'li','options': {'child': div}});
                 answers_container.appendChild(li);
             }
-            let form_management_total_input = element_utils.create_element_api({ 'element': 'input','options': {'name': this.answer_formset_total_form, 'value': answer_count, 'type': 'hidden', 'id': this.answer_formset_total_form}});
-            let form_management_initial_input = element_utils.create_element_api({'element':'input', 'options': {'name': this.answer_formset_initial_form, 'value': 0, 'type': 'hidden', 'id': this.answer_formset_initial_form}});
+            let form_management_total_input = create_api({ 'element': 'input','options': {'name': this.answer_formset_total_form, 'value': answer_count, 'type': 'hidden', 'id': this.answer_formset_total_form}});
+            let form_management_initial_input = create_api({'element':'input', 'options': {'name': this.answer_formset_initial_form, 'value': 0, 'type': 'hidden', 'id': this.answer_formset_initial_form}});
             this.form.appendChild(form_management_initial_input);
             this.form.appendChild(form_management_total_input)
             

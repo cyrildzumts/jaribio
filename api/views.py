@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from quiz.models import Question, Quiz
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -70,6 +71,23 @@ def create_quiz(request):
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
+    return Response(data,status=status_result)
+
+
+@api_view(['POST'])
+def update_question(request, quiz_uuid):
+    logger.info(f"API update quiz Request from user {request.user.username}")
+    data = None
+    status_result = status.HTTP_200_OK
+    try:
+        quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
+        postdata = utils.get_postdata(request)
+        result = quiz_service.update_quiz(quiz, postdata)
+        data = result
+    except Exception as e:
+        status_result = status.HTTP_400_BAD_REQUEST
+        data = {'success': False, 'message': 'Bad request'}
+
     return Response(data,status=status_result)
 
 

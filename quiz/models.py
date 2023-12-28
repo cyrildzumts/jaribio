@@ -108,6 +108,23 @@ class Quiz(models.Model):
     
     def get_delete_url(self):
         return reverse("quiz:quiz-delete", kwargs={"quiz_uuid": self.quiz_uuid})
+    
+    def as_dict(self):
+        return {
+            'title': self.title,
+            'description': self.description,
+            'image': self.image.get_image_url(),
+            'quiz_type': self.quiz_type,
+            'max_questions': self.max_questions,
+            'player_count': self.player_count,
+            'plays_count': self.plays_count,
+            'created_at': self.created_at,
+            'created_by': self.created_by.username,
+            'slug': self.slug,
+            'url': self.get_absolute_url()
+            
+            
+        }
 
 
 class Question(models.Model):

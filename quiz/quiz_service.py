@@ -49,10 +49,11 @@ def update_quiz(quiz, data):
     try:       
         with transaction.atomic():
             q = core_tools.update_instance(Quiz, quiz, data)
-            results = {'quiz': q}
+            results = {'quiz': q.as_dict(), 'success': True, 'message': 'Quiz updated'}
     except Exception as e:
         logger.error(f"Error on update quiz {quiz.title} : ")
         logger.exception(e)
+        results = {'quiz': None, 'success': False, 'message': str(e)}
     return results
     
 def update_answers(question, data):
