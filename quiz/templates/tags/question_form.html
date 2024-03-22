@@ -52,9 +52,20 @@
                         
                         <div class="row padding-l"> <span id="length-counter" class="char-counter">0</span><span class="text-max-length">/{{DESCRIPTION_MAX_SIZE}}</span></div>
                     </div>
+                    
                     <div class="flex flex-left">
                         <div class="form-group">
-                            <div class="row"><span class="padding-bottom">{% trans "Answers" %}</span><span class="js-add-answer padding-h"><i class="fas fa-plus icon"></i>{% trans "Add Answer" %}</span><span class="js-clear-answers padding-h"><i class="fas fa-plus icon"></i>{% trans "Clear all Answers" %}</span></div>
+                            <div class="answer-actions">
+                                <div><span class="padding-bottom margin-r">{% trans "Answers" %}</span></div>
+                                <div class="btn-group">
+                                    <button type="button" class="js-add-answer btn">
+                                        <span class="padding-h"><i class="fas fa-plus icon"></i>{% trans "Add Answer" %}</span>
+                                    </button>
+                                    <button type="button" class="js-clear-answers btn">
+                                        <span class="padding-h"><i class="fas fa-plus icon"></i>{% trans "Clear all Answers" %}</span>
+                                    </button>
+                                </div>
+                            </div>
                             <div id="answers-wrapper" class="row">
                                 <ul id="answers">
                                         

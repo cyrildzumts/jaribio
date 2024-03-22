@@ -19,6 +19,16 @@ class QuizImage(models.Model):
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     image_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     FORM_FIELDS = ['name', 'image']
+    
+    def as_dict(self):
+        return {
+            'height': self.height,
+            'width': self.width,
+            'name': self.name,
+            'created_at': self.created_at,
+            'image': self.image.url,
+            'image_uuid': self.image_uuid
+        }
 
 
     def delete_image_file(self):
@@ -75,9 +85,29 @@ class Category(models.Model):
     def get_delete_url(self):
         return reverse("dashboard:category-delete", kwargs={"category_uuid": self.category_uuid})
     
+    
+    def as_dict(self):
+        parent = None
+        if self.parent:
+            parent = self.parent.as_dict()
+            
+        return {
+            'name': self.name,
+            'display_name': self.display_name,
+            'created_at': self.created_at,
+            'is_active': self.is_active,
+            'view_count': self.view_count,
+            'description': self.description,
+            'slug': self.slug,
+            'parent': parent,
+            'category_uuid': self.category_uuid,
+            'url': self.get_slug_url()
+        }
+    
 
 
 class Quiz(models.Model):
+    
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_quizzes')
     title = models.CharField(max_length=Constants.QUESTION_MAX_LENGTH)
     description = models.CharField(max_length=Constants.DESCRIPTION_MAX_SIZE)
@@ -115,10 +145,13 @@ class Quiz(models.Model):
         return reverse("quiz:quiz-delete", kwargs={"quiz_uuid": self.quiz_uuid})
     
     def as_dict(self):
+        image = None
+        if self.image:
+            image = self.image.as_dict()
         return {
             'title': self.title,
             'description': self.description,
-            'image': self.get_image_url(),
+            'image': image,
             'quiz_type': self.quiz_type,
             'max_questions': self.max_questions,
             'player_count': self.player_count,
@@ -126,9 +159,7 @@ class Quiz(models.Model):
             'created_at': self.created_at,
             'created_by': self.created_by.username,
             'slug': self.slug,
-            'url': self.get_absolute_url()
-            
-            
+            'url': self.get_absolute_url() 
         }
 
 
@@ -157,6 +188,23 @@ class Question(models.Model):
     
     def get_delete_url(self):
         return reverse("quiz:question-delete", kwargs={"question_uuid": self.question_uuid})
+    
+    def as_dict(self):
+        image = None
+        if self.image:
+            image = self.image.as_dict()
+        
+        return {
+            'content': self.content,
+            'explanation': self.explanation,
+            'answer_count': self.answer_count,
+            'question_type': self.question_type,
+            'image': image,
+            'quiz': self.quiz.as_dict(),
+            'created_at': self.created_at,
+            'question_uuid': self.question_uuid,
+            'url': self.get_absolute_url()
+        }
 
 
 class Answer(models.Model):
@@ -170,7 +218,15 @@ class Answer(models.Model):
 
     def __str__(self) -> str:
         return self.content
-
+    
+    def as_dict(self):
+        return {
+            'content': self.content,
+            'question': self.question.as_dict(),
+            'is_correct': self.is_correct,
+            'created_at': self.created_at,
+            'answer_uuid': self.answer_uuid
+        }
 
 
 class QuizSession(models.Model):
@@ -184,6 +240,20 @@ class QuizSession(models.Model):
 
     def __str__(self) -> str:
         return self.session_key
+    
+    def as_dict(self):
+        return {
+            'quiz': self.quiz.as_dict(),
+            'user': {
+                'username': self.user.username,
+                'last_name': self.user.last_name,
+                'first_name': self.user.first_name,
+            },
+            'session_key': self.session_key,
+            'score': self.score,
+            'started_at': self.started_at,
+            'end_at': self.end_at
+        }
 
 
 class QuizStep(models.Model):
@@ -195,5 +265,17 @@ class QuizStep(models.Model):
     score_type = models.IntegerField(blank=True, null=True, default=Constants.ANSWER_SCORE_STANDARD, choices=Constants.ANSWER_SCORE_TYPES)
     FORM_FIELDS = ['quiz', 'title', 'questions', 'score_type', 'rank']
 
+
     def __str__(self) -> str:
         return self.title
+    
+    
+    def as_dict(self):
+        return {
+            'quiz': self.quiz.as_dict(),
+            'title': self.title,
+            'questions': self.questions,
+            'rank': self.rank,
+            'is_played': self.is_played,
+            'scope_type': self.score_type
+        }
