@@ -58,7 +58,7 @@ def update_question(request, quiz_slug ,question_uuid):
     question = get_object_or_404(Question, question_uuid=question_uuid)
     quiz = get_object_or_404(Quiz, slug=quiz_slug)
     #AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=question.answer_count, can_delete=False)
-    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), can_delete=False)
+    AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'),extra=0, can_delete=False)
     formset = AnswerFormset(instance=question)
     context = {
         'page_title': "Update Question",
