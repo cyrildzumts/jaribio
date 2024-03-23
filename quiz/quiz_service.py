@@ -55,6 +55,18 @@ def update_quiz(quiz, data):
         logger.exception(e)
         results = {'quiz': None, 'success': False, 'message': str(e)}
     return results
+
+def update_quizstep(quizstep, data):
+    results = {}
+    try:       
+        with transaction.atomic():
+            q = core_tools.update_instance(QuizStep, quizstep, data)
+            results = {'quizstep': q.as_dict(), 'success': True, 'message': 'QuizStep updated'}
+    except Exception as e:
+        logger.error(f"Error on update quizstep {quizstep.title} : ")
+        logger.exception(e)
+        results = {'quizstep': None, 'success': False, 'message': str(e)}
+    return results
     
 def update_answers(question, data):
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=0, can_delete=False)
@@ -97,6 +109,19 @@ def create_answer(data):
 def create_quizstep(data):
     step = core_tools.create_instance(QuizStep, data)
     return step
+
+
+def update_quiz(quizStep, data):
+    results = {}
+    try:       
+        with transaction.atomic():
+            q = core_tools.update_instance(QuizStep, quizStep, data)
+            results = {'quizstep': q.as_dict(), 'success': True, 'message': 'QuizStep updated'}
+    except Exception as e:
+        logger.error(f"Error on update quiz step {quizStep.title} : ")
+        logger.exception(e)
+        results = {'quiz': None, 'success': False, 'message': str(e)}
+    return results
 
 
 def create_session(quiz, data):

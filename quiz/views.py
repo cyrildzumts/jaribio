@@ -52,12 +52,11 @@ def update_quiz(request, quiz_uuid):
     }
     return render(request, template_name, context)
 
-
+@login_required
 def update_question(request, quiz_slug ,question_uuid):
     template_name = "quiz/question_update.html"
     question = get_object_or_404(Question, question_uuid=question_uuid)
     quiz = get_object_or_404(Quiz, slug=quiz_slug)
-    #AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'), extra=question.answer_count, can_delete=False)
     AnswerFormset = inlineformset_factory(Question, Answer, fields=('content', 'is_correct'),extra=0, can_delete=False)
     formset = AnswerFormset(instance=question)
     context = {
@@ -72,12 +71,15 @@ def update_question(request, quiz_slug ,question_uuid):
     return render(request, template_name, context)
 
 
+
+
+@login_required
 def delete_quiz(request, quiz_uuid):
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
     Quiz.objects.filter(pk=quiz.pk).delete()
     return redirect('quiz:quiz-home')
 
-
+@login_required
 def create_question(request, quiz_uuid):
     template_name = "quiz/question_create.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
@@ -91,12 +93,15 @@ def create_question(request, quiz_uuid):
     return render(request, template_name, context)
 
 
+@login_required
 def delete_question(request, question_uuid):
     question = get_object_or_404(Question, question_uuid=question_uuid)
     quiz = question.quiz
     Question.objects.filter(pk=question.pk).delete()
     return redirect(quiz)
 
+
+@login_required
 def create_quizstep(request, quiz_uuid):
     template_name = "quiz/quizstep_create.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
@@ -110,6 +115,62 @@ def create_quizstep(request, quiz_uuid):
     return render(request, template_name, context)
 
 
+
+
+@login_required
+def create_quizstep(request, quiz_uuid):
+    template_name = "quiz/quizstep_create.html"
+    quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
+    context = {
+        'page_title': "New QuizStep",
+        'quiz': quiz,
+        'questions': quiz.questions.all(),
+        'SCORE_TYPES': QUIZ_CONSTANTS.ANSWER_SCORE_TYPES,
+        'ANSWER_SCORE_STANDARD': QUIZ_CONSTANTS.ANSWER_SCORE_STANDARD
+    }
+    return render(request, template_name, context)
+
+
+@login_required
+def quizstep_details(request, pk):
+    template_name = "quiz/quizstep_details.html"
+    quizstep = get_object_or_404(QuizStep, pk=pk)        
+            
+    context = {
+        'page_title': "QuizStep",
+        'quizstep': quizstep,
+        'quiz': quizstep.quiz,
+        'questions': quizstep.questions,
+        'SCORE_TYPES': QUIZ_CONSTANTS.ANSWER_SCORE_TYPES,
+        'ANSWER_SCORE_STANDARD': QUIZ_CONSTANTS.ANSWER_SCORE_STANDARD
+    }
+    return render(request, template_name, context)
+
+
+@login_required
+def update_quizstep(request, pk):
+    template_name = "quiz/quizstep_update.html"
+    quizstep = get_object_or_404(QuizStep, pk=pk)
+    
+    if request.method == QUIZ_CONSTANTS.REQUEST_METHOD_POST:
+        try:
+            results = quiz_service.update_quizstep(quizstep, utils.get_postdata(request))
+            messages.success(request, "QuizStep updated")
+            return redirect(quizstep.quiz)
+        except Exception as e:
+            messages.error(request, "Quiz not updated")
+            
+            
+    context = {
+        'page_title': "Update QuizStep",
+        'quizstep': quizstep,
+        'sellected_questions': quizstep.questions,
+        'questions': quizstep.quiz.questions.all(),
+        'SCORE_TYPES': QUIZ_CONSTANTS.ANSWER_SCORE_TYPES,
+        'ANSWER_SCORE_STANDARD': QUIZ_CONSTANTS.ANSWER_SCORE_STANDARD
+    }
+    return render(request, template_name, context)
+
 def start_quiz(request, quiz_uuid):
     template_name = "quiz/quiz_start.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)
@@ -118,6 +179,7 @@ def start_quiz(request, quiz_uuid):
         'quiz': quiz
     }
     return render(request, template_name, context)
+
 
 
 def play_quiz(request, quiz_slug, step):

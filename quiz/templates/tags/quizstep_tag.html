@@ -1,0 +1,48 @@
+{% load i18n %}
+
+<div class="mat-box container">
+    <div class="col-xs-12 col-7">
+        <div class="box create-form full">
+            <div class="flex flex-left">
+                <div class="form-group">
+                    <label for="title">{% trans "Title" %}</label>
+                    <input type="text" name="title" id="title" value="{{quizstep.title}}">
+                </div>
+                <div class="form-group">
+                    <label for="rank">{% trans "Rank" %}</label>
+                    <input type="text" name="rank" id="rank" value="{{quizstep.rank}}">
+                </div>
+            </div>
+            <div class="flex flex-left">
+                <div class="form-group">
+                    <span class="padding-bottom">{% trans "Score Type" %}</span>
+                    <div class="row">
+                        {% for k,v in SCORE_TYPES %} 
+                        <span class="padding inline-flex"><input id="score-type-{{v}}" class="js-input-score-type" type="radio" name="score_type" value="{{k}}" {% if k == quizstep.score_type %} checked {% endif %}> <label for="score-type-{{v}}">{{v}}</label></span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="flex flex-left">
+                <div class="form-group">
+                    <label for="questions">{% trans "Selected Question Order" %}</label>
+                    <input type="text" name="questions" id="questions" value="{{quizstep.questions}}">
+                </div>
+            </div>
+            <div class="flex flex-left">
+                <div class="form-group">
+                    <div class="flex flex-left"><span class="padding-bottom"><label">{% trans "Questions" %}</label></span><span class="js-clear-selected-questions warn"><i class="fas fa-backspace icon"></i>{% trans "Clear" %}</span></div>
+                    <div id="answers-wrapper" class="row">
+                        <ul id="question-list">
+                        {% for q in questions %}
+                                <li class="mat-list-item" data-question="{{q.pk}}">
+                                    <span class="inline-flex"><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}({{q.pk}})</label></span>
+                                </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@
     <div class="row" id="created-producted-link">
         <a class="mat-button mat-button-outline" href=""></a>
     </div>
-    <form id="quizstep-form" action="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <form id="quizstep-form" action="{% url 'quiz:quizstep-update' quizstep.pk %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="quiz" value={{quiz.pk}}>
         
         <div class="actions flex-left padding-v">
@@ -16,11 +16,11 @@
                     <div class="flex flex-left">
                         <div class="form-group">
                             <label for="title">{% trans "Title" %}</label>
-                            <input type="text" name="title" id="title">
+                            <input type="text" name="title" id="title" value="{{quizstep.title}}">
                         </div>
                         <div class="form-group">
                             <label for="rank">{% trans "Rank" %}</label>
-                            <input type="text" name="rank" id="rank">
+                            <input type="text" name="rank" id="rank" value="{{quizstep.rank}}">
                         </div>
                     </div>
                     <div class="flex flex-left">
@@ -28,7 +28,7 @@
                             <span class="padding-bottom">{% trans "Score Type" %}</span>
                             <div class="row">
                                 {% for k,v in SCORE_TYPES %} 
-                                <span class="padding inline-flex"><input id="score-type-{{v}}" class="js-input-score-type" type="radio" name="score_type" value="{{k}}" {% if k == ANSWER_SCORE_STANDARD %} checked {% endif %}> <label for="score-type-{{v}}">{{v}}</label></span>
+                                <span class="padding inline-flex"><input id="score-type-{{v}}" class="js-input-score-type" type="radio" name="score_type" value="{{k}}" {% if k == quizstep.score_type %} checked {% endif %}> <label for="score-type-{{v}}">{{v}}</label></span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                     <div class="flex flex-left">
                         <div class="form-group">
                             <label for="questions">{% trans "Selected Question Order" %}</label>
-                            <input type="text" name="questions" id="questions">
+                            <input type="text" name="questions" id="questions" value="{{quizstep.questions}}">
                         </div>
                     </div>
                     <div class="flex flex-left">
@@ -49,7 +49,6 @@
                                             <span class="inline-flex"><input class="js-qs-question-select" type="checkbox" name="" id="question-{{q.pk}}" value="{{q.pk}}"><label for="question-{{q.pk}}">{{q}}({{q.pk}})</label></span>
                                         </li>
                                 {% endfor %}
-                                        
                                 </ul>
                             </div>
                         </div>

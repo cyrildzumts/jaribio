@@ -256,6 +256,7 @@ class QuizSession(models.Model):
         }
 
 
+
 class QuizStep(models.Model):
     title = models.CharField(max_length=64)
     quiz = models.ForeignKey(Quiz, related_name="quiz_steps", on_delete=models.CASCADE)
@@ -268,6 +269,14 @@ class QuizStep(models.Model):
 
     def __str__(self) -> str:
         return self.title
+    
+    
+    def get_absolute_url(self):
+        return reverse("quiz:quizstep-detail", kwargs={"pk": self.pk})
+    
+    
+    def get_update_url(self):
+        return reverse("quiz:quizstep-update", kwargs={"pk": self.pk})
     
     
     def as_dict(self):
