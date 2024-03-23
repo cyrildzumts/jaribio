@@ -32,7 +32,7 @@
               <div class="question-bloc">
                 <div class="flex flex-left flex-wrap"><span>{{q}}</span></div>
                 <div><span>{{q.question_type|question_type_value}}</span></div>
-                <div class="margin-b"><a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i>{{UI_STRINGS_CONTEXT.UI_UPDATE_BTN_LABEL}}</span></a></div>
+                <div class="margin-b"><a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-edit icon"></i>{{UI_STRINGS_CONTEXT.UI_UPDATE_BTN_LABEL}}</span></a></div>
               </div>
             </div>
             <div id="answer-{{q.pk}}" class="collapse-content question-answer">
