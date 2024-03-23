@@ -4,7 +4,7 @@
     <div class="row" id="created-producted-link">
         <a class="mat-button mat-button-outline" href=""></a>
     </div>
-    <form id="quizstep-form" action="{% url 'quiz:quizstep-update' quizstep.pk %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <form id="quizstep-update-form" action="{% url 'quiz:quizstep-update' quizstep.pk %}" data-quiz="{{quiz.quiz_uuid}}" class="form" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <input type="hidden" name="quiz" value={{quiz.pk}}>
         
         <div class="actions flex-left padding-v">
