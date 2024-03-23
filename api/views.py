@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from quiz.models import Question, Quiz
+from quiz.models import Question, Quiz, QuizStep
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework import status
@@ -128,6 +128,22 @@ def create_quizstep(request, quiz_uuid):
     else:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
+    return Response(data,status=status_result)
+
+
+@api_view(['POST'])
+def update_quizstep(request, quiz_uuid, quizstep_id):
+    status_result = status.HTTP_200_OK
+    data = None
+    try:
+        quizstep = QuizStep.objects.get(pk=quizstep_id)
+        results = quiz_service.update_quizstep(quizstep, utils.get_postdata(request))
+        data = {'success': True, 'message': 'QuizStep Created', 'url': quizstep.get_absolute_url()}
+
+    except Exception as e:
+        status_result = status.HTTP_400_BAD_REQUEST
+        data = {'success': False, 'error': 'Bad request'}
+        
     return Response(data,status=status_result)
 
 
