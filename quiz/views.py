@@ -172,6 +172,16 @@ def update_quizstep(request, pk):
     }
     return render(request, template_name, context)
 
+
+@login_required
+def delete_quizstep(request, quiz_slug, pk):
+    quizstep = get_object_or_404(QuizStep, pk=pk)
+    quiz = quizstep.quiz
+    QuizStep.objects.filter(pk=quizstep.pk).delete()
+    return redirect(quiz)
+
+
+
 def start_quiz(request, quiz_uuid):
     template_name = "quiz/quiz_start.html"
     quiz = get_object_or_404(Quiz, quiz_uuid=quiz_uuid)

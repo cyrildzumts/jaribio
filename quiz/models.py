@@ -279,6 +279,10 @@ class QuizStep(models.Model):
         return reverse("quiz:quizstep-update", kwargs={"pk": self.pk})
     
     
+    def get_delete_url(self):
+        return reverse("quiz:quizstep-delete", kwargs={"quiz_slug": self.quiz.slug,"pk": self.pk})
+    
+    
     def as_dict(self):
         return {
             'quiz': self.quiz.as_dict(),

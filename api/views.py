@@ -138,7 +138,7 @@ def update_quizstep(request, quiz_uuid, quizstep_id):
     try:
         quizstep = QuizStep.objects.get(pk=quizstep_id)
         results = quiz_service.update_quizstep(quizstep, utils.get_postdata(request))
-        data = {'success': True, 'message': 'QuizStep Created', 'url': quizstep.get_absolute_url()}
+        data = {'success': True, 'message': 'QuizStep Update', 'url': quizstep.get_absolute_url()}
 
     except Exception as e:
         status_result = status.HTTP_400_BAD_REQUEST
