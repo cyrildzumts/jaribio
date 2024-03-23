@@ -19,22 +19,22 @@
     <a href="{% url 'quiz:quizstep-create' quiz.quiz_uuid %}" class="mat-button mat-button-outline"><span><i class="fas fa-plus icon"></i>{% trans "Add QuizStep" %}</span></a>
     <a href="{{quiz.get_delete_url}}" class="mat-button mat-button-default warn"><span><i class="fas fa-trash icon"></i>{% trans "Delete" %}</span></a>
   </div>
-  <div class="mat-box full">
+  <div class="mat-box full quiz">
    <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span> - <span class="padding-h">{{quiz.quiz_type|quiz_type_value}}</span> <a href="{{quiz.get_update_url}}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
    <div class="mat-box-content padding">
     <span class="bold medium">{% trans "Questions" %}</span>
-    <ul class="question-grid medium">
+    <ul class="question-grid grid medium">
       {% for q in questions %} 
       <li class="question">
         <div class="flex flex-left mat-box">
           <div class="collapsible">
-            <div class="collapse-toggle" data-target="answer-{{q.pk}}">
+            <div class="collapse-toggle question-header" data-target="answer-{{q.pk}}">
               <div class="question-bloc">
                 <div class="flex flex-left flex-wrap"><span>{{q}}</span> <a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
                 <div><span>{{q.question_type|question_type_value}}</span></div>
               </div>
             </div>
-            <div id="answer-{{q.pk}}" class="collapse-content">
+            <div id="answer-{{q.pk}}" class="collapse-content question-answer">
               <span class="padding-v">{% trans "Answers" %}</span>
               {% for a in q.answers.all %}
               <div class="answer"><span>{{a}}</span> - <span><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
