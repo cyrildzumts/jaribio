@@ -121,7 +121,7 @@ class Quiz(models.Model):
     plays_count = models.IntegerField(blank=True, null=True, default=0)
     slug = models.SlugField(max_length=250, blank=True, null=True)
     quiz_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    FORM_FIELDS = ['title', 'description', 'image', 'max_questions', 'quiz_type', 'created_by']
+    FORM_FIELDS = ['title', 'description', 'image', 'max_questions', 'quiz_type', 'created_by','is_active']
 
     def __str__(self):
         return f"{self.title}"
@@ -175,7 +175,7 @@ class Question(models.Model):
     last_edited_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     question_uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
-    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz']
+    FORM_FIELDS = ['content','explanation','answer_count','score','image','quiz', 'question_type']
 
     def __str__(self) -> str:
         return self.content
