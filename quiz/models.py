@@ -272,7 +272,7 @@ class QuizStep(models.Model):
     
     
     def get_absolute_url(self):
-        return reverse("quiz:quizstep-detail", kwargs={"pk": self.pk})
+        return reverse("quiz:quizstep-details", kwargs={"pk": self.pk})
     
     
     def get_update_url(self):
