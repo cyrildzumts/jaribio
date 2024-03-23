@@ -144,7 +144,7 @@ def update_quizstep(request, quiz_uuid, quizstep_id):
     except Exception as e:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
-        logger.error(f"Error on updating QuizStep {quizstep_id} for Quiz {quiz_uuid}")
+        logger.error(f"Error on updating QuizStep {quizstep_id} for Quiz {quiz_uuid} - Error {e}")
     return Response(data,status=status_result)
 
 
