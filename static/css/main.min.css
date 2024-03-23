@@ -2602,6 +2602,16 @@ li .order-tag{
 	background-color: #fafafa;
 	padding: 1em;
 }
+.question {
+	width: 25em;
+}
+.question .question-header{
+	width: 100%;
+	height: 20em;
+}
+.question .question-answer{
+	width: 100%;
+}
 @media only screen and (max-width:40em){
 	.faq-group{
 		width: 100%;
