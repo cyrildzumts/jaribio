@@ -973,7 +973,7 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
         }
 
         QuizStepManager.prototype.is_update_form = function(){
-            return this.form != null ? this.form.id == 'question-update-form' : false;
+            return this.form != null ? this.form.id == 'quizstep-update-form' : false;
         }
 
         QuizStepManager.prototype.onUploadResponse = function(data){
@@ -991,7 +991,7 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
             let self = this;
             let form_is_valid = this.validate();
             if(!form_is_valid){
-                console.log("Quiz form is invalid");
+                console.log("QuizStep form is invalid");
                 return;
             }
 
