@@ -164,7 +164,8 @@ def update_quizstep(request, pk):
     context = {
         'page_title': "Update QuizStep",
         'quizstep': quizstep,
-        'sellected_questions': quizstep.questions,
+        'quiz': quizstep.quiz,
+        'selected_questions': quizstep.questions,
         'questions': quizstep.quiz.questions.all(),
         'SCORE_TYPES': QUIZ_CONSTANTS.ANSWER_SCORE_TYPES,
         'ANSWER_SCORE_STANDARD': QUIZ_CONSTANTS.ANSWER_SCORE_STANDARD
