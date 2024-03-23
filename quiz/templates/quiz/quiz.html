@@ -22,7 +22,7 @@
   <div class="mat-box full quiz">
    <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span> - <span class="padding-h">{{quiz.quiz_type|quiz_type_value}}</span> <a href="{{quiz.get_update_url}}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
    <div class="mat-box-content padding">
-    <span class="bold medium">{% trans "Questions" %}</span>
+    <div class="title margin-b"><span class="bold medium">{% trans "Questions" %}</span></div>
     <ul class="question-grid grid medium">
       {% for q in questions %} 
       <li class="question">
@@ -30,8 +30,9 @@
           <div class="collapsible">
             <div class="collapse-toggle question-header" data-target="answer-{{q.pk}}">
               <div class="question-bloc">
-                <div class="flex flex-left flex-wrap"><span>{{q}}</span> <a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+                <div class="flex flex-left flex-wrap"><span>{{q}}</span></div>
                 <div><span>{{q.question_type|question_type_value}}</span></div>
+                <div class="margin-b"><a href="{% url 'quiz:question-update' quiz.slug q.question_uuid %}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i>{{UI_STRINGS_CONTEXT.UI_UPDATE_BTN_LABEL}}</span></a></div>
               </div>
             </div>
             <div id="answer-{{q.pk}}" class="collapse-content question-answer">
@@ -51,10 +52,15 @@
 
    <div class="mat-box-content padding">
     <span class="bold medium">{% trans "QuizSteps" %}</span>
-    <ul class="medium">
+    <ul class="medium question-grid">
       {% for q in quizsteps %} 
-      <li>
-        <div class="flex flex-left"><span> {{q}} </span> - <span> {{q.rank}} </span> - <span>[{{q.questions}}]</span> - <span> {{q.score_type|score_type_value}} </span> <a href="{{q.get_update_url}}" class="mat-button mat-button-text"><span><i class="fas fa-edit icon"></i></span></a></div>
+      <li class="question">
+        <div class="flex flex-left question-header">
+          <div class="margin-b"><span> {{q}} </span> - <span> {{q.rank}} </span></div>
+          <div class="margin-b"><span>[{{q.questions}}]</span></div>
+          <div class="margin-b"><span> {{q.score_type|score_type_value}} </span></div>
+          <div class="margin-b"><a href="{{q.get_update_url}}" class="mat-button mat-button-outline"><span><i class="fas fa-edit icon"></i>{{UI_STRINGS_CONTEXT.UI_UPDATE_BTN_LABEL}}</span></a></div>
+        </div>
       </li>
       {% empty %}
       <li><span>{% trans "No QuizSteps" %}</span></li>
