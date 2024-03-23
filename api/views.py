@@ -135,6 +135,7 @@ def create_quizstep(request, quiz_uuid):
 def update_quizstep(request, quiz_uuid, quizstep_id):
     status_result = status.HTTP_200_OK
     data = None
+    logger.info(f"Updating QuizStep {quizstep_id} for Quiz {quiz_uuid}")
     try:
         quizstep = QuizStep.objects.get(pk=quizstep_id)
         results = quiz_service.update_quizstep(quizstep, utils.get_postdata(request))
@@ -143,7 +144,7 @@ def update_quizstep(request, quiz_uuid, quizstep_id):
     except Exception as e:
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
-        
+        logger.error(f"Error on updating QuizStep {quizstep_id} for Quiz {quiz_uuid}")
     return Response(data,status=status_result)
 
 
