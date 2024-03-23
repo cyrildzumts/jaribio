@@ -184,10 +184,10 @@ class Question(models.Model):
         return reverse("quiz:question-details", kwargs={ "question_uuid": self.question_uuid})    
 
     def get_update_url(self):
-        return reverse("quiz:question-update", kwargs={"question_uuid": self.question_uuid})
+        return reverse("quiz:question-update", kwargs={"quiz_slug": self.quiz.slug, "question_uuid": self.question_uuid})
     
     def get_delete_url(self):
-        return reverse("quiz:question-delete", kwargs={"question_uuid": self.question_uuid})
+        return reverse("quiz:question-delete", kwargs={"quiz_slug": self.quiz.slug,"question_uuid": self.question_uuid})
     
     def as_dict(self):
         image = None
