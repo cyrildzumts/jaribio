@@ -31,6 +31,18 @@ p{
   text-decoration: none;
   text-align: left;
 }
+.upper-case{
+  text-transform: uppercase;
+}
+.capitalize{
+  text-transform: capitalize;
+}
+.title-case{
+  text-transform: lowercase;
+}
+.title-case:first-letter{
+  text-transform: uppercase;
+}
 :root{
   --active-border-color: #45A29E;
   --body-bg:#fff;

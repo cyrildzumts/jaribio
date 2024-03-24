@@ -30,7 +30,7 @@
           <div class="collapsible">
             <div class="collapse-toggle collapse-v2-toggle question-header" data-target="answer-{{q.pk}}" data-icon="collapse-icon-{{q.pk}}">
               <div class="question-bloc">
-                <div class="flex flex-left flex-wrap"><span class="bold">{{q}}</span><span id="collapse-icon-{{q.pk}}" class="collapse-icon margin-h"><i class="fas fa-chevron-down"></i></span></div>
+                <div class="flex flex-left flex-wrap"><span class="bold title-case">{{q}}</span><span id="collapse-icon-{{q.pk}}" class="collapse-icon margin-h"><i class="fas fa-chevron-down"></i></span></div>
                 <div><span class="medim">{{q.question_type|question_type_value}}</span></div>
                 <div><span class="medium">{{q.pk}}</span></div>
               </div>
@@ -39,7 +39,7 @@
               <div class="margin-v"><span class="padding-v">{% trans "Answers" %}</span></div>
               <div class="margin-v flex flex-wrap small">
                 {% for a in q.answers.all %}
-                <div class="answer margin-h padding"><span>{{a}}</span><span class="margin-l"><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
+                <div class="answer margin-h padding"><span class="title-case">{{a}}</span><span class="margin-l"><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
                 {% endfor %}
               </div>
             </div>
