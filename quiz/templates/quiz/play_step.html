@@ -27,10 +27,10 @@
         </div>
         <form class="form" name="question_step_answer_form" action="" method="POST">
             <input id="question" type="hidden" name="question" value="{{question.question_uuid}}">
-            <ul id="answers" class="question-grid answers">
+            <ul id="answers" class="question-grid container answers">
               {% for a in question.answers.all %}
-                <li class="answer margin-h" data-answer="{{a.answer_uuid}}" data-value="{{a.content}}">
-                  <div class="answer padding">{{a.content}}</div>
+                <li class="answer" data-answer="{{a.answer_uuid}}" data-value="{{a.content}}">
+                  <div class="padding">{{a.content}}</div>
                 </li>
               {% endfor %}
             </ul>
