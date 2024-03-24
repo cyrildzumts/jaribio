@@ -28,9 +28,9 @@
       <li class="question">
         <div class="flex flex-left mat-box">
           <div class="collapsible">
-            <div class="collapse-toggle collapse-v2-toggle question-header" data-target="answer-{{q.pk}}">
+            <div class="collapse-toggle collapse-v2-toggle question-header" data-target="answer-{{q.pk}}" data-icon="collapse-icon-{{q.pk}}">
               <div class="question-bloc">
-                <div class="flex flex-left flex-wrap"><span class="bold">{{q}}</span></div>
+                <div class="flex flex-left flex-wrap"><span class="bold">{{q}}</span><span id="collapse-icon-{{q.pk}}" class="collapse-icon"><i class="fas fa-chevron-down"></i></span></div>
                 <div><span class="medim">{{q.question_type|question_type_value}}</span></div>
                 <div><span class="medium">{{q.pk}}</span></div>
                 <div class="margin-b flex">
@@ -40,10 +40,13 @@
               </div>
             </div>
             <div id="answer-{{q.pk}}" class="collapse-content question-answer">
-              <span class="padding-v">{% trans "Answers" %}</span>
-              {% for a in q.answers.all %}
-              <div class="answer"><span>{{a}}</span> - <span><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
-              {% endfor %}
+              <div class="margin-v"><span class="padding-v">{% trans "Answers" %}</span></div>
+              
+              <div class="margin-v flex flex-wrap">
+                {% for a in q.answers.all %}
+                <div class="answer"><span>{{a}}</span> - <span><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
+                {% endfor %}
+              </div>
             </div>
           </div>
         </div>

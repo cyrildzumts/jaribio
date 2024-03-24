@@ -9,6 +9,8 @@ define(['ajax_api','tag_api', 'filters'], function(ajax_api, tag_api,Filters) {
     var notification_wrapper;
     var fadeDelay = 5000; // 5s
     var AVAILABILITY_ON_DEMAND = 1;
+    const CLS_COLLAPSE_ICON_DOWN = "fa-chevron-down";
+    const CLS_COLLAPSE_ICON_UP = "fa-chevron-up";
     
     var filter_form;
     let create_api = tag_api.create_tag;
@@ -1446,6 +1448,7 @@ define(['ajax_api','tag_api', 'filters'], function(ajax_api, tag_api,Filters) {
                 event.stopPropagation();
                 event.preventDefault();
                 let activate = !this.classList.contains('active');
+                let icon = document.getElementById(this.dataset.icon);
                 /*
                 toggle_list.forEach((e,i)=>{
                     e.classList.remove('active');
@@ -1459,6 +1462,10 @@ define(['ajax_api','tag_api', 'filters'], function(ajax_api, tag_api,Filters) {
                     }
                 });*/
                 this.classList.toggle('active', activate);
+                if(icon){
+                    icon.firstElementChild.classList.toggle(CLS_COLLAPSE_ICON_DOWN, !activate);
+                    icon.firstElementChild.classList.toggle(CLS_COLLAPSE_ICON_UP, activate);
+                }
                 if(this.dataset.target){
                     let el = document.getElementById(this.dataset.target);
                     if(el){
