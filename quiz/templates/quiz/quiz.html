@@ -44,7 +44,7 @@
               
               <div class="margin-v flex flex-wrap">
                 {% for a in q.answers.all %}
-                <div class="answer margin-h"><span>{{a}}</span> - <span><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
+                <div class="answer margin-h padding"><span>{{a}}</span><span class="margin-l"><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
                 {% endfor %}
               </div>
             </div>
