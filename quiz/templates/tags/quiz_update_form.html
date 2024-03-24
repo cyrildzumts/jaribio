@@ -47,7 +47,7 @@
                     <div class="flex flex-left flex-wrap">
                         <div class="form-group">
                             <label class="padding-bottom" for="description">{% trans "Description" %}</label>
-                            <textarea id="description" class="limited-input bordered" name="description" cols="30" rows="10" data-target="#length-counter" data-max-length="{{DESCRIPTION_MAX_SIZE}}">{{quiz.description}}</textarea>
+                            <textarea id="description" class="limited-input bordered" name="description" cols="30" rows="10" data-target="#length-counter" data-max-length="{{DESCRIPTION_MAX_SIZE}}">{{quiz.description|default_if_none:""}}</textarea>
                         </div>
                         
                         <div class="row padding-l"> <span id="length-counter" class="char-counter">0</span><span class="text-max-length">/{{DESCRIPTION_MAX_SIZE}}</span></div>

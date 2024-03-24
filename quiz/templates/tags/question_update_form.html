@@ -52,7 +52,7 @@
                     <div class="flex flex-left flex-wrap">
                         <div class="form-group">
                             <label class="padding-bottom" for="explanation">{% trans "Explanation" %}</label>
-                            <textarea id="explanation" class="limited-input bordered" name="explanation" cols="30" rows="10" data-target="#length-counter" data-max-length="{{DESCRIPTION_MAX_SIZE}}">{{question.explanation}}</textarea>
+                            <textarea id="explanation" class="limited-input bordered" name="explanation" cols="30" rows="10" data-target="#length-counter" data-max-length="{{DESCRIPTION_MAX_SIZE}}">{{question.explanation|default_if_none:""}}</textarea>
                         </div>
                         
                         <div class="row padding-l"> <span id="length-counter" class="char-counter">{{question.explanation|length}}</span><span class="text-max-length">/{{DESCRIPTION_MAX_SIZE}}</span></div>
