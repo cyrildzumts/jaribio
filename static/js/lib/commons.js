@@ -1,4 +1,4 @@
-define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
+define(['ajax_api','tag_api', 'filters'], function(ajax_api, tag_api,Filters) {
     'use strict';
     var fileUpload;
     var productManager;
@@ -13,159 +13,7 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
     var filter_form;
     let create_api = tag_api.create_tag;
 
-    function clean_form_before_submit(form){
-        $('.filter-input', form).each(function(){
-            this.disabled = this.value == "";
-        });
-        $('.no-submit', form).each(function(){
-            this.disabled = true;
-        });
-    }
     
-    function filter_singular_init(field_id, chips_class){
-        var input = $(field_id);
-        var selected_chips = $(chips_class);
-        var values = ""
-        selected_chips.each(function(index, element){
-            var chips = $(this);
-            if(index < selected_chips.length - 1){
-                values += chips.data('value') + ",";
-            }else{
-                values += chips.data('value');
-            }
-        });
-        input.val(values);
-    }
-    
-    function initialize_filters(){
-        filter_singular_init('#order-status-input', '.order-status-chips.chips-selected');
-        filter_singular_init('#order-payment-option-input', '.order-payment-option-chips.chips-selected');
-    }
-    
-    
-    function integer_field_filter(element){
-        var values = "";
-        var input_target = $('#' + element.data('target'));
-        var filter_type = element.data('type');
-        var parent = element.parent();
-        if (filter_type == "selection"){
-            element.toggleClass('chips-selected', !element.hasClass('chips-selected'));
-            var selected_chips = $('.chips-selected', parent);
-            selected_chips.each(function(index, element){
-                var chips = $(this);
-                if(index < selected_chips.length - 1){
-                    values += chips.data('value') + ",";
-                }else{
-                    values += chips.data('value');
-                }
-            });
-            
-    
-        }else if(filter_type == "range-start" || filter_type == "range-end"){
-            var start;
-            var end;
-            if(filter_type == 'range-start'){
-                start = element.val();
-                end = $('#' + element.data('range-next')).val();
-            }else if(filter_type == 'range-end'){
-                end = element.val();
-                start = $('#' + element.data('range-next')).val();
-            }
-            if(start != "" || end != ""){
-                values = start + '-' + end;
-            }
-    
-        }else if (filter_type == "value"){
-            values = element.val();
-        }
-        input_target.val(values);
-    
-    }
-    
-    function install_integer_filter(){
-        $('.js-list-filter').on('click', function(){
-            integer_field_filter($(this));
-        });
-        $('.js-range-filter,.js-value-filter').on('keyup change', function(){
-            integer_field_filter($(this));
-        });
-        /*
-        $('.js-value-filter').on('keyup,change', function(){
-            integer_field_filter($(this));
-        });
-        */
-    }
-    
-    function toggle_order_status(element){
-        var value = element.data('value');
-        var added = false;
-        var status_input = $('#order-status-input');
-        var current_value = status_input.val();
-        var values = ""
-        element.toggleClass('chips-selected', !element.hasClass('chips-selected'));
-        var selected_chips = $('.order-status-chips.chips-selected');
-        selected_chips.each(function(index, element){
-            var chips = $(this);
-            if(index < selected_chips.length - 1){
-                values += chips.data('value') + ",";
-            }else{
-                values += chips.data('value');
-            }
-            added = true;
-        });
-        status_input.val(values);
-        return added;
-    }
-    
-    function toggle_playment_option(element){
-        var value = element.data('value');
-        var added = false;
-        var input = $('#order-payment-option-input');
-        var current_value = input.val();
-        var values = ""
-        element.toggleClass('chips-selected', !element.hasClass('chips-selected'));
-        var selected_chips = $('.order-payment-option-chips.chips-selected');
-        selected_chips.each(function(index, element){
-            var chips = $(this);
-            if(index < selected_chips.length - 1){
-                values += chips.data('value') + ",";
-            }else{
-                values += chips.data('value');
-            }
-            added = true;
-        });
-        input.val(values);
-        return added;
-    }
-    
-    
-    function toggle_amount_option(element){
-        var input = $('#amount-filter');
-        var filter_action = element.data('value');
-        var added = false;
-        if(input.val() == filter_action){
-            //element.removeClass('chips-selected').siblings().removeClass('chips-selected');
-            input.val('');
-        }else{
-            input.val(filter_action);
-            added = true;
-            //element.addClass('chips-selected').siblings().removeClass('chips-selected');
-        }
-        $(".amount-filter-chips .chips").removeClass('chips-selected');
-        return added;
-    }
-    
-    function toggle_date_filter(element){
-        var input = $('#filter-action');
-        var filter_action = element.data('filter-action');
-        if(input.val() == filter_action){
-            element.removeClass('chips-selected').siblings().removeClass('chips-selected');;
-            input.val('');
-        }else{
-            input.val(filter_action);
-            element.addClass('chips-selected').siblings().removeClass('chips-selected');
-        }
-    }
 
     function notify(message){
         if( typeof notification_wrapper === 'undefined' || typeof messages === 'undefined'){
@@ -234,62 +82,6 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
             console.error(reason);
         });
     }
-
-
-    var ListFilter = (function(){
-        function ListFilter(){
-            this.init();
-            console.log("ListFilter instance created");
-        };
-
-        ListFilter.prototype.init = function(){
-            console.log("ListFilter instance initializing");
-            var self;
-            $('.js-list-filter').on('keyup', function(event){
-                event.stopPropagation();
-                var value = this.value.trim().toLowerCase();
-                var fieldname = $(this).data('field');
-                var target = $("#" + $(this).data('target'));
-                
-                target.children().filter(function(){
-                    self = $(this)
-                    self.toggle(self.data(fieldname).toLowerCase().includes(value));
-                });
-            });
-
-            console.log("ListFilter instance initialized");
-        };
-
-        ListFilter.prototype.filter = function(ctx, filter_field, value_list){
-            if(!ctx || !filter_field || !value_list || value_list.length == 0){
-                console.log("Filter called with missing argumtent");
-                return;
-            }
-            console.log("Filtering started");
-            $(".filterable", ctx).each(function(index, element){
-                let filter_value = this.getAttribute(filter_field);
-                console.log(" Filter Field = \"%s\" - Filter Value = \"%s\" - Value List = [\"%s\"]", filter_field ,filter_value, value_list)
-                $(this).toggle(value_list.includes(filter_value));
-            });
-            console.log("Listfilter : filter run with success");
-        };
-
-        ListFilter.prototype.reset_filter = function(ctx, container){
-            if(!ctx || !container){
-                console.log(" Reset Filter called with missing context");
-                return;
-            }
-            $("input:checkbox", ctx).each(function(){
-                this.checked = false;
-            });
-            $(".filterable", container).each(function(index, element){
-                $(this).show();
-            });
-            console.log("Listfilter : reset run with success");
-        };
-
-        return ListFilter;
-    })();
 
     function clear_uploaded_files(){
         var files_container = document.querySelector('.file-list');
@@ -1644,6 +1436,123 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
     }
 
 
+    function init_collapsible(){
+        let toggle_list = document.querySelectorAll('.collapse-v2-toggle');
+        if( toggle_list == 0){
+            return;
+        }
+        toggle_list.forEach((t,i)=>{
+            t.addEventListener('click', function(event){
+                event.stopPropagation();
+                event.preventDefault();
+                let activate = !this.classList.contains('active');
+                /*
+                toggle_list.forEach((e,i)=>{
+                    e.classList.remove('active');
+                    if(e.dataset.target){
+                        let el = document.getElementById(e.dataset.target);
+                        el.style.display = 'none';
+                    }else{
+                        if(e.parentElement.nextElementSibling){
+                            e.parentElement.nextElementSibling.style.display = 'none';
+                        }
+                    }
+                });*/
+                this.classList.toggle('active', activate);
+                if(this.dataset.target){
+                    let el = document.getElementById(this.dataset.target);
+                    if(el){
+                        el.style.display = activate ? 'block': '';
+                    }
+                }else{
+                    //this.parentElement.nextElementSibling.classList.toggle('hidden', !activate);
+                    if(this.nextElementSibling){
+                        this.nextElementSibling.style.display = activate ? 'block': '';
+                    }
+                    
+                }
+            });
+        });
+    }
+
+    function init_accordion(){
+        let toggle_list = document.querySelectorAll('.accordion-toggle');
+        if( toggle_list == 0){
+            return;
+        }
+        toggle_list.forEach((t,i)=>{
+            t.addEventListener('click', function(event){
+                event.stopPropagation();
+                event.preventDefault();
+                let activate = !this.classList.contains('active');
+                toggle_list.forEach((e,i)=>{
+                    e.classList.remove('active');
+                    if(e.dataset.target){
+                        let el = document.getElementById(e.dataset.target);
+                        el.style.display = 'none';
+                    }else{
+                        if(e.parentElement.nextElementSibling){
+                            e.parentElement.nextElementSibling.style.display = 'none';
+                        }
+                    }
+                });
+                this.classList.toggle('active', activate);
+                if(this.dataset.target){
+                    let el = document.getElementById(this.dataset.target);
+                    if(el){
+                        el.style.display = activate ? 'block': '';
+                    }
+                }else{
+                    //this.parentElement.nextElementSibling.classList.toggle('hidden', !activate);
+                    if(this.parentElement.nextElementSibling){
+                        this.parentElement.nextElementSibling.style.display = activate ? 'block': '';
+                    }
+                    
+                }
+            });
+        });
+    }
+
+    function init_dropdown(){
+        let toggle_list = document.querySelectorAll('.dropdown-toggle');
+        if( !toggle_list){
+            return;
+        }
+        
+
+        toggle_list.forEach((t,i)=>{
+            t.addEventListener('click', function(event){
+                event.stopPropagation();
+                event.preventDefault();
+                toggle_list.forEach((e,i)=>{
+                    if((e != t) && (e.dataset.target != t.dataset.target)){
+                        if(e.dataset.target){
+                            let el = document.getElementById(e.dataset.target);
+                            if(el){
+                                el.classList.remove('show');
+                            }
+                        }else{
+                            if(e.nextElementSibling){
+                                e.nextElementSibling.classList.remove('show');
+                            }
+                        }
+                    }
+                });
+                if(this.dataset.target){
+                    let el = document.getElementById(this.dataset.target);
+                    if(el){
+                        el.classList.toggle('show');
+                    }
+                }else{
+                    if(this.nextElementSibling){
+                        this.nextElementSibling.classList.toggle('show');
+                    } 
+                }
+            });
+        });
+        
+    }
+
     $(document).ready(function(){
         if(window){
             window.notify = notify;
@@ -1652,7 +1561,7 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
         messages = $('#messages', notification_wrapper);
         //onDragInit();
         notify_init(notification_wrapper, messages);
-        var listfilter = new ListFilter();
+        Filters.init();
         fileUpload = new FileUpload();
         quizManager = new QuizManager();
         questionManager = new QuestionManager();
@@ -1661,31 +1570,10 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
         questionManager.init();
         quizstepManager.init();
         
-        $('.collapsible .toggle').on('click', function(event){
-            var parent = $(this).parent();
-            var target = $('.' + this.getAttribute('data-toggle'), parent);
-            $('input', parent).val('');
-            
-            target.toggle();
-        });
-        $('.js-filter-btn').on('click', function(event){
-            var ctx = $('#' + this.getAttribute('data-context'));
-            var input_name = this.getAttribute('data-input-name');
-            var container = $('#' + this.getAttribute('data-container'));
-            var filter_field = this.getAttribute("data-filter-field");
-            var value_list = [];
-            $("input:checked[name=\"" + input_name + "\"]", ctx).each(function(){
-                console.log("adding value to filter : %s", this.getAttribute("data-value"));
-                value_list.push(this.getAttribute("data-value"));
-            });
-            listfilter.filter(container, filter_field, value_list);
-        });
-
-        $('.js-filter-reset-btn').on('click', function(event){
-            var ctx = $('#' + this.getAttribute('data-context'));
-            var container = $('#' + this.getAttribute('data-container'));
-            listfilter.reset_filter(ctx, container);
-        });
+        init_accordion();
+        init_dropdown();
+        init_collapsible();
+        
 
         $('#file-upload-form').on('submit', function(event){
             console.log("submitting file-upload-form");
@@ -1749,11 +1637,7 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
             activable_list.prop('disabled', !this.checked);
         });
 
-        filter_form = $('#filter-form');
-        $('#filter-form').on('submit', function(event){
-            $('input[name="csrfmiddlewaretoken"]').prop('disabled', true);
-            clean_form_before_submit(this);
-        });
+        
         $('.js-pagination').on('click', function(event){
             
             if(filter_form.length != 0){
@@ -1771,14 +1655,6 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
             
 
         });
-
-        $("#amount-filter-input").on('keyup', function(event){
-            var input = $(this);
-            $(input.data('update')).text(input.val());
-            $("#" + input.data('target')).val(input.val());
-        });
-        initialize_filters();
-        install_integer_filter();
         
         $('.js-custom-input .input-value').on('click', function(event){
             $(this).toggle();
@@ -1821,13 +1697,6 @@ define(['ajax_api','tag_api'], function(ajax_api, tag_api) {
         });
         
         console.log("commons.js loaded");
-        /*
-        $('.js-revealable-hide').on('click', function(){
-            console.log('hidding revealable inputs');
-            var target = $($(this).data('target')).parent();
-            $('.js-revealable', target).hide();
-        });
-        */
     });
 
 });

@@ -266,6 +266,8 @@ class QuizStep(models.Model):
     score_type = models.IntegerField(blank=True, null=True, default=Constants.ANSWER_SCORE_STANDARD, choices=Constants.ANSWER_SCORE_TYPES)
     FORM_FIELDS = ['quiz', 'title', 'questions', 'score_type', 'rank']
 
+    class meta:
+        ordering = ['rank']
 
     def __str__(self) -> str:
         return self.title
