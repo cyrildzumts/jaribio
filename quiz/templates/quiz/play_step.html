@@ -16,13 +16,14 @@
   <div class="flex"><h3>{{quiz}}</h3></div>
   <div class="mat-box full" id="quiz-step" data-rank="{{quiz_step.rank}}" data-quiz="{{quiz.quiz_uuid}}">
     <div class="margin-v padding">
+      <div class="title-case"><span class="bold title-case">{{quizstep.title}}</span></div>
       <div class="quiz title-case"><span class="bold margin-r">{% translate "Round" %} {{quizstep.rank}}</span><span class="title-case">{{quizstep.title}}</span></div>
       <div><span class="medim">{{question.question_type|question_type_value}}</span></div>
     </div>
 
     <div class="container">
         <div id="question" class="question-box">
-          <div class="margin-b"><p class="title-case">{{question.content}}</p></div>
+          <div class="margin-b"><p class="title-case bold">{{question.content}}</p></div>
         </div>
         <form class="form" name="question_step_answer_form" action="" method="POST">
             <input id="question" type="hidden" name="question" value="{{question.question_uuid}}">
