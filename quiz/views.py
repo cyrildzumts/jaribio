@@ -197,14 +197,19 @@ def play_quiz(request, quiz_slug, step):
     template_name = "quiz/play_step.html"
     quiz = get_object_or_404(Quiz, slug=quiz_slug)
     quiz_step = None
+    questions = []
     try:
         quiz_step = QuizStep.objects.filter(quiz=quiz, rank=step).get()
+        q_ids = list(map(lambda x: int(x), quiz_step.questions.split(',')))
+        questions = [ Question.objects.get(pk=pk) for pk in q_ids]
     except QuizStep.DoesNotExist:
         pass
     
     context = {
         'page_title': "Start Quiz",
         'quiz': quiz,
+        'questions': questions,
+        'question': questions[0],
         'quiz_step': quiz_step
     }
     return render(request, template_name, context)

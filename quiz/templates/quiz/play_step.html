@@ -14,15 +14,27 @@
 <div class="container">
   <div class="flex"><h3>{{quiz}}</h3></div>
   <div class="mat-box full" id="quiz-step" data-rank="{{quiz_step.rank}}" data-quiz="{{quiz.quiz_uuid}}">
-    <p>{{quiz_step}}</p>
-    
-    <div>
-        <div><h4><span id="question-content">Question come here</span></h4></div>
-        <form class="form" name="question_step_answer_form" action="" method="POST">
-            <input id="question" type="text" name="question">
-            <div id="answers" class="flex flex-left">
+    <div class="margin-v">
+      <div class="quiz title-case">{{quiz.title}}</div>
+    </div>
+    <div class="margin-v">
+      <div class="quiz title-case"><span class="bold margin-h">{% translate "Round" %} {{quizstep.rank}}</span><span class="title-case">{{quizstep.title}}</span></div>
+    </div>
 
-            </div>
+    <div class="container">
+        <div id="question" class="question-box">
+          <div class="margin-b"><p>{{question.content}}</p></div>
+          <div><span class="medim">{{question.question_type|question_type_value}}</span></div>
+        </div>
+        <form class="form" name="question_step_answer_form" action="" method="POST">
+            <input id="question" type="text" name="question" value="{{question.question_uuid}}">
+            <ul id="answers" class="question-grid answers">
+              {% for a in question.answers.all %}
+                <li class="answer" data-answer="{{a.answer_uuid}}" data-value="{{a.content}}">
+                  <div class="answer">{{a.content}}</div>
+                </li>
+              {% endfor %}
+            </ul>
             <div class="actions flex-right">
                 <button class="mat-button mat-button-default" type="button"><span>{{UI_STRINGS_CONTEXT.UI_SEND_BTN_LABEL}}</span></button>
             </div>
