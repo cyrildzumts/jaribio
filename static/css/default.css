@@ -37,6 +37,10 @@ p{
 }
 
 
+.large{
+  font-size: 1.5em;
+}
+
 .upper-case{
   text-transform: uppercase;
 }

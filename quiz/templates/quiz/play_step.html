@@ -23,7 +23,7 @@
 
     <div class="container">
         <div id="question" class="question-box">
-          <div class="margin-b"><p class="title-case bold">{{question.content}}</p></div>
+          <div class="margin-b"><p class="title-case bold large">{{question.content}}</p></div>
         </div>
         <form class="form" name="question_step_answer_form" action="" method="POST">
             <input id="question" type="hidden" name="question" value="{{question.question_uuid}}">
@@ -34,7 +34,7 @@
                 </li>
               {% endfor %}
             </ul>
-            <div class="actions flex-right">
+            <div class="actions">
                 <button class="mat-button mat-button-default" type="button"><span>{{UI_STRINGS_CONTEXT.UI_SEND_BTN_LABEL}}</span></button>
             </div>
         </form>
