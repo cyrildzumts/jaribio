@@ -28,9 +28,11 @@
       <li class="question">
         <div class="flex flex-left mat-box">
           <div class="collapsible">
-            <div class="collapse-toggle collapse-v2-toggle question-header" data-target="answer-{{q.pk}}" data-icon="collapse-icon-{{q.pk}}">
-              <div class="question-bloc">
+            <div class="question-header">
+              <div class="collapse-toggle collapse-v2-toggle question-header" data-target="answer-{{q.pk}}" data-icon="collapse-icon-{{q.pk}}">
                 <div class="flex flex-left flex-wrap"><span class="bold">{{q}}</span><span id="collapse-icon-{{q.pk}}" class="collapse-icon margin-h"><i class="fas fa-chevron-down"></i></span></div>
+              </div>
+              <div class="question-bloc">
                 <div><span class="medim">{{q.question_type|question_type_value}}</span></div>
                 <div><span class="medium">{{q.pk}}</span></div>
                 <div class="margin-b flex">
