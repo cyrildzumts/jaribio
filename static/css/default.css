@@ -49,6 +49,6 @@ p{
   text-transform: lowercase;
 }
 
-.title-case:first-letter{
+.title-case::first-letter{
   text-transform: uppercase;
 }
