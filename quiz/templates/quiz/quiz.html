@@ -37,7 +37,7 @@
             </div>
             <div id="answer-{{q.pk}}" class="collapse-content question-answer">
               <div class="margin-v"><span class="padding-v">{% trans "Answers" %}</span></div>
-              <div class="margin-v flex flex-wrap">
+              <div class="margin-v flex flex-wrap small">
                 {% for a in q.answers.all %}
                 <div class="answer margin-h padding"><span>{{a}}</span><span class="margin-l"><i class="fas {% if a.is_correct %}fa-check-circle{% else %}fa-times-circle{% endif %} icon"></i></span> </div>
                 {% endfor %}
