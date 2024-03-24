@@ -3167,15 +3167,24 @@ li .order-tag{
 	width: 100%;
 }
 
-#quiz-step #answers .answer{
+#quiz-step #answers .answer-wrapper{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 10em;
+	width: 50%;
 	height: 5em;
+	margin: 0;
+	border-radius: 3em;
+}
+
+#quiz-step #answers .answer-wrapper .answer{
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	font-size: large;
 	text-align: center;
-	margin: 0.5em;
+
+	padding: 1em;
 }
 
 

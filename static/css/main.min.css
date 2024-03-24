@@ -2635,15 +2635,22 @@ li .order-tag{
 .question .question-answer{
 	width: 100%;
 }
-#quiz-step #answers .answer{
+#quiz-step #answers .answer-wrapper{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 10em;
+	width: 50%;
 	height: 5em;
+	margin: 0;
+	border-radius: 3em;
+}
+#quiz-step #answers .answer-wrapper .answer{
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	font-size: large;
 	text-align: center;
-	margin: 0.5em;
+	padding: 1em;
 }
 @media only screen and (max-width:40em){
 	.faq-group{
@@ -3306,8 +3313,8 @@ li .order-tag{
     text-transform: capitalize;
 }
 :root{
-    --primary-color: #26C6DA;
-    --secondary-color: #FAFAFA;
+    --primary-color: #0A0A0A;
+    --secondary-color: #16a085;
     --third-color : #FAFAFA;
     --fourth-color : #FAFAFA;
     --light-color : #FAFAFA;
@@ -3330,6 +3337,8 @@ li .order-tag{
     --debug-color: #1e88e5;
     --on-demand-order : #f39c12;
     --standard-order : #2980b9;
+    --answer-bg :#16a085;
+    --answer-color :#0A0A0A;
     
 }
 body{
@@ -3639,6 +3648,13 @@ h1, h2, h3, h4, h5, h6{
 }
 .category-nav{
 	background-color: #fafafa;
+}
+#quiz-step #answers .answer-wrapper{
+	background-color: var(--answer-bg);
+    color: var(--answer-color);
+}
+#quiz-step #answers .answer{
+    color: var(--answer-color);
 }
 .container {
   min-width: 100% !important;

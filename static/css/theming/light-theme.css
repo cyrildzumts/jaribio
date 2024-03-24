@@ -1,6 +1,6 @@
 :root{
-    --primary-color: #26C6DA;
-    --secondary-color: #FAFAFA;
+    --primary-color: #0A0A0A;
+    --secondary-color: #16a085;
     --third-color : #FAFAFA;
     --fourth-color : #FAFAFA;
     --light-color : #FAFAFA;
@@ -23,5 +23,7 @@
     --debug-color: #1e88e5;
     --on-demand-order : #f39c12;
     --standard-order : #2980b9;
+    --answer-bg :#16a085;
+    --answer-color :#0A0A0A;
     
 }
