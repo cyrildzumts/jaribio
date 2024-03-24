@@ -3172,19 +3172,20 @@ li .order-tag{
 	align-items: center;
 	justify-content: center;
 	width: 50%;
-	height: 5em;
-	margin: 0;
-	border-radius: 3em;
+	margin: 1em 0;
+	padding: 1em;
+	
 }
 
 #quiz-step #answers .answer-wrapper .answer{
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: large;
+	font-size: 2em;
 	text-align: center;
-
+	width: 100%;
 	padding: 1em;
+	border-radius: 0.2em;
 }
 
 

@@ -398,11 +398,12 @@ h1, h2, h3, h4, h5, h6{
 }
 
 #quiz-step #answers .answer-wrapper{
-	background-color: var(--answer-bg);
+	
     color: var(--answer-color);
 }
 
 #quiz-step #answers .answer{
+    background-color: var(--answer-bg);
     color: var(--answer-color);
 }
 
