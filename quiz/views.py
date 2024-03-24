@@ -210,7 +210,7 @@ def play_quiz(request, quiz_slug, step):
         'quiz': quiz,
         'questions': questions,
         'question': questions[0],
-        'quiz_step': quiz_step
+        'quizstep': quiz_step
     }
     return render(request, template_name, context)
 

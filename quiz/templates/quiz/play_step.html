@@ -20,19 +20,19 @@
     </div>
     <div class="margin-v">
       <div class="quiz title-case"><span class="bold margin-h">{% translate "Round" %} {{quizstep.rank}}</span><span class="title-case">{{quizstep.title}}</span></div>
+      <div><span class="medim">{{question.question_type|question_type_value}}</span></div>
     </div>
 
     <div class="container">
         <div id="question" class="question-box">
-          <div class="margin-b"><p>{{question.content}}</p></div>
-          <div><span class="medim">{{question.question_type|question_type_value}}</span></div>
+          <div class="margin-b"><p class="title-case">{{question.content}}</p></div>
         </div>
         <form class="form" name="question_step_answer_form" action="" method="POST">
-            <input id="question" type="text" name="question" value="{{question.question_uuid}}">
+            <input id="question" type="hidden" name="question" value="{{question.question_uuid}}">
             <ul id="answers" class="question-grid answers">
               {% for a in question.answers.all %}
-                <li class="answer" data-answer="{{a.answer_uuid}}" data-value="{{a.content}}">
-                  <div class="answer">{{a.content}}</div>
+                <li class="answer margin-h" data-answer="{{a.answer_uuid}}" data-value="{{a.content}}">
+                  <div class="answer padding">{{a.content}}</div>
                 </li>
               {% endfor %}
             </ul>
