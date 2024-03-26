@@ -79,7 +79,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
                 self.questions.push(new Question(q));
             });
             response.quizsteps.forEach(qs => {
-                let q_ids = qs.questions.split(',');
+                let q_ids = qs.questions.split(',').map((x)=> parseInt(x));
                 let questions = self.questions.filter((q) => q_ids.includes(q.id));
                 let quizStep = new QuizStep(qs);
                 quizStep.setQuestions(questions);
