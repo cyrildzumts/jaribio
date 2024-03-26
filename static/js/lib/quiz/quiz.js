@@ -137,6 +137,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             if(this.currentStepIndex < this.steps.length){
                 
             }
+            this.next_step_btn.classList.add('hidden');
             this.currentStepIndex ++;
             this.currentStep = this.steps[this.currentStepIndex];
             this.currentQuestion = this.currentStep.currentQuestion();
@@ -150,6 +151,8 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
 
 
         onNextBtnClicked(event){
+            this.next_btn.classList.add("hidden");
+            this.next_btn.disabled = true;
             this.currentStep.nextQuestion();
             this.currentQuestion = this.currentStep.currentQuestion();
             if(this.currentQuestion){
