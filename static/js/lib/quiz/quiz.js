@@ -151,6 +151,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             });
             self.answers_container.appendChild(question.renderAnswers());
             this.answers_container.classList.toggle('hidden', !response.success);
+            this.timer_tag.classList.remove('hidden');
             this.monitorQuestion();
         }
 
@@ -201,6 +202,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.next_btn.disabled = false;
             this.iterations = TIMER_TIMEOUT_MS;
             this.timer_tag.innerText = `${this.iterations}s`;
+            this.timer_tag.classList.add('hidden');
         }
         onQuizStarted(){
 

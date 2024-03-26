@@ -3671,6 +3671,7 @@ h1, h2, h3, h4, h5, h6{
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     width: 5em;
     height: 5em;
     border-radius: 50%;
