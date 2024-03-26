@@ -3345,6 +3345,7 @@ li .order-tag{
     --standard-order : #2980b9;
     --answer-bg :#EFF3F2;
     --answer-color :#0A0A0A;
+    --answer-selected : #16a085;
     
 }
 body{
@@ -3662,6 +3663,10 @@ h1, h2, h3, h4, h5, h6{
 #quiz-step #answers .answer{
     background-color: var(--answer-bg);
     color: var(--answer-color);
+}
+#quiz-step #answers .answer.selected{
+    color: var(--answer-selected);
+    border: 2px dotted var(--answer-selected);
 }
 .container {
   min-width: 100% !important;

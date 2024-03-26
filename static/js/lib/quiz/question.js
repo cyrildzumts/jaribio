@@ -90,6 +90,16 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
 
             return ul;
         }
+
+        onAnswerClicked(answer){
+            let self = this;
+            this.answers.forEach((a) =>{
+                if(a != answer){
+                    a.classList.remove('selected');
+                }
+            });
+            answer.classList.add('selected');
+        }
     }
 
     return Question;

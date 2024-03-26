@@ -1,10 +1,17 @@
 define(['ajax_api','tag_api'], function(Ajax,TagApi){
     class Answer {
         constructor(answer){
+            this.id = answer.id;
             this.question = answer.question;
             this.content = answer.content;
             this.answer_uuid = answer.answer_uuid;
             this.quiz = answer.question.quiz;
+            this.selected = false;
+            this.onclick = null;
+        }
+
+        setOnclick(callback){
+            this.onclick = callback;
         }
 
         getContent(){
@@ -24,6 +31,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
         }
 
         render(){
+            let self = this;
             let content = TagApi.create_tag({
                 'element': 'div',
                 'options': {
@@ -40,6 +48,12 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
                     'data-value': this.content,
                     'children': [content]
                 }
+            });
+            div.addEventListener('click', function(event){
+                event.preventDefault();
+                event.stopPropagation();
+                self.selected = true;
+                self.onclick(self);
             });
             return div;
         }

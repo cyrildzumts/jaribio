@@ -407,4 +407,8 @@ h1, h2, h3, h4, h5, h6{
     color: var(--answer-color);
 }
 
+#quiz-step #answers .answer.selected{
+    color: var(--answer-selected);
+    border: 2px dotted var(--answer-selected);
+}
 
