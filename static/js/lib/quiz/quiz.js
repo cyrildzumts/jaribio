@@ -136,7 +136,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.currentStep = this.steps[0];
             this.currentQuestion = this.currentStep.currentQuestion();
             this.quiz_data = response.quiz;
-            renderCurrentQuestion()
+            this.renderCurrentQuestion()
             
         }
 
