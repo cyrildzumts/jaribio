@@ -52,7 +52,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             if(this.iterations-- > 0){
                 this.timeout = setTimeout(this.monitorQuestion.bind(this), BASE_TIMEOUT_MS);
             }else{
-                onQuestionTimeout();
+                this.onQuestionTimeout();
             }
         }
 
