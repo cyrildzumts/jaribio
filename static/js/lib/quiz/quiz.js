@@ -100,9 +100,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.removeAllChildren(this.answers_container);
             let answers = response.answers.map((a) => new Answer(a));
             question.setAnswers(answers);
-            answers.forEach((a) =>{
-                self.answers_container.appendChild(question.renderAnswers());
-            });
+            self.answers_container.appendChild(question.renderAnswers());
             this.answers_container.classList.toggle('hidden', !response.success);
         }
 
