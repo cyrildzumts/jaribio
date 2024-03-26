@@ -53,7 +53,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             div.addEventListener('click', function(event){
                 event.preventDefault();
                 event.stopPropagation();
-                self.selected = true;
+                //self.selected = true;
                 self.onclick(self);
             });
             this.tag = {

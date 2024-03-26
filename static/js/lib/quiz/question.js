@@ -1,6 +1,9 @@
 define(['ajax_api','tag_api'], function(Ajax,TagApi){
     const ANSWERS_CLS = "question-grid container answers";
     const ANSWERS_ID = "answers";
+    const ANSWER_UNIQUE_SELECTION = 0;
+    const ANSWER_MULTIPLE_SELECTION = 1;
+    const ANSWER_TYPE_BOOLEAN_SELECTION = 2;
     class Question {
         constructor(question){
             this.id = question.id;
@@ -91,7 +94,13 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             return ul;
         }
 
-        onAnswerClicked(answer){
+        onMultipleSelection(answer){
+            let self = this;
+            answer.selected = !answer.selected;
+            answer.tag.content.classList.toggle('selected');
+        }
+
+        onUniqueSelection(answer){
             let self = this;
             this.answers.forEach((a) =>{
                 if(a != answer){
@@ -99,7 +108,18 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
                     a.tag.content.classList.remove('selected');
                 }
             });
+            answer.selected = true;
             answer.tag.content.classList.add('selected');
+        }
+
+        onAnswerClicked(answer){
+            if(this.question_type == ANSWER_MULTIPLE_SELECTION){
+                this.onMultipleSelection(answer);
+            }else if(this.question_type == ANSWER_UNIQUE_SELECTION){
+                this.onUniqueSelection(answer);
+            }else{
+                
+            }
         }
     }
 
