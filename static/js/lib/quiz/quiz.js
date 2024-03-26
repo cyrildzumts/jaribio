@@ -49,7 +49,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
 
         monitorQuestion(){
             this.timer_tag.innerText = `${this.iterations}s`;
-            if(this.iterations-- > 0){
+            if(this.iterations-- > -1){
                 this.timeout = setTimeout(this.monitorQuestion.bind(this), BASE_TIMEOUT_MS);
             }else{
                 this.onQuestionTimeout();
