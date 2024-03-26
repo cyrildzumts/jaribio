@@ -11,8 +11,7 @@
 {% block MAIN %}
 <div class="container">
   <div class="actions flex-left">
-    <a href="{% url 'quiz:play-quiz' quiz.slug 1 %}" class="mat-button mat-button-default"><span><i class="fas fa-play icon"></i>{% trans "Play" %}</span></a>
-    <a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-default"><span><i class="fas fa-trash icon"></i>{% trans "Back" %}</span></a>
+    <a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-default"><span>{% trans "Back" %}</span></a>
   </div>
   <div class="mat-box full quiz">
       <div class="flex"><span class="bold padding-h">{{quiz}}</span></div>

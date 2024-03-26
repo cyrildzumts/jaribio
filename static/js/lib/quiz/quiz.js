@@ -89,7 +89,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.currentStep = this.steps[0];
             this.currentQuestion = this.currentStep.currentQuestion();
             this.quiz_data = response.quiz;
-            this.container.appendChild(this.currentQuestion.render());
+            this.container.appendChild(this.currentQuestion.renderQuestion());
             this.container.classList.toggle('hidden', !response.success);
             this.fetch_question_data(this.currentQuestion);
         }
@@ -101,9 +101,13 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             let answers = response.answers.map((a) => new Answer(a));
             question.setAnswers(answers);
             answers.forEach((a) =>{
-                self.answers_container.appendChild(a.render());
+                self.answers_container.appendChild(question.renderAnswers());
             });
             this.answers_container.classList.toggle('hidden', !response.success);
+        }
+
+        renderAnswers(){
+
         }
 
         fetch_quiz_data(){

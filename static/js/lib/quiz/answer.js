@@ -25,17 +25,19 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
 
         render(){
             let content = TagApi.create_tag({
-                'element': 'span',
+                'element': 'div',
                 'options': {
                     'innerText': this.content,
-                    'cls': ''
+                    'cls': 'answer'
                 }
             });
             
             let div = TagApi.create_tag({
-                'element': 'div',
+                'element': 'li',
                 'options': {
-                    'cls': 'flex margin',
+                    'cls': 'answer-wrapper',
+                    'data-answer': this.answer_uuid,
+                    'data-value': this.content,
                     'children': [content]
                 }
             });
