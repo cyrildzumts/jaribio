@@ -13,10 +13,13 @@
   <div class="actions flex-left">
     <a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-default"><span>{% trans "Back" %}</span></a>
   </div>
-  <div class="mat-box full quiz">
-      <div class="flex"><span class="bold padding-h">{{quiz}}</span></div>
+  <div class="full quiz">
+      <div class="flex"><span class="bold padding-h large">{{quiz}}</span></div>
       <div class="margin-v flex">
         <button id="start-quiz-btn"  class="start-quiz-btn mat-button mat-button-default" data-quiz="{{quiz.quiz_uuid}}">{% translate "Start" %}</button>
+    </div>
+    <div id="timer-wrapper" class="timer-wrapper flex full">
+      <div id="timer" class="timer"></div>
     </div>
     <div id="quiz-step" class="container">
       <div id="quiz-game-container" class="mat-box hidden full"></div>

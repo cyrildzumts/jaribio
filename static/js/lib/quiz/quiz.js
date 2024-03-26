@@ -4,6 +4,9 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
     const START_QUIZ_BTN = "start-quiz-btn";
     const FETCH_QUIZ_URL = "/api/fetch-quiz-data/";
     const FETCH_QUESTION_ANSWERS_URL = "/api/fetch-question-data/";
+    const TIMER_ID = "timer";
+    const BASE_TIMEOUT_MS = 1000; 
+    const TIMER_TIMEOUT_MS = 15; 
     class Quiz {
         constructor(){
             this.players = [];
@@ -17,6 +20,9 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.quiz_data = null;
             this.quiz_started = false;
             this.is_ready = false;
+            this.iterations = TIMER_TIMEOUT_MS;
+            this.timeout = null;
+            this.timer_tag = null;
         }
 
         init(){
@@ -24,6 +30,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.start_btn = document.getElementById(START_QUIZ_BTN);
             this.container = document.getElementById(QUIZ_GAME_CONTAINER);
             this.answers_container = document.getElementById(ANSWERS_GAME_CONTAINER);
+            this.timer_tag = document.getElementById(TIMER_ID);
             this.quiz_uuid = this.start_btn.dataset.quiz;
             this.start_btn.addEventListener('click', function(event){
                 event.preventDefault();
@@ -36,7 +43,17 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
                 }
 
             });
+            
             console.info("Quiz Initialized");
+        }
+
+        monitorQuestion(){
+            this.timer_tag.innerText = `${this.iterations}s`;
+            if(this.iterations-- > 0){
+                this.timeout = setTimeout(this.monitorQuestion, BASE_TIMEOUT_MS);
+            }else{
+                onQuestionTimeout();
+            }
         }
 
         removeAllChildren(container){
@@ -102,6 +119,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             question.setAnswers(answers);
             self.answers_container.appendChild(question.renderAnswers());
             this.answers_container.classList.toggle('hidden', !response.success);
+            this.monitorQuestion();
         }
 
         renderAnswers(){
@@ -145,7 +163,8 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
         }
 
         onQuestionTimeout(){
-
+            clearTimeout(this.timeout);
+            this.timer_tag.innerText = `${this.iterations}s`;
         }
         onQuizStarted(){
 
