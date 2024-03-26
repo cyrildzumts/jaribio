@@ -90,12 +90,20 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.currentQuestion = this.currentStep.currentQuestion();
             this.quiz_data = response.quiz;
             this.container.appendChild(this.currentQuestion.render());
+            this.container.classList.toggle('hidden', !response.success);
             this.fetch_question_data(this.currentQuestion);
         }
 
         onQuestionDataFetched(response, question){
+            let self = this;
             console.info("Question Data fetched : ", response, question);
             this.removeAllChildren(this.answers_container);
+            let answers = response.answers.map((a) => new Answer(a));
+            question.setAnswers(answers);
+            answers.forEach((a) =>{
+                self.answers_container.appendChild(a.render());
+            });
+            this.answers_container.classList.toggle('hidden', !response.success);
         }
 
         fetch_quiz_data(){

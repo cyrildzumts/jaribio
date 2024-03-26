@@ -35,7 +35,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             let div = TagApi.create_tag({
                 'element': 'div',
                 'options': {
-                    'cls': 'flex',
+                    'cls': 'flex margin',
                     'children': [content]
                 }
             });
