@@ -50,11 +50,8 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
                 event.preventDefault();
                 event.stopPropagation();
                 if(self.quiz_started){
-                    self.startQuiz();
-                }else{
-                    self.stopQuiz();
+                    self.onNextBtnClicked(event);
                 }
-
             });
             
             console.info("Quiz Initialized");
