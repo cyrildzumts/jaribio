@@ -56,7 +56,10 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
                 self.selected = true;
                 self.onclick(self);
             });
-            this.tag = div;
+            this.tag = {
+                'div': div,
+                'content': content
+            };
             return div;
         }
     }

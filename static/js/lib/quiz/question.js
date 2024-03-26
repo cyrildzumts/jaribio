@@ -95,10 +95,10 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             let self = this;
             this.answers.forEach((a) =>{
                 if(a != answer){
-                    a.tag.classList.remove('selected');
+                    a.tag.content.classList.remove('selected');
                 }
             });
-            answer.tag.classList.add('selected');
+            answer.tag.content.classList.add('selected');
         }
     }
 
