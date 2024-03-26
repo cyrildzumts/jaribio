@@ -70,7 +70,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
                 'element': 'div',
                 'options': {
                     'id':'question',
-                    'cls': 'question-box',
+                    'cls': 'question-box full',
                     'children': [div_inner]
                 }
             });
