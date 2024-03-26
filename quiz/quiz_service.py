@@ -144,7 +144,7 @@ def get_quiz_question_data(question_uuid):
     results = {}
     try:       
         with transaction.atomic():
-            answers = Answer.objects.filter(question__question_uuid=question_uuid)
+            answers = Answer.objects.filter(question__question_uuid=question_uuid).order_by("?")
             results = {'answers': [q.as_quiz_data() for q in answers], 'success': True, 'message': 'Answers found'}
     except Exception as e:
         logger.error(f"Error on getting answers for question {question_uuid} : ")
