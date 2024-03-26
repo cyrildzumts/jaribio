@@ -118,7 +118,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             let answers = response.answers.map((a) => new Answer(a));
             question.setAnswers(answers);
             answers.forEach((a)=>{
-                a.setOnClicked(question.onAnswerClicked);
+                a.setOnClicked(question.onAnswerClicked.bind(question));
             });
             self.answers_container.appendChild(question.renderAnswers());
             this.answers_container.classList.toggle('hidden', !response.success);
