@@ -1,16 +1,20 @@
-define(['ajax_api', 'tag_api' ],function(Ajax, TagApi){
+define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],function(Ajax, TagApi, QuizStep, Question,Answer){
     const QUIZ_GAME_CONTAINER = "quiz-game-container";
+    const ANSWERS_GAME_CONTAINER = "answers-game-container";
     const START_QUIZ_BTN = "start-quiz-btn";
     const FETCH_QUIZ_URL = "/api/fetch-quiz-data/";
+    const FETCH_QUESTION_ANSWERS_URL = "/api/fetch-question-data/";
     class Quiz {
         constructor(){
             this.players = [];
             this.currentStep = null;
             this.steps = [];
+            this.questions = [];
             this.currentQuestion = null;
             this.start_btn = null;
             this.container = null;
             this.quiz_uuid = null;
+            this.quiz_data = null;
             this.quiz_started = false;
             this.is_ready = false;
         }
@@ -19,6 +23,7 @@ define(['ajax_api', 'tag_api' ],function(Ajax, TagApi){
             let self = this;
             this.start_btn = document.getElementById(START_QUIZ_BTN);
             this.container = document.getElementById(QUIZ_GAME_CONTAINER);
+            this.answers_container = document.getElementById(ANSWERS_GAME_CONTAINER);
             this.quiz_uuid = this.start_btn.dataset.quiz;
             this.start_btn.addEventListener('click', function(event){
                 event.preventDefault();
@@ -32,6 +37,15 @@ define(['ajax_api', 'tag_api' ],function(Ajax, TagApi){
 
             });
             console.info("Quiz Initialized");
+        }
+
+        removeAllChildren(container){
+            if(!container){
+                return;
+            }
+            while(container.firstChild){
+                container.removeChild(container.firstChild);
+            }
         }
 
         addPlayer(player){
@@ -58,7 +72,30 @@ define(['ajax_api', 'tag_api' ],function(Ajax, TagApi){
         }
 
         onQuizDataFetched(response){
+            let self = this;
             console.info("Quiz Data fetched : ", response);
+            this.removeAllChildren(this.container);
+            response.questions.forEach(q => {
+                self.questions.push(new Question(q));
+            });
+            response.quizsteps.forEach(qs => {
+                let q_ids = qs.questions.split(',');
+                let questions = self.questions.filter((q) => q_ids.includes(q.id));
+                let quizStep = new QuizStep(qs);
+                quizStep.setQuestions(questions);
+                self.steps.push(quizStep);
+                
+            });
+            this.currentStep = this.steps[0];
+            this.currentQuestion = this.currentStep.currentQuestion();
+            this.quiz_data = response.quiz;
+            this.container.appendChild(this.currentQuestion.render());
+            this.fetch_question_data(this.currentQuestion);
+        }
+
+        onQuestionDataFetched(response, question){
+            console.info("Question Data fetched : ", response, question);
+            this.removeAllChildren(this.answers_container);
         }
 
         fetch_quiz_data(){
@@ -73,6 +110,24 @@ define(['ajax_api', 'tag_api' ],function(Ajax, TagApi){
             Ajax.ajax(options).then(function(response){
                 if(response.success){
                     self.onQuizDataFetched(response)
+                }
+            }, function(error){
+                console.error(error);
+            });
+        }
+
+        fetch_question_data(question){
+            let self = this;
+            let url = `${FETCH_QUESTION_ANSWERS_URL}${question.getQuestionUuid()}/`;
+            let options = {
+                type: 'GET',
+                dataType: 'json',
+                url : url,
+            }
+
+            Ajax.ajax(options).then(function(response){
+                if(response.success){
+                    self.onQuestionDataFetched(response, question);
                 }
             }, function(error){
                 console.error(error);

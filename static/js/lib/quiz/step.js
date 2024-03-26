@@ -4,7 +4,8 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             this.title = quizStep.title;
             this.quiz = quizStep.quiz;
             this.rank = quizStep.rank;
-            this.questions = quizStep.questions;
+            this.question_order = quizStep.questions;
+            this.questions = [];
             this.is_played = quizStep.is_played;
             this.score_type = quizStep.score_type;
             this.current_question_index = 0;
@@ -25,6 +26,10 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
 
         getQuestions(){
             return this.questions;
+        }
+
+        setQuestions(questions){
+            this.questions = questions;
         }
 
         getMaxSteps(){

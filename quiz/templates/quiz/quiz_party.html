@@ -15,12 +15,13 @@
     <a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-default"><span><i class="fas fa-trash icon"></i>{% trans "Back" %}</span></a>
   </div>
   <div class="mat-box full quiz">
-      <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span></div>
-      <div class="margin-v">
-        <button id="start-quiz-btn"  class="start-quiz-btn" data-quiz="{{quiz.quiz_uuid}}">{% translate "Start" %}</button>
+      <div class="flex"><span class="bold padding-h">{{quiz}}</span></div>
+      <div class="margin-v flex">
+        <button id="start-quiz-btn"  class="start-quiz-btn mat-button mat-button-default" data-quiz="{{quiz.quiz_uuid}}">{% translate "Start" %}</button>
     </div>
 
-    <div id="quiz-game-container" class="mat-box"></div>
+    <div id="quiz-game-container" class="mat-box hidden"></div>
+    <div id="answers-game-container" class="mat-box hidden"></div>
   </div>
 
 </div>

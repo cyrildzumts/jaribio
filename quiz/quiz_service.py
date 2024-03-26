@@ -139,6 +139,19 @@ def get_quiz_party_data(quiz_uuid):
         results = {'quiz': None, 'success': False, 'message': str(e)}
     return results
 
+
+def get_quiz_question_data(question_uuid):
+    results = {}
+    try:       
+        with transaction.atomic():
+            answers = Answer.objects.filter(question_uuid=question_uuid)
+            results = {'answers': [q.as_quiz_data() for q in answers], 'success': True, 'message': 'Answers found'}
+    except Exception as e:
+        logger.error(f"Error on getting answers for question {question_uuid} : ")
+        logger.exception(e)
+        results = {'answers': None, 'success': False, 'message': str(e)}
+    return results
+
 def create_session(quiz, data):
     pass
 

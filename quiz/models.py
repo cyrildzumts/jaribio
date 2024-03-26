@@ -195,6 +195,7 @@ class Question(models.Model):
             image = self.image.as_dict()
         
         return {
+            'id': self.pk,
             'content': self.content,
             'explanation': self.explanation,
             'answer_count': self.answer_count,
@@ -221,9 +222,19 @@ class Answer(models.Model):
     
     def as_dict(self):
         return {
+            'id': self.pk,
             'content': self.content,
             'question': self.question.as_dict(),
             'is_correct': self.is_correct,
+            'created_at': self.created_at,
+            'answer_uuid': self.answer_uuid
+        }
+        
+    
+    def as_quiz_data(self):
+        return {
+            'content': self.content,
+            'question': self.question.as_dict(),
             'created_at': self.created_at,
             'answer_uuid': self.answer_uuid
         }
@@ -287,6 +298,7 @@ class QuizStep(models.Model):
     
     def as_dict(self):
         return {
+            'id': self.pk,
             'quiz': self.quiz.as_dict(),
             'title': self.title,
             'questions': self.questions,
