@@ -8,6 +8,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             this.quiz = answer.question.quiz;
             this.selected = false;
             this.onclick = null;
+            this.tag = null;
         }
 
         setOnClicked(callback){
@@ -55,6 +56,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
                 self.selected = true;
                 self.onclick(self);
             });
+            this.tag = div;
             return div;
         }
     }
