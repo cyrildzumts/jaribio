@@ -3657,7 +3657,6 @@ h1, h2, h3, h4, h5, h6{
 	background-color: #fafafa;
 }
 #quiz-step #answers .answer-wrapper{
-	
     color: var(--answer-color);
 }
 #quiz-step #answers .answer{
@@ -3666,7 +3665,14 @@ h1, h2, h3, h4, h5, h6{
 }
 #quiz-step #answers .answer.selected{
     color: var(--answer-selected);
-    border: 2px dotted var(--answer-selected);
+    border: 0.25em solid var(--answer-selected);
+}
+.timer{
+    display: flex;
+    width: 5em;
+    height: 5em;
+    border-radius: 50%;
+    color: var(--answer-selected);
 }
 .container {
   min-width: 100% !important;

@@ -41,13 +41,18 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
         }
 
         currentQuestion(){
+            if(this.current_question_index == -1){
+                return null;
+            }
             return this.questions[this.current_question_index]; 
         }
 
         nextQuestion(){
             if(this.current_question_index < this.max_steps - 1){
                 this.current_question_index++;
-            } 
+            }else{
+                this.current_question_index = -1;
+            }
         }
         isLastQuestion(){
             return this.current_question_index == this.max_steps - 1;

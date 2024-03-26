@@ -2,6 +2,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
     const QUIZ_GAME_CONTAINER = "quiz-game-container";
     const ANSWERS_GAME_CONTAINER = "answers-game-container";
     const START_QUIZ_BTN = "start-quiz-btn";
+    const NEXT_QUESTION_BTN = "next-question-btn";
     const FETCH_QUIZ_URL = "/api/fetch-quiz-data/";
     const FETCH_QUESTION_ANSWERS_URL = "/api/fetch-question-data/";
     const TIMER_ID = "timer";
@@ -15,6 +16,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.questions = [];
             this.currentQuestion = null;
             this.start_btn = null;
+            this.next_btn = null;
             this.container = null;
             this.quiz_uuid = null;
             this.quiz_data = null;
@@ -28,6 +30,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
         init(){
             let self = this;
             this.start_btn = document.getElementById(START_QUIZ_BTN);
+            this.next_btn = document.getElementById(NEXT_QUESTION_BTN);
             this.container = document.getElementById(QUIZ_GAME_CONTAINER);
             this.answers_container = document.getElementById(ANSWERS_GAME_CONTAINER);
             this.timer_tag = document.getElementById(TIMER_ID);
@@ -36,6 +39,16 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
                 event.preventDefault();
                 event.stopPropagation();
                 self.quiz_started = !self.quiz_started;
+                if(self.quiz_started){
+                    self.startQuiz();
+                }else{
+                    self.stopQuiz();
+                }
+
+            });
+            this.next_btn.addEventListener('click', function(event){
+                event.preventDefault();
+                event.stopPropagation();
                 if(self.quiz_started){
                     self.startQuiz();
                 }else{
@@ -88,10 +101,27 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
 
         }
 
+        onNextBtnClicked(event){
+            this.currentStep.nextQuestion();
+            this.currentQuestion = this.currentStep.currentQuestion();
+            if(this.currentQuestion){
+                this.renderCurrentQuestion();
+            }else{
+                console.warn("CurrentQuestion is null");
+            }
+
+        }
+
+        renderCurrentQuestion(){
+            this.removeAllChildren(this.container);
+            this.container.appendChild(this.currentQuestion.renderQuestion());
+            this.container.classList.toggle('hidden', !this.currentQuestion);
+            this.fetch_question_data(this.currentQuestion);
+        }
+
         onQuizDataFetched(response){
             let self = this;
             console.info("Quiz Data fetched : ", response);
-            this.removeAllChildren(this.container);
             response.questions.forEach(q => {
                 self.questions.push(new Question(q));
             });
@@ -106,9 +136,8 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.currentStep = this.steps[0];
             this.currentQuestion = this.currentStep.currentQuestion();
             this.quiz_data = response.quiz;
-            this.container.appendChild(this.currentQuestion.renderQuestion());
-            this.container.classList.toggle('hidden', !response.success);
-            this.fetch_question_data(this.currentQuestion);
+            renderCurrentQuestion()
+            
         }
 
         onQuestionDataFetched(response, question){
@@ -167,6 +196,9 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
 
         onQuestionTimeout(){
             clearTimeout(this.timeout);
+            this.start_btn.classList.add("hidden");
+            this.next_btn.classList.remove("hidden");
+            this.next_btn.disabled = false;
             this.iterations = TIMER_TIMEOUT_MS;
             this.timer_tag.innerText = `${this.iterations}s`;
         }
@@ -177,9 +209,13 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
         startQuiz(){
             console.log("Starting Quiz ...");
             this.fetch_quiz_data();
+            this.start_btn.classList.add("hidden");
+            this.start_btn.disabled = true;
         }
 
         stopQuiz(){
+            this.next_btn.classList.add("hidden");
+            this.next_btn.disabled = true;
             console.log("Stopping Quiz ...");
         }
     };
