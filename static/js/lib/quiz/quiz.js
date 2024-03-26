@@ -31,6 +31,7 @@ define(['ajax_api', 'tag_api' ],function(Ajax, TagApi){
                 }
 
             });
+            console.info("Quiz Initialized");
         }
 
         addPlayer(player){
