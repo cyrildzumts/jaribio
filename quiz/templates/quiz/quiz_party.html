@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load static %}
+{% load core_tags %}
+{% if banner %}
+
+{% block HEADER_BANNER %}
+{% endblock HEADER_BANNER %}
+{% endif %}
+
+{% block MAIN %}
+<div class="container">
+  <div class="actions flex-left">
+    <a href="{% url 'quiz:play-quiz' quiz.slug 1 %}" class="mat-button mat-button-default"><span><i class="fas fa-play icon"></i>{% trans "Play" %}</span></a>
+    <a href="{{quiz.get_absolute_url}}" class="mat-button mat-button-default"><span><i class="fas fa-trash icon"></i>{% trans "Back" %}</span></a>
+  </div>
+  <div class="mat-box full quiz">
+      <div class="flex flex-left"><span class="bold padding-h">{{quiz}}</span></div>
+      <div class="margin-v">
+        <button id="start-quiz-btn"  class="start-quiz-btn" data-quiz="{{quiz.quiz_uuid}}">{% translate "Start" %}</button>
+    </div>
+
+    <div id="quiz-game-container" class="mat-box"></div>
+  </div>
+
+</div>
+
+{% endblock MAIN %}
+
+{% block BASE_SCRIPT %}
+<script  data-main="{% static 'js/quiz-app.min' %}" src="{% static 'js/require.js' %}"></script>        
+{% endblock BASE_SCRIPT %}
+

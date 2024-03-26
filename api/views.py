@@ -168,3 +168,18 @@ def update_question(request, quiz_slug, question_uuid):
         status_result = status.HTTP_400_BAD_REQUEST
         data = {'success': False, 'error': 'Bad request'}
     return Response(data,status=status_result)
+
+
+
+@api_view(['GET'])
+def quiz_data(request, quiz_uuid):
+    logger.info(f"API fetch quiz data Request from user {request.user.username}")
+    data = None
+    status_result = status.HTTP_200_OK
+    try:
+        data = quiz_service.get_quiz_party_data(quiz_uuid)
+    except Exception as e:
+        status_result = status.HTTP_400_BAD_REQUEST
+        data = {'success': False, 'message': 'Bad request'}
+
+    return Response(data,status=status_result)

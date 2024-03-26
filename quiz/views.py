@@ -262,3 +262,15 @@ def question_details(request,quiz_slug, question_uuid):
         'QUESTION_TYPE_MCQ' : QUIZ_CONSTANTS.QUESTION_TYPE_MCQ
     }
     return render(request, template_name, context)
+
+
+
+
+def quiz_party(request, slug):
+    template_name = "quiz/quiz_party.html"
+    quiz = get_object_or_404(Quiz, slug=slug)
+    context = {
+        'page_title': "Quiz",
+        'quiz': quiz,
+    }
+    return render(request, template_name, context)

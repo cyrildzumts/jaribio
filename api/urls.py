@@ -13,6 +13,7 @@ urlpatterns = [
     path('authenticate/', views.authenticate, name='authenticate'),
     path('create-quiz/', views.create_quiz, name="create-quiz"),
     path('update-quiz/<uuid:quiz_uuid>/', views.update_quiz, name="update-quiz"),
+    path('fetch-quiz-data/<uuid:quiz_uuid>/', views.quiz_data, name="fetch-quiz-data"),
     path('quizzes/<uuid:quiz_uuid>/create-question/', views.create_question, name="create-question"),
     path('quizzes/<uuid:quiz_uuid>/create-quizstep/', views.create_quizstep, name="create-quizstep"),
      path('quizzes/<uuid:quiz_uuid>/update-quizstep/<int:quizstep_id>/', views.update_quizstep, name="update-quizstep"),

@@ -1,11 +1,11 @@
 ({
-    baseUrl: "lib",
+    baseUrl: "../lib",
     paths: {
         vendor: "../vendors",
         jquery: "../vendors/jquery-3.6.0.min",
         editor: "empty:",
-        main: '../jaribio-app',
+        main: '../quiz-app'
     },
     name: "main",
-    out: "main.min.js"
+    out: "../quiz-app.min.js"
 })

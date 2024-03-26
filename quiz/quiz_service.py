@@ -124,6 +124,21 @@ def update_quiz(quizStep, data):
     return results
 
 
+
+def get_quiz_party_data(quiz_uuid):
+    results = {}
+    try:       
+        with transaction.atomic():
+            quiz = Quiz.objects.get(quiz_uuid=quiz_uuid)
+            quizSteps = QuizStep.objects.filter(quiz=quiz)
+            questions = Question.objects.filter(quiz=quiz)
+            results = {'quiz': quiz.as_dict(),'questions': [q.as_dict() for q in questions], 'quizsteps': [ qs.as_dict() for qs in quizSteps], 'success': True, 'message': 'Quiz found'}
+    except Exception as e:
+        logger.error(f"Error on update quiz step {quiz.title} : ")
+        logger.exception(e)
+        results = {'quiz': None, 'success': False, 'message': str(e)}
+    return results
+
 def create_session(quiz, data):
     pass
 
