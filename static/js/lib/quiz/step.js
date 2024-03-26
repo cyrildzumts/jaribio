@@ -25,6 +25,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
         }
 
         getQuestions(){
+
             return this.questions;
         }
 
@@ -33,7 +34,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
         }
 
         getMaxSteps(){
-            return this.max_steps;
+            return this.questions.length;
         }
 
         getScoreType(){
@@ -48,14 +49,14 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
         }
 
         nextQuestion(){
-            if(this.current_question_index < this.max_steps - 1){
+            if(this.current_question_index < this.getMaxSteps() - 1){
                 this.current_question_index++;
             }else{
                 this.current_question_index = -1;
             }
         }
         isLastQuestion(){
-            return this.current_question_index == this.max_steps - 1;
+            return this.current_question_index == this.getMaxSteps() - 1;
         }
 
         render(){
