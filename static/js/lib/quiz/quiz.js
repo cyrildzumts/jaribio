@@ -164,6 +164,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
 
         onQuestionTimeout(){
             clearTimeout(this.timeout);
+            this.iterations = TIMER_TIMEOUT_MS;
             this.timer_tag.innerText = `${this.iterations}s`;
         }
         onQuizStarted(){
