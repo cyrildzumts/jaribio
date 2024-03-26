@@ -10,7 +10,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             this.onclick = null;
         }
 
-        setOnclick(callback){
+        setOnClicked(callback){
             this.onclick = callback;
         }
 
