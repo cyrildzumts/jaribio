@@ -130,7 +130,7 @@ def get_quiz_party_data(quiz_uuid):
     try:       
         with transaction.atomic():
             quiz = Quiz.objects.get(quiz_uuid=quiz_uuid)
-            quizSteps = QuizStep.objects.filter(quiz=quiz)
+            quizSteps = QuizStep.objects.filter(quiz=quiz).order_by('rank')
             questions = Question.objects.filter(quiz=quiz)
             results = {'quiz': quiz.as_dict(),'questions': [q.as_dict() for q in questions], 'quizsteps': [ qs.as_dict() for qs in quizSteps], 'success': True, 'message': 'Quiz found'}
     except Exception as e:
