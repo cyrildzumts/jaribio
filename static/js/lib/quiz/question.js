@@ -13,8 +13,17 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
             this.question_type = question.question_type;
             this.question_uuid = question.question_uuid;
             this.quiz = question.quiz;
+            this.timer_timedout = false;
             this.answers = [];
 
+        }
+
+        setTimedout(timedout){
+            this.timer_timedout = timedout;
+        }
+
+        isTimedout(){
+            return this.timer_timedout;
         }
 
         getId(){
@@ -113,12 +122,15 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
         }
 
         onAnswerClicked(answer){
+            if(this.isTimedout()){
+                return;
+            }
             if(this.question_type == ANSWER_MULTIPLE_SELECTION){
                 this.onMultipleSelection(answer);
             }else if(this.question_type == ANSWER_UNIQUE_SELECTION){
                 this.onUniqueSelection(answer);
             }else{
-                
+
             }
         }
     }

@@ -31,6 +31,7 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
             this.iterations = TIMER_TIMEOUT_MS;
             this.timeout = null;
             this.timer_tag = null;
+            this.timer_timedout = false;
         }
 
         init(){
@@ -81,7 +82,10 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
 
         monitorQuestion(){
             this.timer_tag.innerText = `${this.iterations}s`;
+            
             if(this.iterations-- > -1){
+                this.timer_timedout = false;
+                this.currentQuestion.setTimedout(this.timer_timedout);
                 this.timeout = setTimeout(this.monitorQuestion.bind(this), BASE_TIMEOUT_MS);
             }else{
                 this.onQuestionTimeout();
@@ -121,6 +125,8 @@ define(['ajax_api', 'tag_api', 'quiz/step', 'quiz/question','quiz/answer' ],func
         }
 
         onQuestionTimeout(){
+            this.timer_timedout = true;
+            this.currentQuestion.setTimedout(this.timer_timedout);
             clearTimeout(this.timeout);
             this.start_btn.classList.add("hidden");
             this.next_btn.classList.toggle("hidden", this.currentStep.isLastQuestion());
