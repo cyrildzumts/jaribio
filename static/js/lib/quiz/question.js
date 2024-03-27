@@ -67,7 +67,7 @@ define(['ajax_api','tag_api'], function(Ajax,TagApi){
                 'element': 'p',
                 'options': {
                     'innerText': this.content,
-                    'cls': 'title-case bold large'
+                    'cls': 'title-case bold large center'
                 }
             });
             let div_inner = TagApi.create_tag({
